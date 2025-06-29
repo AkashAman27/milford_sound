@@ -20,6 +20,7 @@ interface BlogPost {
   read_time_minutes: number
   featured: boolean
   view_count: number
+  created_at: string
   blog_categories?: {
     name: string
   }
