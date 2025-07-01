@@ -70,7 +70,7 @@ export function TestimonialsSection() {
             Loved by travelers worldwide
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Join millions of happy travelers who trust Headout for their best experiences
+            Join millions of happy travelers who trust Milford Sound for their best experiences
           </p>
           <div className="flex items-center justify-center mt-6 space-x-2">
             <div className="flex">

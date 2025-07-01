@@ -9,7 +9,7 @@ import { CartProvider } from '@/components/providers/CartProvider'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Headout - Tours, Activities & Experiences',
+  title: 'Milford Sound - Tours, Activities & Experiences',
   description: 'Book the best tours, activities and experiences around the world',
 }
 

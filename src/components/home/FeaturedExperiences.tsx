@@ -28,7 +28,7 @@ export function FeaturedExperiences() {
       const supabase = createClient()
       
       const { data } = await supabase
-        .from('products')
+        .from('experiences')
         .select('*')
         .eq('featured', true)
         .eq('status', 'active')

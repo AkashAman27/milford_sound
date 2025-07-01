@@ -50,7 +50,7 @@ export default function AuthPage() {
             {mode === 'signin' ? 'Sign in to Admin Panel' : 'Create Admin Account'}
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Access the Headout CMS dashboard
+            Access the Milford Sound CMS dashboard
           </p>
         </div>
 

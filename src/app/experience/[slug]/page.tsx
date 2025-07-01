@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { notFound, useParams } from 'next/navigation'
 import Image from 'next/image'
+import Link from 'next/link'
 import { 
   Star, 
   Clock, 
@@ -57,6 +58,7 @@ export default function ExperiencePage() {
   const [product, setProduct] = useState<Product | null>(null)
   const [loading, setLoading] = useState(true)
   const [travelers, setTravelers] = useState(2)
+  const [selectedDate, setSelectedDate] = useState('')
 
   useEffect(() => {
     fetchProduct()
@@ -67,7 +69,7 @@ export default function ExperiencePage() {
     
     try {
       const { data, error } = await supabase
-        .from('products')
+        .from('experiences')
         .select(`
           *,
           cities(name),
@@ -475,9 +477,11 @@ export default function ExperiencePage() {
                   </div>
                 </div>
                 
-                <Button className="w-full bg-primary hover:bg-primary/90" size="lg">
-                  Book Now
-                </Button>
+                <Link href={`/checkout?product=${product.id}&travelers=${travelers}${selectedDate ? `&date=${selectedDate}` : ''}`}>
+                  <Button className="w-full bg-primary hover:bg-primary/90" size="lg">
+                    Book Now
+                  </Button>
+                </Link>
                 
                 <div className="text-center text-sm text-gray-600">
                   {product.cancellation_policy || 'Free cancellation available'}

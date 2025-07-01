@@ -35,7 +35,7 @@ export default function ProductManagement() {
     const supabase = createClient()
     
     const { data, error } = await supabase
-      .from('products')
+      .from('experiences')
       .select(`
         *,
         cities(name),
@@ -49,17 +49,17 @@ export default function ProductManagement() {
   }
 
   async function deleteProduct(id: string) {
-    if (!confirm('Are you sure you want to delete this product?')) return
+    if (!confirm('Are you sure you want to delete this experience?')) return
 
     const supabase = createClient()
     
     const { error } = await supabase
-      .from('products')
+      .from('experiences')
       .delete()
       .eq('id', id)
 
     if (error) {
-      alert('Error deleting product')
+      alert('Error deleting experience')
       console.error(error)
     } else {
       fetchProducts()
@@ -72,12 +72,12 @@ export default function ProductManagement() {
     const newStatus = currentStatus === 'active' ? 'inactive' : 'active'
     
     const { error } = await supabase
-      .from('products')
+      .from('experiences')
       .update({ status: newStatus })
       .eq('id', id)
 
     if (error) {
-      alert('Error updating product')
+      alert('Error updating experience')
       console.error(error)
     } else {
       fetchProducts()
@@ -88,12 +88,12 @@ export default function ProductManagement() {
     const supabase = createClient()
     
     const { error } = await supabase
-      .from('products')
+      .from('experiences')
       .update({ featured: !currentStatus })
       .eq('id', id)
 
     if (error) {
-      alert('Error updating product')
+      alert('Error updating experience')
       console.error(error)
     } else {
       fetchProducts()
@@ -101,20 +101,20 @@ export default function ProductManagement() {
   }
 
   if (loading) {
-    return <div className="text-center py-8">Loading products...</div>
+    return <div className="text-center py-8">Loading experiences...</div>
   }
 
   return (
     <div>
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Product Management</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Experience Management</h1>
           <p className="text-gray-600 mt-2">Manage tours, experiences, and attractions</p>
         </div>
         <Link href="/admin/products/new">
           <Button className="flex items-center">
             <Plus className="h-4 w-4 mr-2" />
-            New Product
+            New Experience
           </Button>
         </Link>
       </div>
@@ -123,9 +123,9 @@ export default function ProductManagement() {
         {products.length === 0 ? (
           <Card>
             <CardContent className="text-center py-12">
-              <p className="text-gray-500 mb-4">No products found</p>
+              <p className="text-gray-500 mb-4">No experiences found</p>
               <Link href="/admin/products/new">
-                <Button>Create Your First Product</Button>
+                <Button>Create Your First Experience</Button>
               </Link>
             </CardContent>
           </Card>

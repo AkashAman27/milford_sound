@@ -96,7 +96,7 @@ export default function EditProduct() {
     
     // Fetch product data
     const { data: productData, error: productError } = await supabase
-      .from('products')
+      .from('experiences')
       .select('*')
       .eq('id', productId)
       .single()
@@ -185,7 +185,7 @@ export default function EditProduct() {
       .filter(lang => lang.length > 0)
 
     const { error } = await supabase
-      .from('products')
+      .from('experiences')
       .update({
         ...formData,
         languages: languagesArray

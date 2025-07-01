@@ -41,7 +41,7 @@ export function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
             <div className="h-8 w-8 rounded bg-primary" />
-            <span className="text-xl font-bold text-primary">Headout</span>
+            <span className="text-xl font-bold text-primary">Milford Sound</span>
           </Link>
 
           {/* Desktop Search */}

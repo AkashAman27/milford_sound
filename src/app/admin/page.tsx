@@ -14,7 +14,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState({
-    totalProducts: 0,
+    totalExperiences: 0,
     totalCategories: 0,
     totalTestimonials: 0,
     totalBlogPosts: 0,
@@ -30,13 +30,13 @@ export default function AdminDashboard() {
       try {
         // Get counts from each table
         const [
-          { count: products },
+          { count: experiences },
           { count: categories },
           { count: testimonials },
           { count: blogPosts },
           { count: reviews }
         ] = await Promise.all([
-          supabase.from('products').select('*', { count: 'exact', head: true }),
+          supabase.from('experiences').select('*', { count: 'exact', head: true }),
           supabase.from('categories').select('*', { count: 'exact', head: true }),
           supabase.from('testimonials').select('*', { count: 'exact', head: true }),
           supabase.from('blog_posts').select('*', { count: 'exact', head: true }),
@@ -53,7 +53,7 @@ export default function AdminDashboard() {
           : 0
 
         setStats({
-          totalProducts: products || 0,
+          totalExperiences: experiences || 0,
           totalCategories: categories || 0,
           totalTestimonials: testimonials || 0,
           totalBlogPosts: blogPosts || 0,
@@ -72,8 +72,8 @@ export default function AdminDashboard() {
 
   const statCards = [
     {
-      title: 'Total Products',
-      value: stats.totalProducts,
+      title: 'Total Experiences',
+      value: stats.totalExperiences,
       icon: Package,
       color: 'text-blue-600'
     },
@@ -121,7 +121,7 @@ export default function AdminDashboard() {
     <div>
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-        <p className="text-gray-600 mt-2">Welcome to your Headout CMS dashboard</p>
+        <p className="text-gray-600 mt-2">Welcome to your Milford Sound CMS dashboard</p>
       </div>
 
       {/* Stats Grid */}
@@ -169,7 +169,7 @@ export default function AdminDashboard() {
               >
                 <Package className="h-5 w-5 mr-3 text-green-600" />
                 <div>
-                  <p className="font-medium">Add New Product</p>
+                  <p className="font-medium">Add New Experience</p>
                   <p className="text-sm text-gray-600">Create a new tour or experience</p>
                 </div>
               </a>

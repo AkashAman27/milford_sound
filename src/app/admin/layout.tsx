@@ -62,7 +62,7 @@ export default function AdminLayout({
   const navigation = [
     { name: 'Dashboard', href: '/admin', icon: BarChart3 },
     { name: 'Blog Posts', href: '/admin/blog', icon: FileText },
-    { name: 'Products', href: '/admin/products', icon: Package },
+    { name: 'Experiences', href: '/admin/products', icon: Package },
     { name: 'Categories', href: '/admin/categories', icon: Settings },
     { name: 'Testimonials', href: '/admin/testimonials', icon: MessageSquare },
     { name: 'Homepage', href: '/admin/homepage', icon: Home },
@@ -73,7 +73,7 @@ export default function AdminLayout({
       {/* Sidebar */}
       <div className="fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg">
         <div className="flex h-16 items-center justify-center border-b border-gray-200">
-          <h1 className="text-xl font-bold text-primary">Headout Admin</h1>
+          <h1 className="text-xl font-bold text-primary">Milford Sound Admin</h1>
         </div>
         
         <nav className="mt-8 px-4">

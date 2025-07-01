@@ -12,7 +12,7 @@ export function Footer() {
           <div>
             <div className="flex items-center space-x-2 mb-4">
               <div className="h-8 w-8 rounded bg-primary" />
-              <span className="text-xl font-bold">Headout</span>
+              <span className="text-xl font-bold">Milford Sound</span>
             </div>
             <p className="text-gray-400 text-sm mb-4">
               Making the world more accessible, one experience at a time.
@@ -78,7 +78,7 @@ export function Footer() {
 
         {/* Bottom Bar */}
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
-          <p>&copy; 2024 Headout. All rights reserved.</p>
+          <p>&copy; 2024 Milford Sound. All rights reserved.</p>
         </div>
       </div>
     </footer>

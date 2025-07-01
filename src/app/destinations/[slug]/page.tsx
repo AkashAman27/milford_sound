@@ -70,7 +70,7 @@ export default function CityPage({ params }: CityPageProps) {
 
       // Fetch products for this city
       const { data: productsData, error: productsError } = await supabase
-        .from('products')
+        .from('experiences')
         .select('*')
         .eq('city_id', cityData.id)
         .eq('status', 'active')
