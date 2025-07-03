@@ -164,7 +164,7 @@ export default function AdminDashboard() {
               </a>
               
               <a 
-                href="/admin/products" 
+                href="/admin/experiences" 
                 className="flex items-center p-3 rounded-lg border hover:bg-gray-50 transition-colors"
               >
                 <Package className="h-5 w-5 mr-3 text-green-600" />

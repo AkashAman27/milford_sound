@@ -5,10 +5,11 @@ import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Save, ArrowLeft } from 'lucide-react'
+import { Save, ArrowLeft, Eye } from 'lucide-react'
 import Link from 'next/link'
 import { FormField, TextInput, TextArea, Select, Checkbox } from '@/components/admin/forms/FormField'
 import { CodeEditor } from '@/components/admin/forms/CodeEditor'
+import { SEOFormFields, SEOFormData } from '@/components/seo/SEOFormFields'
 
 interface BlogCategory {
   id: string
@@ -20,6 +21,11 @@ export default function NewBlogPost() {
   const router = useRouter()
   const [categories, setCategories] = useState<BlogCategory[]>([])
   const [saving, setSaving] = useState(false)
+  const [seoData, setSeoData] = useState<SEOFormData>({
+    robots_index: true,
+    robots_follow: true,
+    robots_nosnippet: false
+  })
   const [formData, setFormData] = useState({
     title: '',
     slug: '',
@@ -60,9 +66,17 @@ export default function NewBlogPost() {
     setFormData(prev => ({
       ...prev,
       title,
-      slug: generateSlug(title),
-      seo_title: title
+      slug: generateSlug(title)
     }))
+    
+    // Auto-update SEO title if not manually set
+    if (!seoData.seo_title) {
+      setSeoData(prev => ({ ...prev, seo_title: title }))
+    }
+  }
+  
+  const handleSEOChange = (field: keyof SEOFormData, value: any) => {
+    setSeoData(prev => ({ ...prev, [field]: value }))
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -71,18 +85,43 @@ export default function NewBlogPost() {
 
     const supabase = createClient()
     
+    // Complete blog data including all SEO fields
+    const blogData = {
+      ...formData,
+      published_at: formData.published ? new Date().toISOString() : null,
+      // SEO fields
+      seo_title: seoData.seo_title || null,
+      seo_description: seoData.seo_description || null,
+      seo_keywords: seoData.seo_keywords || null,
+      canonical_url: seoData.canonical_url || null,
+      robots_index: seoData.robots_index ?? true,
+      robots_follow: seoData.robots_follow ?? true,
+      robots_nosnippet: seoData.robots_nosnippet ?? false,
+      og_title: seoData.og_title || null,
+      og_description: seoData.og_description || null,
+      og_image: seoData.og_image || null,
+      og_image_alt: seoData.og_image_alt || null,
+      twitter_title: seoData.twitter_title || null,
+      twitter_description: seoData.twitter_description || null,
+      twitter_image: seoData.twitter_image || null,
+      twitter_image_alt: seoData.twitter_image_alt || null,
+      structured_data_type: seoData.structured_data_type || null,
+      focus_keyword: seoData.focus_keyword || null,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    }
+    
     const { data, error } = await supabase
       .from('blog_posts')
-      .insert([{
-        ...formData,
-        published_at: formData.published ? new Date().toISOString() : null
-      }])
+      .insert([blogData])
       .select()
 
     if (error) {
-      alert('Error creating blog post')
-      console.error(error)
+      alert(`Error creating blog post: ${error.message}`)
+      console.error('Insert failed:', error)
+      console.log('Insert data:', blogData) // Debug log
     } else {
+      console.log('Blog post created successfully with SEO data')
       router.push('/admin/blog')
     }
     
@@ -184,38 +223,13 @@ export default function NewBlogPost() {
             </Card>
 
             {/* SEO Section */}
-            <Card>
-              <CardHeader>
-                <CardTitle>SEO Settings</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    SEO Title
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.seo_title}
-                    onChange={(e) => setFormData(prev => ({ ...prev, seo_title: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                    placeholder="SEO optimized title"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    SEO Description
-                  </label>
-                  <textarea
-                    value={formData.seo_description}
-                    onChange={(e) => setFormData(prev => ({ ...prev, seo_description: e.target.value }))}
-                    rows={3}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                    placeholder="Meta description for search engines"
-                  />
-                </div>
-              </CardContent>
-            </Card>
+            <SEOFormFields
+              data={seoData}
+              onChange={handleSEOChange}
+              baseUrl={process.env.NEXT_PUBLIC_SITE_URL || 'https://milford-sound.com'}
+              slug={formData.slug}
+              contentType="blog"
+            />
           </div>
 
           {/* Sidebar */}

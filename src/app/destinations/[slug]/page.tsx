@@ -10,9 +10,9 @@ import { ProductCard } from '@/components/products/ProductCard'
 import { createClient } from '@/lib/supabase'
 
 interface CityPageProps {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
 interface City {
@@ -40,7 +40,8 @@ interface Product {
   shortDescription: string
 }
 
-export default function CityPage({ params }: CityPageProps) {
+export default async function CityPage({ params }: CityPageProps) {
+  const { slug } = await params
   const [city, setCity] = useState<City | null>(null)
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
@@ -48,7 +49,7 @@ export default function CityPage({ params }: CityPageProps) {
 
   useEffect(() => {
     fetchCityData()
-  }, [params.slug])
+  }, [slug])
 
   async function fetchCityData() {
     const supabase = createClient()
@@ -58,7 +59,7 @@ export default function CityPage({ params }: CityPageProps) {
       const { data: cityData, error: cityError } = await supabase
         .from('cities')
         .select('*')
-        .eq('slug', params.slug)
+        .eq('slug', slug)
         .single()
 
       if (cityError || !cityData) {

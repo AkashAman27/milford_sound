@@ -5,10 +5,12 @@ import { createClient } from '@/lib/supabase'
 import { useRouter, useParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Save, ArrowLeft } from 'lucide-react'
+import { Save, ArrowLeft, Eye } from 'lucide-react'
 import Link from 'next/link'
 import { FormField, TextInput, TextArea, Select, Checkbox } from '@/components/admin/forms/FormField'
 import { CodeEditor } from '@/components/admin/forms/CodeEditor'
+import { SEOFormFields, SEOFormData } from '@/components/seo/SEOFormFields'
+import { SlugManager } from '@/components/admin/SlugManager'
 
 interface BlogCategory {
   id: string
@@ -33,8 +35,24 @@ interface BlogPost {
   featured: boolean
   published: boolean
   read_time_minutes: number
-  seo_title: string
-  seo_description: string
+  seo_title?: string
+  seo_description?: string
+  seo_keywords?: string
+  canonical_url?: string
+  robots_index?: boolean
+  robots_follow?: boolean
+  robots_nosnippet?: boolean
+  og_title?: string
+  og_description?: string
+  og_image?: string
+  og_image_alt?: string
+  twitter_title?: string
+  twitter_description?: string
+  twitter_image?: string
+  twitter_image_alt?: string
+  structured_data_type?: string
+  focus_keyword?: string
+  previous_slug?: string
   code_snippets: CodeSnippet[]
 }
 
@@ -46,6 +64,11 @@ export default function EditBlogPost() {
   const [categories, setCategories] = useState<BlogCategory[]>([])
   const [saving, setSaving] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [seoData, setSeoData] = useState<SEOFormData>({
+    robots_index: true,
+    robots_follow: true,
+    robots_nosnippet: false
+  })
   const [formData, setFormData] = useState({
     title: '',
     slug: '',
@@ -97,7 +120,29 @@ export default function EditBlogPost() {
         read_time_minutes: data.read_time_minutes || 5,
         seo_title: data.seo_title || '',
         seo_description: data.seo_description || '',
-        code_snippets: data.code_snippets || []
+        code_snippets: data.code_snippets || [],
+        previous_slug: data.previous_slug || ''
+      })
+      
+      // Set SEO data
+      setSeoData({
+        seo_title: data.seo_title || '',
+        seo_description: data.seo_description || '',
+        seo_keywords: data.seo_keywords || '',
+        canonical_url: data.canonical_url || '',
+        robots_index: data.robots_index !== false,
+        robots_follow: data.robots_follow !== false,
+        robots_nosnippet: data.robots_nosnippet || false,
+        og_title: data.og_title || '',
+        og_description: data.og_description || '',
+        og_image: data.og_image || '',
+        og_image_alt: data.og_image_alt || '',
+        twitter_title: data.twitter_title || '',
+        twitter_description: data.twitter_description || '',
+        twitter_image: data.twitter_image || '',
+        twitter_image_alt: data.twitter_image_alt || '',
+        structured_data_type: data.structured_data_type || '',
+        focus_keyword: data.focus_keyword || ''
       })
     }
     
@@ -120,9 +165,17 @@ export default function EditBlogPost() {
     setFormData(prev => ({
       ...prev,
       title,
-      slug: generateSlug(title),
-      seo_title: title
+      slug: generateSlug(title)
     }))
+    
+    // Auto-update SEO title if not manually set
+    if (!seoData.seo_title) {
+      setSeoData(prev => ({ ...prev, seo_title: title }))
+    }
+  }
+  
+  const handleSEOChange = (field: keyof SEOFormData, value: any) => {
+    setSeoData(prev => ({ ...prev, [field]: value }))
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -131,18 +184,50 @@ export default function EditBlogPost() {
 
     const supabase = createClient()
     
+    // Complete update data including all SEO fields
+    const updateData = {
+      title: formData.title,
+      slug: formData.slug,
+      excerpt: formData.excerpt,
+      content: formData.content,
+      featured_image: formData.featured_image,
+      category_id: formData.category_id,
+      featured: formData.featured,
+      published: formData.published,
+      read_time_minutes: formData.read_time_minutes,
+      published_at: formData.published ? new Date().toISOString() : null,
+      // SEO fields
+      seo_title: seoData.seo_title || null,
+      seo_description: seoData.seo_description || null,
+      seo_keywords: seoData.seo_keywords || null,
+      canonical_url: seoData.canonical_url || null,
+      robots_index: seoData.robots_index ?? true,
+      robots_follow: seoData.robots_follow ?? true,
+      robots_nosnippet: seoData.robots_nosnippet ?? false,
+      og_title: seoData.og_title || null,
+      og_description: seoData.og_description || null,
+      og_image: seoData.og_image || null,
+      og_image_alt: seoData.og_image_alt || null,
+      twitter_title: seoData.twitter_title || null,
+      twitter_description: seoData.twitter_description || null,
+      twitter_image: seoData.twitter_image || null,
+      twitter_image_alt: seoData.twitter_image_alt || null,
+      structured_data_type: seoData.structured_data_type || null,
+      focus_keyword: seoData.focus_keyword || null,
+      updated_at: new Date().toISOString()
+    }
+    
     const { error } = await supabase
       .from('blog_posts')
-      .update({
-        ...formData,
-        published_at: formData.published ? new Date().toISOString() : null
-      })
+      .update(updateData)
       .eq('id', postId)
 
     if (error) {
-      alert('Error updating blog post')
-      console.error(error)
+      alert(`Error updating blog post: ${error.message}`)
+      console.error('Update failed:', error)
+      console.log('Update data:', updateData) // Debug log
     } else {
+      console.log('Blog post updated successfully with SEO data')
       router.push('/admin/blog')
     }
     
@@ -191,11 +276,14 @@ export default function EditBlogPost() {
                   />
                 </FormField>
 
-                <FormField label="Slug" description="Auto-generated from title, but you can customize it">
-                  <TextInput
-                    value={formData.slug}
-                    onChange={(value) => setFormData(prev => ({ ...prev, slug: value }))}
-                    placeholder="post-url-slug"
+                <FormField label="URL Slug" description="This affects the post's URL - be careful when changing">
+                  <SlugManager
+                    currentSlug={formData.slug}
+                    previousSlug={formData.previous_slug}
+                    contentType="blog_posts"
+                    contentId={postId}
+                    onSlugChange={(slug) => setFormData(prev => ({ ...prev, slug }))}
+                    baseUrl={process.env.NEXT_PUBLIC_SITE_URL || 'https://milford-sound.com'}
                   />
                 </FormField>
 
@@ -244,29 +332,13 @@ export default function EditBlogPost() {
             </Card>
 
             {/* SEO Section */}
-            <Card>
-              <CardHeader>
-                <CardTitle>SEO Settings</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <FormField label="SEO Title">
-                  <TextInput
-                    value={formData.seo_title}
-                    onChange={(value) => setFormData(prev => ({ ...prev, seo_title: value }))}
-                    placeholder="SEO optimized title"
-                  />
-                </FormField>
-
-                <FormField label="SEO Description">
-                  <TextArea
-                    value={formData.seo_description}
-                    onChange={(value) => setFormData(prev => ({ ...prev, seo_description: value }))}
-                    placeholder="Meta description for search engines"
-                    rows={3}
-                  />
-                </FormField>
-              </CardContent>
-            </Card>
+            <SEOFormFields
+              data={seoData}
+              onChange={handleSEOChange}
+              baseUrl={process.env.NEXT_PUBLIC_SITE_URL || 'https://milford-sound.com'}
+              slug={formData.slug}
+              contentType="blog"
+            />
           </div>
 
           {/* Sidebar */}

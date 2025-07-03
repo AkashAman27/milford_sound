@@ -56,7 +56,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, [user])
 
   const loadCartItems = async () => {
-    if (!user) return
+    if (!user) {
+      setItems([])
+      setLoading(false)
+      return
+    }
 
     setLoading(true)
     try {
@@ -67,10 +71,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           product_id,
           quantity,
           selected_date,
-          products:product_id (
+          experiences:product_id (
             title,
             price,
-            image_url,
+            main_image_url,
             duration,
             cities:city_id (
               name
@@ -79,23 +83,28 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         `)
         .eq('user_id', user.id)
 
-      if (error) throw error
+      if (error) {
+        console.warn('Cart table may not exist yet:', error.message)
+        setItems([])
+        return
+      }
 
-      const cartItems: CartItem[] = data.map((item: any) => ({
+      const cartItems: CartItem[] = (data || []).map((item: any) => ({
         id: item.id,
         product_id: item.product_id,
-        product_title: item.products.title,
-        product_image: item.products.image_url,
-        price: item.products.price,
+        product_title: item.experiences?.title || 'Unknown Product',
+        product_image: item.experiences?.main_image_url || '',
+        price: item.experiences?.price || 0,
         quantity: item.quantity,
         selected_date: item.selected_date,
-        city: item.products.cities.name,
-        duration: item.products.duration,
+        city: item.experiences?.cities?.name || 'Unknown City',
+        duration: item.experiences?.duration || 'Unknown Duration',
       }))
 
       setItems(cartItems)
     } catch (error) {
-      console.error('Error loading cart items:', error)
+      console.warn('Cart functionality not available:', error)
+      setItems([])
     } finally {
       setLoading(false)
     }

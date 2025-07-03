@@ -5,7 +5,13 @@ import { createClient } from '@/lib/supabase'
 import { useRouter, useParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Save, ArrowLeft } from 'lucide-react'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { Label } from '@/components/ui/label'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Switch } from '@/components/ui/switch'
+import { SEOFormFields, SEOFormData } from '@/components/seo/SEOFormFields'
+import { Save, ArrowLeft, Eye } from 'lucide-react'
 import Link from 'next/link'
 
 interface City {
@@ -18,7 +24,7 @@ interface Category {
   name: string
 }
 
-interface Product {
+interface Experience {
   id: string
   title: string
   slug: string
@@ -43,20 +49,40 @@ interface Product {
   rating: number
   review_count: number
   booking_count: number
-  seo_title: string
-  seo_description: string
+  seo_title?: string
+  seo_description?: string
+  seo_keywords?: string
+  canonical_url?: string
+  robots_index?: boolean
+  robots_follow?: boolean
+  robots_nosnippet?: boolean
+  og_title?: string
+  og_description?: string
+  og_image?: string
+  og_image_alt?: string
+  twitter_title?: string
+  twitter_description?: string
+  twitter_image?: string
+  twitter_image_alt?: string
+  structured_data_type?: string
+  focus_keyword?: string
   sort_order: number
 }
 
-export default function EditProduct() {
+export default function EditExperience() {
   const router = useRouter()
   const params = useParams()
-  const productId = params.id as string
+  const experienceId = params.id as string
 
   const [cities, setCities] = useState<City[]>([])
   const [categories, setCategories] = useState<Category[]>([])
   const [saving, setSaving] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [seoData, setSeoData] = useState<SEOFormData>({
+    robots_index: true,
+    robots_follow: true,
+    robots_nosnippet: false
+  })
   
   const [formData, setFormData] = useState({
     title: '',
@@ -84,57 +110,82 @@ export default function EditProduct() {
     booking_count: 0,
     seo_title: '',
     seo_description: '',
-    sort_order: 0
+    sort_order: 0,
+    highlights: '',
+    availability_url: ''
   })
 
   useEffect(() => {
     fetchData()
-  }, [productId])
+  }, [experienceId])
 
   async function fetchData() {
     const supabase = createClient()
     
-    // Fetch product data
-    const { data: productData, error: productError } = await supabase
+    // Fetch experience data
+    const { data: experienceData, error: experienceError } = await supabase
       .from('experiences')
       .select('*')
-      .eq('id', productId)
+      .eq('id', experienceId)
       .single()
 
-    if (productData) {
+    if (experienceData) {
       setFormData({
-        title: productData.title || '',
-        slug: productData.slug || '',
-        description: productData.description || '',
-        short_description: productData.short_description || '',
-        price: productData.price || 0,
-        original_price: productData.original_price || 0,
-        currency: productData.currency || 'USD',
-        city_id: productData.city_id || '',
-        category_id: productData.category_id || '',
-        duration: productData.duration || '',
-        duration_hours: productData.duration_hours || 0,
-        max_group_size: productData.max_group_size || 1,
-        min_age: productData.min_age || 0,
-        meeting_point: productData.meeting_point || '',
-        cancellation_policy: productData.cancellation_policy || '',
-        languages: Array.isArray(productData.languages) ? productData.languages.join(', ') : '',
-        main_image_url: productData.main_image_url || '',
-        featured: productData.featured || false,
-        bestseller: productData.bestseller || false,
-        status: productData.status || 'active',
-        rating: productData.rating || 0,
-        review_count: productData.review_count || 0,
-        booking_count: productData.booking_count || 0,
-        seo_title: productData.seo_title || '',
-        seo_description: productData.seo_description || '',
-        sort_order: productData.sort_order || 0
+        title: experienceData.title || '',
+        slug: experienceData.slug || '',
+        description: experienceData.description || '',
+        short_description: experienceData.short_description || '',
+        price: experienceData.price || 0,
+        original_price: experienceData.original_price || 0,
+        currency: experienceData.currency || 'USD',
+        city_id: experienceData.city_id || '',
+        category_id: experienceData.category_id || '',
+        duration: experienceData.duration || '',
+        duration_hours: experienceData.duration_hours || 0,
+        max_group_size: experienceData.max_group_size || 1,
+        min_age: experienceData.min_age || 0,
+        meeting_point: experienceData.meeting_point || '',
+        cancellation_policy: experienceData.cancellation_policy || '',
+        languages: Array.isArray(experienceData.languages) ? experienceData.languages.join(', ') : '',
+        main_image_url: experienceData.main_image_url || '',
+        featured: experienceData.featured || false,
+        bestseller: experienceData.bestseller || false,
+        status: experienceData.status || 'active',
+        rating: experienceData.rating || 0,
+        review_count: experienceData.review_count || 0,
+        booking_count: experienceData.booking_count || 0,
+        seo_title: experienceData.seo_title || '',
+        seo_description: experienceData.seo_description || '',
+        sort_order: experienceData.sort_order || 0,
+        highlights: Array.isArray(experienceData.highlights) ? experienceData.highlights.join('\n') : '',
+        availability_url: experienceData.availability_url || ''
+      })
+      
+      // Set SEO data
+      setSeoData({
+        seo_title: experienceData.seo_title || '',
+        seo_description: experienceData.seo_description || '',
+        seo_keywords: experienceData.seo_keywords || '',
+        canonical_url: experienceData.canonical_url || '',
+        robots_index: experienceData.robots_index !== false,
+        robots_follow: experienceData.robots_follow !== false,
+        robots_nosnippet: experienceData.robots_nosnippet || false,
+        og_title: experienceData.og_title || '',
+        og_description: experienceData.og_description || '',
+        og_image: experienceData.og_image || '',
+        og_image_alt: experienceData.og_image_alt || '',
+        twitter_title: experienceData.twitter_title || '',
+        twitter_description: experienceData.twitter_description || '',
+        twitter_image: experienceData.twitter_image || '',
+        twitter_image_alt: experienceData.twitter_image_alt || '',
+        structured_data_type: experienceData.structured_data_type || '',
+        focus_keyword: experienceData.focus_keyword || ''
       })
     }
 
-    if (productError) {
-      console.error('Error fetching product:', productError)
-      alert('Error loading product')
+    if (experienceError) {
+      console.error('Error fetching experience:', experienceError)
+      alert('Error loading experience')
     }
 
     // Fetch cities
@@ -167,9 +218,17 @@ export default function EditProduct() {
     setFormData(prev => ({
       ...prev,
       title,
-      slug: generateSlug(title),
-      seo_title: title
+      slug: generateSlug(title)
     }))
+    
+    // Auto-update SEO title if not manually set
+    if (!seoData.seo_title) {
+      setSeoData(prev => ({ ...prev, seo_title: title }))
+    }
+  }
+  
+  const handleSEOChange = (field: keyof SEOFormData, value: any) => {
+    setSeoData(prev => ({ ...prev, [field]: value }))
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -184,19 +243,52 @@ export default function EditProduct() {
       .map(lang => lang.trim())
       .filter(lang => lang.length > 0)
 
+    // Convert highlights string to array
+    const highlightsArray = formData.highlights
+      .split('\n')
+      .map(highlight => highlight.trim())
+      .filter(highlight => highlight.length > 0)
+
+
+    // Complete update data including all SEO fields
+    const updateData = {
+      ...formData,
+      languages: languagesArray,
+      highlights: highlightsArray,
+      availability_url: formData.availability_url || null,
+      // SEO fields
+      seo_title: seoData.seo_title || null,
+      seo_description: seoData.seo_description || null,
+      seo_keywords: seoData.seo_keywords || null,
+      canonical_url: seoData.canonical_url || null,
+      robots_index: seoData.robots_index ?? true,
+      robots_follow: seoData.robots_follow ?? true,
+      robots_nosnippet: seoData.robots_nosnippet ?? false,
+      og_title: seoData.og_title || null,
+      og_description: seoData.og_description || null,
+      og_image: seoData.og_image || null,
+      og_image_alt: seoData.og_image_alt || null,
+      twitter_title: seoData.twitter_title || null,
+      twitter_description: seoData.twitter_description || null,
+      twitter_image: seoData.twitter_image || null,
+      twitter_image_alt: seoData.twitter_image_alt || null,
+      structured_data_type: seoData.structured_data_type || null,
+      focus_keyword: seoData.focus_keyword || null,
+      updated_at: new Date().toISOString()
+    }
+    
     const { error } = await supabase
       .from('experiences')
-      .update({
-        ...formData,
-        languages: languagesArray
-      })
-      .eq('id', productId)
+      .update(updateData)
+      .eq('id', experienceId)
 
     if (error) {
-      alert('Error updating product')
-      console.error(error)
+      alert(`Error updating experience: ${error.message}`)
+      console.error('Update failed:', error)
+      console.log('Update data:', updateData) // Debug log
     } else {
-      router.push('/admin/products')
+      console.log('Experience updated successfully with SEO data')
+      router.push('/admin/experiences')
     }
     
     setSaving(false)
@@ -206,7 +298,7 @@ export default function EditProduct() {
     return (
       <div className="text-center py-8">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary mx-auto"></div>
-        <p className="mt-4 text-gray-600">Loading product...</p>
+        <p className="mt-4 text-gray-600">Loading experience...</p>
       </div>
     )
   }
@@ -214,15 +306,15 @@ export default function EditProduct() {
   return (
     <div>
       <div className="flex items-center mb-8">
-        <Link href="/admin/products">
+        <Link href="/admin/experiences">
           <Button variant="outline" size="sm" className="mr-4">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Products
+            Back to Experiences
           </Button>
         </Link>
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Edit Product</h1>
-          <p className="text-gray-600 mt-2">Update product information and settings</p>
+          <h1 className="text-3xl font-bold text-gray-900">Edit Experience</h1>
+          <p className="text-gray-600 mt-2">Update experience information and settings</p>
         </div>
       </div>
 
@@ -246,7 +338,7 @@ export default function EditProduct() {
                     value={formData.title}
                     onChange={(e) => handleTitleChange(e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                    placeholder="Enter product title"
+                    placeholder="Enter experience title"
                   />
                 </div>
 
@@ -259,7 +351,7 @@ export default function EditProduct() {
                     value={formData.slug}
                     onChange={(e) => setFormData(prev => ({ ...prev, slug: e.target.value }))}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                    placeholder="product-url-slug"
+                    placeholder="experience-url-slug"
                   />
                 </div>
 
@@ -287,7 +379,7 @@ export default function EditProduct() {
                     onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
                     rows={8}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                    placeholder="Detailed product description"
+                    placeholder="Detailed experience description"
                   />
                 </div>
 
@@ -463,39 +555,54 @@ export default function EditProduct() {
               </CardContent>
             </Card>
 
-            {/* SEO Settings */}
+            {/* Content Management */}
             <Card>
               <CardHeader>
-                <CardTitle>SEO Settings</CardTitle>
+                <CardTitle>Content Management</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    SEO Title
+                    Experience Highlights (one per line)
                   </label>
-                  <input
-                    type="text"
-                    value={formData.seo_title}
-                    onChange={(e) => setFormData(prev => ({ ...prev, seo_title: e.target.value }))}
+                  <textarea
+                    value={formData.highlights}
+                    onChange={(e) => setFormData(prev => ({ ...prev, highlights: e.target.value }))}
+                    rows={6}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                    placeholder="SEO optimized title"
+                    placeholder="Professional guided experience&#10;Skip-the-line access where available&#10;Audio guide in multiple languages&#10;Small group experience&#10;Expert local knowledge&#10;Memorable photo opportunities"
                   />
+                  <p className="text-xs text-gray-600 mt-1">
+                    Enter each highlight on a new line. These will appear as bullet points in the experience details.
+                  </p>
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    SEO Description
+                    Availability/Booking URL
                   </label>
-                  <textarea
-                    value={formData.seo_description}
-                    onChange={(e) => setFormData(prev => ({ ...prev, seo_description: e.target.value }))}
-                    rows={3}
+                  <input
+                    type="url"
+                    value={formData.availability_url}
+                    onChange={(e) => setFormData(prev => ({ ...prev, availability_url: e.target.value }))}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                    placeholder="Meta description for search engines"
+                    placeholder="https://booking-provider.com/experience-123"
                   />
+                  <p className="text-xs text-gray-600 mt-1">
+                    URL to redirect users when they click "Check Availability". This should link to your booking provider.
+                  </p>
                 </div>
               </CardContent>
             </Card>
+
+            {/* SEO Settings */}
+            <SEOFormFields
+              data={seoData}
+              onChange={handleSEOChange}
+              baseUrl={process.env.NEXT_PUBLIC_SITE_URL || 'https://milford-sound.com'}
+              slug={formData.slug}
+              contentType="experience"
+            />
           </div>
 
           {/* Sidebar */}
@@ -574,7 +681,7 @@ export default function EditProduct() {
                     className="mr-2"
                   />
                   <label htmlFor="featured" className="text-sm font-medium text-gray-700">
-                    Featured Product
+                    Featured Experience
                   </label>
                 </div>
 
@@ -612,7 +719,7 @@ export default function EditProduct() {
                 disabled={saving}
               >
                 <Save className="h-4 w-4 mr-2" />
-                {saving ? 'Saving...' : 'Update Product'}
+                {saving ? 'Saving...' : 'Update Experience'}
               </Button>
             </div>
           </div>

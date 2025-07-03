@@ -10,6 +10,8 @@ import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { createClient } from '@/lib/supabase'
+import { SEOHead } from '@/components/seo/SEOHead'
+import { generateBlogPostStructuredData } from '@/components/seo/structuredData'
 
 interface CodeSnippet {
   language: string
@@ -26,8 +28,24 @@ interface BlogPost {
   featured_image: string
   published_at: string
   read_time_minutes: number
-  seo_title: string
-  seo_description: string
+  seo_title?: string
+  seo_description?: string
+  seo_keywords?: string
+  canonical_url?: string
+  robots_index?: boolean
+  robots_follow?: boolean
+  robots_nosnippet?: boolean
+  og_title?: string
+  og_description?: string
+  og_image?: string
+  og_image_alt?: string
+  twitter_title?: string
+  twitter_description?: string
+  twitter_image?: string
+  twitter_image_alt?: string
+  structured_data_type?: string
+  focus_keyword?: string
+  updated_at?: string
   code_snippets: CodeSnippet[]
   blog_categories?: {
     name: string
@@ -107,8 +125,57 @@ export default function BlogPostPage() {
     notFound()
   }
 
+  // Generate SEO data
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://milford-sound.com'
+  const currentUrl = `${siteUrl}/blog/${post.slug}`
+  const seoTitle = post.seo_title || `${post.title} - Milford Sound Blog`
+  const seoDescription = post.seo_description || post.excerpt || post.content.substring(0, 160)
+  const author = 'Milford Sound Team'
+  const structuredData = generateBlogPostStructuredData({
+    id: post.id,
+    title: post.title,
+    content: post.content,
+    excerpt: post.excerpt,
+    slug: post.slug,
+    author: author,
+    published_date: post.published_at,
+    updated_date: post.updated_at || post.published_at,
+    featured_image: post.featured_image,
+    category: 'Blog'
+  }, siteUrl)
+
   return (
-    <article className="min-h-screen bg-white">
+    <>
+      <SEOHead
+        title={seoTitle}
+        description={seoDescription}
+        canonical={post.canonical_url || currentUrl}
+        robots={{
+          index: post.robots_index !== false,
+          follow: post.robots_follow !== false,
+          nosnippet: post.robots_nosnippet || false
+        }}
+        openGraph={{
+          title: post.og_title || seoTitle,
+          description: post.og_description || seoDescription,
+          image: post.og_image || post.featured_image,
+          imageAlt: post.og_image_alt || `${post.title} - Blog Post Image`,
+          type: 'article',
+          url: currentUrl,
+          siteName: 'Milford Sound'
+        }}
+        twitter={{
+          card: 'summary_large_image',
+          title: post.twitter_title || post.og_title || seoTitle,
+          description: post.twitter_description || post.og_description || seoDescription,
+          image: post.twitter_image || post.og_image || post.featured_image,
+          imageAlt: post.twitter_image_alt || post.og_image_alt || `${post.title} - Blog Post Image`
+        }}
+        structuredData={structuredData}
+        lastModified={post.updated_at}
+      />
+      
+      <article className="min-h-screen bg-white">
       {/* Hero Section */}
       <section className="relative h-96 lg:h-[500px]">
         <Image
@@ -352,6 +419,7 @@ export default function BlogPostPage() {
           </div>
         </section>
       )}
-    </article>
+      </article>
+    </>
   )
 }

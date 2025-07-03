@@ -6,9 +6,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { ProductCard } from '@/components/products/ProductCard'
 
 interface CategoryPageProps {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
 // Mock data - replace with actual data fetching
@@ -78,8 +78,9 @@ const products = [
   }
 ]
 
-export default function CategoryPage({ params }: CategoryPageProps) {
-  const category = categoryData[params.slug as keyof typeof categoryData]
+export default async function CategoryPage({ params }: CategoryPageProps) {
+  const { slug } = await params
+  const category = categoryData[slug as keyof typeof categoryData]
   
   if (!category) {
     notFound()

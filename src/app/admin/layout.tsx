@@ -13,7 +13,8 @@ import {
   MessageSquare, 
   Settings,
   BarChart3,
-  LogOut
+  LogOut,
+  Link as LinkIcon
 } from 'lucide-react'
 
 export default function AdminLayout({
@@ -62,7 +63,9 @@ export default function AdminLayout({
   const navigation = [
     { name: 'Dashboard', href: '/admin', icon: BarChart3 },
     { name: 'Blog Posts', href: '/admin/blog', icon: FileText },
-    { name: 'Experiences', href: '/admin/products', icon: Package },
+    { name: 'Experiences', href: '/admin/experiences', icon: Package },
+    { name: 'Internal Links', href: '/admin/internal-links', icon: LinkIcon },
+    { name: 'URL Redirects', href: '/admin/redirects', icon: LinkIcon },
     { name: 'Categories', href: '/admin/categories', icon: Settings },
     { name: 'Testimonials', href: '/admin/testimonials', icon: MessageSquare },
     { name: 'Homepage', href: '/admin/homepage', icon: Home },

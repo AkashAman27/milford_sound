@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { notFound, useParams } from 'next/navigation'
+import { notFound, useParams, useRouter } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { 
@@ -15,7 +15,9 @@ import {
   Share2,
   Heart,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Plus,
+  Minus
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -23,6 +25,9 @@ import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Separator } from '@/components/ui/separator'
 import { createClient } from '@/lib/supabase'
+import { SEOHead } from '@/components/seo/SEOHead'
+import { generateExperienceStructuredData } from '@/components/seo/structuredData'
+import { InternalLinksSection } from '@/components/experience/InternalLinksSection'
 
 interface Product {
   id: string
@@ -31,49 +36,72 @@ interface Product {
   description: string
   short_description: string
   price: number
+  original_price: number
   currency: string
-  rating: number
-  review_count: number
   duration: string
+  duration_hours: number
   max_group_size: number
+  min_age: number
   meeting_point: string
   cancellation_policy: string
+  languages: string[]
   main_image_url: string
   featured: boolean
   bestseller: boolean
   status: string
-  languages: string[]
-  cities?: {
-    name: string
-  }
-  categories?: {
-    name: string
-  }
+  rating: number
+  review_count: number
+  booking_count: number
+  sort_order: number
+  created_at: string
+  updated_at: string
+  seo_title?: string
+  seo_description?: string
+  seo_keywords?: string
+  canonical_url?: string
+  robots_index?: boolean
+  robots_follow?: boolean
+  robots_nosnippet?: boolean
+  og_title?: string
+  og_description?: string
+  og_image?: string
+  og_image_alt?: string
+  twitter_title?: string
+  twitter_description?: string
+  twitter_image?: string
+  twitter_image_alt?: string
+  structured_data_type?: string
+  focus_keyword?: string
+  highlights?: string[]
+  availability_url?: string
+  cities?: { name: string }
+  categories?: { name: string }
 }
+
 
 export default function ExperiencePage() {
   const params = useParams()
+  const router = useRouter()
   const slug = params.slug as string
   
   const [product, setProduct] = useState<Product | null>(null)
   const [loading, setLoading] = useState(true)
-  const [travelers, setTravelers] = useState(2)
-  const [selectedDate, setSelectedDate] = useState('')
 
   useEffect(() => {
-    fetchProduct()
+    if (slug) {
+      fetchProduct()
+    }
   }, [slug])
 
-  async function fetchProduct() {
-    const supabase = createClient()
-    
+  const fetchProduct = async () => {
     try {
+      const supabase = createClient()
       const { data, error } = await supabase
         .from('experiences')
         .select(`
           *,
-          cities(name),
-          categories(name)
+          cities:city_id(name),
+          categories:category_id(name)
         `)
         .eq('slug', slug)
         .eq('status', 'active')
@@ -93,404 +121,303 @@ export default function ExperiencePage() {
     }
   }
 
+  const handleCheckAvailability = () => {
+    if (product?.availability_url) {
+      window.open(product.availability_url, '_blank')
+    } else {
+      alert('Availability booking is currently unavailable')
+    }
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading experience...</p>
-        </div>
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
       </div>
     )
   }
 
   if (!product) {
     notFound()
+    return null
   }
 
-  // Mock data for features not yet in database
-  const mockImages = [
-    product.main_image_url || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop',
-    'https://images.unsplash.com/photo-1500916434205-0c77489c6cf7?w=800&h=600&fit=crop',
-    'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&h=600&fit=crop',
-    'https://images.unsplash.com/photo-1534430480872-3498386e7856?w=800&h=600&fit=crop'
-  ]
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://milford-sound.com'
+  const currentUrl = `${siteUrl}/experience/${product.slug}`
+  const seoTitle = product.seo_title || `${product.title} - Milford Sound`
+  const seoDescription = product.seo_description || product.short_description || product.description.substring(0, 160)
 
-  const mockHighlights = [
-    'Professional guided experience',
-    'Skip-the-line access where available',
-    'Audio guide in multiple languages',
-    'Small group experience',
-    'Expert local knowledge',
-    'Memorable photo opportunities'
-  ]
+  const structuredData = generateExperienceStructuredData({
+    id: product.id,
+    title: product.title,
+    description: product.description,
+    slug: product.slug,
+    price: product.price,
+    currency: product.currency,
+    rating: product.rating,
+    review_count: product.review_count,
+    duration: product.duration,
+    main_image_url: product.main_image_url,
+    category: product.categories?.name || 'Experience',
+    city: product.cities?.name || 'Unknown',
+    updated_date: product.updated_at
+  }, siteUrl)
 
-  const mockIncludes = [
-    'Professional tour guide',
-    'Entry tickets (where applicable)',
-    'Audio guide system',
-    'Group coordination',
-    'Safety briefing'
-  ]
-
-  const mockExcludes = [
-    'Food and beverages',
-    'Personal expenses',
-    'Hotel pickup and drop-off',
-    'Gratuities',
-    'Travel insurance'
-  ]
-
-  const mockReviews = [
-    {
-      id: '1',
-      name: 'Sarah Johnson',
-      rating: 5,
-      date: '2 days ago',
-      comment: 'Amazing experience! Highly recommend this tour for anyone visiting the area.',
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b1e0?w=40&h=40&fit=crop&crop=face'
-    },
-    {
-      id: '2',
-      name: 'Michael Chen',
-      rating: 4,
-      date: '1 week ago',
-      comment: 'Great tour overall. The guide was very knowledgeable and friendly.',
-      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face'
-    },
-    {
-      id: '3',
-      name: 'Emma Williams',
-      rating: 5,
-      date: '2 weeks ago',
-      comment: 'Perfect for first-time visitors. Well organized and informative.',
-      avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face'
+  // Get highlights from product data or fallback to default
+  const getHighlights = () => {
+    if (product?.highlights && Array.isArray(product.highlights) && product.highlights.length > 0) {
+      return product.highlights
     }
-  ]
+    return [
+      'Professional guided experience',
+      'Skip-the-line access where available',
+      'Audio guide in multiple languages',
+      'Small group experience',
+      'Expert local knowledge',
+      'Memorable photo opportunities'
+    ]
+  }
 
   return (
-    <div className="min-h-screen">
-      {/* Image Gallery */}
-      <section className="h-96 lg:h-[500px] relative">
-        <div className="grid grid-cols-4 gap-2 h-full">
-          <div className="col-span-4 lg:col-span-2 relative">
-            <Image
-              src={mockImages[0]}
-              alt={product.title}
-              fill
-              className="object-cover rounded-lg"
-            />
-          </div>
-          <div className="hidden lg:block col-span-1">
-            <div className="grid grid-rows-2 gap-2 h-full">
-              <div className="relative">
-                <Image
-                  src={mockImages[1]}
-                  alt={product.title}
-                  fill
-                  className="object-cover rounded-lg"
-                />
-              </div>
-              <div className="relative">
-                <Image
-                  src={mockImages[2]}
-                  alt={product.title}
-                  fill
-                  className="object-cover rounded-lg"
-                />
-              </div>
+    <>
+      <SEOHead
+        title={seoTitle}
+        description={seoDescription}
+        canonical={product.canonical_url || currentUrl}
+        robots={{
+          index: product.robots_index ?? true,
+          follow: product.robots_follow ?? true,
+          nosnippet: product.robots_nosnippet ?? false
+        }}
+        openGraph={{
+          title: product.og_title || seoTitle,
+          description: product.og_description || seoDescription,
+          image: product.og_image || product.main_image_url,
+          imageAlt: product.og_image_alt || `${product.title} image`,
+          type: 'product',
+          url: currentUrl
+        }}
+        twitter={{
+          card: 'summary_large_image',
+          title: product.twitter_title || product.og_title || seoTitle,
+          description: product.twitter_description || product.og_description || seoDescription,
+          image: product.twitter_image || product.og_image || product.main_image_url,
+          imageAlt: product.twitter_image_alt || product.og_image_alt || `${product.title} image`
+        }}
+        structuredData={structuredData}
+        lastModified={product.updated_at}
+      />
+
+      <div className="min-h-screen bg-gray-50">
+        {/* Header */}
+        <header className="bg-white shadow-sm border-b">
+          <div className="container mx-auto px-4 py-4">
+            <div className="flex items-center justify-between">
+              <Link href="/" className="flex items-center space-x-2">
+                <div className="w-8 h-8 bg-purple-600 rounded"></div>
+                <span className="text-xl font-bold">Milford Sound</span>
+              </Link>
+              <nav className="hidden md:flex items-center space-x-6">
+                <Link href="/destinations" className="text-gray-600 hover:text-gray-900">Destinations</Link>
+                <Link href="/experiences" className="text-gray-600 hover:text-gray-900">Experiences</Link>
+                <Link href="/blog" className="text-gray-600 hover:text-gray-900">Blog</Link>
+                <Link href="/help" className="text-gray-600 hover:text-gray-900">Help</Link>
+              </nav>
             </div>
           </div>
-          <div className="hidden lg:block col-span-1">
-            <div className="grid grid-rows-2 gap-2 h-full">
-              <div className="relative">
+        </header>
+
+        <div className="container mx-auto px-4 py-8">
+          {/* Breadcrumb */}
+          <div className="flex items-center space-x-2 text-sm text-gray-600 mb-6">
+            <Link href="/" className="hover:text-gray-900">Home</Link>
+            <span>/</span>
+            <Link href="/experiences" className="hover:text-gray-900">Experiences</Link>
+            <span>/</span>
+            <span className="text-gray-900">{product.title}</span>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Main Content */}
+            <div className="lg:col-span-2">
+              {/* Hero Image */}
+              <div className="relative h-96 rounded-lg overflow-hidden mb-6">
                 <Image
-                  src={mockImages[3]}
+                  src={product.main_image_url}
                   alt={product.title}
                   fill
-                  className="object-cover rounded-lg"
+                  className="object-cover"
                 />
-              </div>
-              <div className="relative bg-black/50 rounded-lg flex items-center justify-center">
-                <Button variant="secondary" size="sm">
-                  View all photos
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        {/* Action buttons */}
-        <div className="absolute top-4 right-4 flex space-x-2">
-          <Button variant="secondary" size="sm">
-            <Share2 className="h-4 w-4" />
-          </Button>
-          <Button variant="secondary" size="sm">
-            <Heart className="h-4 w-4" />
-          </Button>
-        </div>
-      </section>
-
-      <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main Content */}
-          <div className="lg:col-span-2">
-            {/* Header */}
-            <div className="mb-6">
-              <div className="flex items-center space-x-2 mb-2">
-                <Badge variant="secondary">{product.categories?.name || 'Experience'}</Badge>
-                <Badge variant="outline">{product.cities?.name || 'City'}</Badge>
-                {product.featured && <Badge className="bg-blue-500">Featured</Badge>}
-                {product.bestseller && <Badge className="bg-orange-500">Bestseller</Badge>}
-              </div>
-              
-              <h1 className="text-3xl lg:text-4xl font-bold mb-4">{product.title}</h1>
-              
-              <div className="flex items-center space-x-6 text-sm text-gray-600 mb-4">
-                <div className="flex items-center space-x-1">
-                  <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                  <span className="font-medium">{product.rating || 'New'}</span>
-                  {product.review_count > 0 && <span>({product.review_count} reviews)</span>}
-                </div>
-                <div className="flex items-center space-x-1">
-                  <Clock className="h-4 w-4" />
-                  <span>{product.duration || 'Flexible duration'}</span>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <Users className="h-4 w-4" />
-                  <span>Up to {product.max_group_size || 20} people</span>
-                </div>
-              </div>
-              
-              <p className="text-lg text-gray-700">{product.short_description}</p>
-            </div>
-
-            {/* Tabs */}
-            <Tabs defaultValue="overview" className="mb-8">
-              <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="overview">Overview</TabsTrigger>
-                <TabsTrigger value="includes">Includes</TabsTrigger>
-                <TabsTrigger value="reviews">Reviews</TabsTrigger>
-              </TabsList>
-              
-              <TabsContent value="overview" className="mt-6">
-                <div className="space-y-6">
-                  <div>
-                    <h3 className="text-xl font-semibold mb-3">About this experience</h3>
-                    <p className="text-gray-700 leading-relaxed whitespace-pre-line">{product.description}</p>
-                  </div>
-                  
-                  <div>
-                    <h3 className="text-xl font-semibold mb-3">Highlights</h3>
-                    <ul className="space-y-2">
-                      {mockHighlights.map((highlight, index) => (
-                        <li key={index} className="flex items-start space-x-2">
-                          <Check className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                          <span className="text-gray-700">{highlight}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  
-                  {product.meeting_point && (
-                    <div>
-                      <h3 className="text-xl font-semibold mb-3">Meeting point</h3>
-                      <div className="flex items-start space-x-2">
-                        <MapPin className="h-5 w-5 text-gray-500 mt-0.5" />
-                        <span className="text-gray-700">{product.meeting_point}</span>
-                      </div>
-                    </div>
-                  )}
-
-                  {product.languages && product.languages.length > 0 && (
-                    <div>
-                      <h3 className="text-xl font-semibold mb-3">Available Languages</h3>
-                      <div className="flex flex-wrap gap-2">
-                        {product.languages.map((language, index) => (
-                          <Badge key={index} variant="outline">{language}</Badge>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </TabsContent>
-              
-              <TabsContent value="includes" className="mt-6">
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <h3 className="text-xl font-semibold mb-3 text-green-600">What's included</h3>
-                    <ul className="space-y-2">
-                      {mockIncludes.map((item, index) => (
-                        <li key={index} className="flex items-start space-x-2">
-                          <Check className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                          <span className="text-gray-700">{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  
-                  <div>
-                    <h3 className="text-xl font-semibold mb-3 text-red-600">What's not included</h3>
-                    <ul className="space-y-2">
-                      {mockExcludes.map((item, index) => (
-                        <li key={index} className="flex items-start space-x-2">
-                          <X className="h-5 w-5 text-red-500 mt-0.5 flex-shrink-0" />
-                          <span className="text-gray-700">{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-
-                {product.cancellation_policy && (
-                  <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-                    <h4 className="font-semibold text-blue-900 mb-2">Cancellation Policy</h4>
-                    <p className="text-blue-800 text-sm">{product.cancellation_policy}</p>
-                  </div>
+                {product.featured && (
+                  <Badge className="absolute top-4 left-4 bg-purple-600">Featured</Badge>
                 )}
-              </TabsContent>
-              
-              <TabsContent value="reviews" className="mt-6">
-                <div className="space-y-6">
-                  <div className="flex items-center space-x-4 mb-6">
-                    <div className="text-3xl font-bold">{product.rating || 'New'}</div>
-                    <div>
-                      <div className="flex items-center space-x-1 mb-1">
-                        {[1, 2, 3, 4, 5].map((star) => (
-                          <Star
-                            key={star}
-                            className={`h-5 w-5 ${
-                              star <= (product.rating || 0)
-                                ? 'fill-yellow-400 text-yellow-400'
-                                : 'text-gray-300'
-                            }`}
-                          />
-                        ))}
-                      </div>
-                      <div className="text-sm text-gray-600">
-                        {product.review_count > 0 
-                          ? `Based on ${product.review_count} reviews`
-                          : 'No reviews yet'
-                        }
-                      </div>
-                    </div>
-                  </div>
-                  
-                  {product.review_count > 0 ? (
-                    <div className="space-y-4">
-                      {mockReviews.map((review) => (
-                        <div key={review.id} className="border-b pb-4">
-                          <div className="flex items-start space-x-3">
-                            <Image
-                              src={review.avatar}
-                              alt={review.name}
-                              width={40}
-                              height={40}
-                              className="rounded-full"
-                            />
-                            <div className="flex-1">
-                              <div className="flex items-center space-x-2 mb-1">
-                                <span className="font-medium">{review.name}</span>
-                                <div className="flex items-center space-x-1">
-                                  {[1, 2, 3, 4, 5].map((star) => (
-                                    <Star
-                                      key={star}
-                                      className={`h-4 w-4 ${
-                                        star <= review.rating
-                                          ? 'fill-yellow-400 text-yellow-400'
-                                          : 'text-gray-300'
-                                      }`}
-                                    />
-                                  ))}
-                                </div>
-                                <span className="text-sm text-gray-500">{review.date}</span>
-                              </div>
-                              <p className="text-gray-700">{review.comment}</p>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="text-center py-8 text-gray-500">
-                      <p>No reviews yet. Be the first to review this experience!</p>
-                    </div>
-                  )}
-                </div>
-              </TabsContent>
-            </Tabs>
-          </div>
+                {product.bestseller && (
+                  <Badge className="absolute top-4 right-4 bg-orange-500">Bestseller</Badge>
+                )}
+              </div>
 
-          {/* Booking Sidebar */}
-          <div className="lg:col-span-1">
-            <Card className="sticky top-8">
-              <CardHeader>
-                <div className="flex items-baseline space-x-2">
-                  <span className="text-3xl font-bold">
-                    {product.currency === 'USD' ? '$' : product.currency}{product.price}
-                  </span>
-                  <span className="text-gray-600">per person</span>
+              {/* Title and Basic Info */}
+              <div className="mb-6">
+                <div className="flex flex-wrap gap-2 mb-3">
+                  <Badge variant="secondary" className="bg-purple-100 text-purple-700">
+                    {product.categories?.name || 'Tours & Attractions'}
+                  </Badge>
+                  <Badge variant="outline">{product.cities?.name}</Badge>
+                  <Badge variant="outline" className="bg-blue-50 text-blue-700">Featured</Badge>
                 </div>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium mb-2">Select date</label>
-                  <Button variant="outline" className="w-full justify-start">
-                    <Calendar className="h-4 w-4 mr-2" />
-                    Choose date
+
+                <h1 className="text-3xl font-bold text-gray-900 mb-4">{product.title}</h1>
+                
+                <div className="flex items-center space-x-6 text-sm text-gray-600 mb-4">
+                  <div className="flex items-center">
+                    <Star className="h-4 w-4 text-yellow-400 mr-1" />
+                    <span className="font-medium">{product.rating}</span>
+                    <span className="ml-1">({product.review_count} reviews)</span>
+                  </div>
+                  <div className="flex items-center">
+                    <Clock className="h-4 w-4 mr-1" />
+                    <span>{product.duration}</span>
+                  </div>
+                  <div className="flex items-center">
+                    <Users className="h-4 w-4 mr-1" />
+                    <span>Up to {product.max_group_size} people</span>
+                  </div>
+                </div>
+
+                <p className="text-gray-600 text-lg mb-6">{product.short_description}</p>
+              </div>
+
+              {/* Tabs */}
+              <Tabs defaultValue="overview" className="mb-8">
+                <TabsList className="grid w-full grid-cols-3">
+                  <TabsTrigger value="overview">Overview</TabsTrigger>
+                  <TabsTrigger value="includes">Includes</TabsTrigger>
+                  <TabsTrigger value="reviews">Reviews</TabsTrigger>
+                </TabsList>
+                
+                <TabsContent value="overview" className="space-y-6">
+                  <div>
+                    <h3 className="text-xl font-semibold mb-4">About this experience</h3>
+                    <p className="text-gray-700 leading-relaxed">{product.description}</p>
+                  </div>
+
+                  <div>
+                    <h3 className="text-xl font-semibold mb-4">Highlights</h3>
+                    <ul className="space-y-2">
+                      {getHighlights().map((highlight, index) => (
+                        <li key={index} className="flex items-start">
+                          <Check className="h-5 w-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
+                          <span>{highlight}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div>
+                    <h3 className="text-xl font-semibold mb-4">Meeting point</h3>
+                    <div className="flex items-start">
+                      <MapPin className="h-5 w-5 text-gray-400 mr-2 flex-shrink-0 mt-0.5" />
+                      <span>{product.meeting_point}</span>
+                    </div>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="includes" className="space-y-4">
+                  <div>
+                    <h3 className="text-lg font-semibold mb-3">What's included</h3>
+                    <ul className="space-y-2">
+                      <li className="flex items-start">
+                        <Check className="h-5 w-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
+                        <span>Entry tickets</span>
+                      </li>
+                      <li className="flex items-start">
+                        <Check className="h-5 w-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
+                        <span>Professional guide</span>
+                      </li>
+                      <li className="flex items-start">
+                        <Check className="h-5 w-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
+                        <span>Audio guide (multiple languages)</span>
+                      </li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold mb-3">What's not included</h3>
+                    <ul className="space-y-2">
+                      <li className="flex items-start">
+                        <X className="h-5 w-5 text-red-500 mr-2 flex-shrink-0 mt-0.5" />
+                        <span>Transportation to meeting point</span>
+                      </li>
+                      <li className="flex items-start">
+                        <X className="h-5 w-5 text-red-500 mr-2 flex-shrink-0 mt-0.5" />
+                        <span>Food and drinks</span>
+                      </li>
+                      <li className="flex items-start">
+                        <X className="h-5 w-5 text-red-500 mr-2 flex-shrink-0 mt-0.5" />
+                        <span>Gratuities</span>
+                      </li>
+                    </ul>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="reviews">
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-lg font-semibold">Reviews</h3>
+                      <div className="flex items-center">
+                        <Star className="h-5 w-5 text-yellow-400 mr-1" />
+                        <span className="font-medium">{product.rating}</span>
+                        <span className="text-gray-600 ml-1">({product.review_count} reviews)</span>
+                      </div>
+                    </div>
+                    <p className="text-gray-600">Reviews will be displayed here...</p>
+                  </div>
+                </TabsContent>
+              </Tabs>
+
+              {/* Internal Links Section */}
+              <InternalLinksSection 
+                experienceId={product.id} 
+                className="mt-8"
+              />
+            </div>
+
+            {/* Booking Sidebar */}
+            <div className="lg:col-span-1">
+              <Card className="bg-white shadow-lg">
+                <CardHeader>
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-gray-900">
+                      ${product.price.toFixed(2)}
+                    </div>
+                    <div className="text-sm text-gray-600">per person</div>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <Button 
+                    onClick={handleCheckAvailability}
+                    className="w-full bg-purple-600 hover:bg-purple-700"
+                  >
+                    Check Availability
                   </Button>
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium mb-2">Number of travelers</label>
-                  <div className="flex items-center justify-between border rounded-md px-3 py-2">
-                    <Button 
-                      variant="ghost" 
-                      size="sm"
-                      onClick={() => setTravelers(Math.max(1, travelers - 1))}
-                      disabled={travelers <= 1}
-                    >
-                      -
-                    </Button>
-                    <span>{travelers} {travelers === 1 ? 'person' : 'people'}</span>
-                    <Button 
-                      variant="ghost" 
-                      size="sm"
-                      onClick={() => setTravelers(Math.min(product.max_group_size || 20, travelers + 1))}
-                      disabled={travelers >= (product.max_group_size || 20)}
-                    >
-                      +
-                    </Button>
+
+                  <div className="text-center text-sm text-gray-600">
+                    Free cancellation available
                   </div>
-                </div>
-                
-                <Separator />
-                
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <span>{travelers} × {product.currency === 'USD' ? '$' : product.currency}{product.price}</span>
-                    <span>{product.currency === 'USD' ? '$' : product.currency}{product.price * travelers}</span>
+
+                  <div className="bg-gray-50 p-3 rounded-lg text-sm text-gray-600">
+                    <p className="font-medium mb-1">What's included:</p>
+                    <ul className="space-y-1">
+                      <li>• Entry tickets</li>
+                      <li>• Professional guide</li>
+                      <li>• Audio guide (multiple languages)</li>
+                    </ul>
                   </div>
-                  <div className="flex justify-between font-semibold">
-                    <span>Total</span>
-                    <span>{product.currency === 'USD' ? '$' : product.currency}{product.price * travelers}</span>
-                  </div>
-                </div>
-                
-                <Link href={`/checkout?product=${product.id}&travelers=${travelers}${selectedDate ? `&date=${selectedDate}` : ''}`}>
-                  <Button className="w-full bg-primary hover:bg-primary/90" size="lg">
-                    Book Now
-                  </Button>
-                </Link>
-                
-                <div className="text-center text-sm text-gray-600">
-                  {product.cancellation_policy || 'Free cancellation available'}
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }

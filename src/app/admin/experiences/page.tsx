@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import Image from 'next/image'
 
-interface Product {
+interface Experience {
   id: string
   title: string
   slug: string
@@ -23,15 +23,15 @@ interface Product {
   categories: { name: string }
 }
 
-export default function ProductManagement() {
-  const [products, setProducts] = useState<Product[]>([])
+export default function ExperienceManagement() {
+  const [experiences, setExperiences] = useState<Experience[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetchProducts()
+    fetchExperiences()
   }, [])
 
-  async function fetchProducts() {
+  async function fetchExperiences() {
     const supabase = createClient()
     
     const { data, error } = await supabase
@@ -43,12 +43,12 @@ export default function ProductManagement() {
       `)
       .order('created_at', { ascending: false })
 
-    if (data) setProducts(data)
-    if (error) console.error('Error fetching products:', error)
+    if (data) setExperiences(data)
+    if (error) console.error('Error fetching experiences:', error)
     setLoading(false)
   }
 
-  async function deleteProduct(id: string) {
+  async function deleteExperience(id: string) {
     if (!confirm('Are you sure you want to delete this experience?')) return
 
     const supabase = createClient()
@@ -62,7 +62,7 @@ export default function ProductManagement() {
       alert('Error deleting experience')
       console.error(error)
     } else {
-      fetchProducts()
+      fetchExperiences()
     }
   }
 
@@ -80,7 +80,7 @@ export default function ProductManagement() {
       alert('Error updating experience')
       console.error(error)
     } else {
-      fetchProducts()
+      fetchExperiences()
     }
   }
 
@@ -96,7 +96,7 @@ export default function ProductManagement() {
       alert('Error updating experience')
       console.error(error)
     } else {
-      fetchProducts()
+      fetchExperiences()
     }
   }
 
@@ -111,7 +111,7 @@ export default function ProductManagement() {
           <h1 className="text-3xl font-bold text-gray-900">Experience Management</h1>
           <p className="text-gray-600 mt-2">Manage tours, experiences, and attractions</p>
         </div>
-        <Link href="/admin/products/new">
+        <Link href="/admin/experiences/new">
           <Button className="flex items-center">
             <Plus className="h-4 w-4 mr-2" />
             New Experience
@@ -120,54 +120,54 @@ export default function ProductManagement() {
       </div>
 
       <div className="grid gap-6">
-        {products.length === 0 ? (
+        {experiences.length === 0 ? (
           <Card>
             <CardContent className="text-center py-12">
               <p className="text-gray-500 mb-4">No experiences found</p>
-              <Link href="/admin/products/new">
+              <Link href="/admin/experiences/new">
                 <Button>Create Your First Experience</Button>
               </Link>
             </CardContent>
           </Card>
         ) : (
-          products.map((product) => (
-            <Card key={product.id}>
+          experiences.map((experience) => (
+            <Card key={experience.id}>
               <CardContent className="p-6">
                 <div className="flex justify-between items-start">
                   <div className="flex-1">
                     <div className="flex items-start space-x-4">
                       <div className="flex-1">
-                        <h3 className="text-xl font-semibold mb-2">{product.title}</h3>
-                        <p className="text-gray-600 mb-4 line-clamp-2">{product.description}</p>
+                        <h3 className="text-xl font-semibold mb-2">{experience.title}</h3>
+                        <p className="text-gray-600 mb-4 line-clamp-2">{experience.description}</p>
                         
                         <div className="flex items-center space-x-4 text-sm text-gray-500 mb-4">
                           <span className="flex items-center">
                             <Star className="h-4 w-4 mr-1 text-yellow-400 fill-current" />
-                            {product.rating} ({product.review_count} reviews)
+                            {experience.rating} ({experience.review_count} reviews)
                           </span>
                           
                           <span className="font-semibold text-primary">
-                            ${product.price}
+                            ${experience.price}
                           </span>
                           
-                          <span>{product.cities?.name}</span>
-                          <span>{product.categories?.name}</span>
+                          <span>{experience.cities?.name}</span>
+                          <span>{experience.categories?.name}</span>
                           
                           <span>
-                            {new Date(product.created_at).toLocaleDateString()}
+                            {new Date(experience.created_at).toLocaleDateString()}
                           </span>
                         </div>
 
                         <div className="flex items-center space-x-2">
                           <span className={`px-2 py-1 rounded-full text-xs ${
-                            product.status === 'active'
+                            experience.status === 'active'
                               ? 'bg-green-100 text-green-800' 
                               : 'bg-red-100 text-red-800'
                           }`}>
-                            {product.status === 'active' ? 'Active' : 'Inactive'}
+                            {experience.status === 'active' ? 'Active' : 'Inactive'}
                           </span>
                           
-                          {product.featured && (
+                          {experience.featured && (
                             <span className="px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-800">
                               Featured
                             </span>
@@ -181,20 +181,20 @@ export default function ProductManagement() {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => toggleActive(product.id, product.status)}
+                      onClick={() => toggleActive(experience.id, experience.status)}
                     >
-                      {product.status === 'active' ? 'Deactivate' : 'Activate'}
+                      {experience.status === 'active' ? 'Deactivate' : 'Activate'}
                     </Button>
 
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => toggleFeatured(product.id, product.featured)}
+                      onClick={() => toggleFeatured(experience.id, experience.featured)}
                     >
-                      {product.featured ? 'Unfeature' : 'Feature'}
+                      {experience.featured ? 'Unfeature' : 'Feature'}
                     </Button>
                     
-                    <Link href={`/admin/products/edit/${product.id}`}>
+                    <Link href={`/admin/experiences/edit/${experience.id}`}>
                       <Button variant="outline" size="sm">
                         <Edit className="h-4 w-4" />
                       </Button>
@@ -203,7 +203,7 @@ export default function ProductManagement() {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => deleteProduct(product.id)}
+                      onClick={() => deleteExperience(experience.id)}
                       className="text-red-600 hover:text-red-700"
                     >
                       <Trash2 className="h-4 w-4" />
