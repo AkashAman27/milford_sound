@@ -150,12 +150,18 @@ export default function ExperiencesPage() {
                   <Card className="group cursor-pointer overflow-hidden hover:shadow-lg transition-all duration-300 h-full">
                     <CardContent className="p-0">
                       <div className="relative h-48 overflow-hidden">
-                        <Image
-                          src={experience.image_url}
-                          alt={experience.title}
-                          fill
-                          className="object-cover group-hover:scale-105 transition-transform duration-300"
-                        />
+                        {experience.image_url ? (
+                          <Image
+                            src={experience.image_url}
+                            alt={experience.title}
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                            <span className="text-gray-400 text-sm">No image</span>
+                          </div>
+                        )}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
                         {experience.featured && (
                           <Badge className="absolute top-3 left-3 bg-primary">
