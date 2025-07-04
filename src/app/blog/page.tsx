@@ -13,17 +13,17 @@ interface BlogPost {
   id: string
   title: string
   slug: string
-  excerpt: string
+  excerpt: string | null
   content: string
-  featured_image: string
-  published_at: string
-  read_time_minutes: number
-  featured: boolean
-  view_count: number
-  created_at: string
+  featured_image: string | null
+  published_at: string | null
+  read_time_minutes: number | null
+  featured: boolean | null
+  view_count: number | null
+  created_at: string | null
   blog_categories?: {
     name: string
-  }
+  } | null
 }
 
 interface BlogCategory {
@@ -126,16 +126,16 @@ export default function BlogPage() {
                           {post.title}
                         </h3>
                         <p className="text-gray-200 mb-3 line-clamp-2">
-                          {post.excerpt}
+                          {post.excerpt || 'No excerpt available'}
                         </p>
                         <div className="flex items-center space-x-4 text-sm text-gray-300">
                           <div className="flex items-center space-x-1">
                             <Calendar className="h-4 w-4" />
-                            <span>{new Date(post.published_at || post.created_at).toLocaleDateString()}</span>
+                            <span>{new Date(post.published_at || post.created_at || new Date()).toLocaleDateString()}</span>
                           </div>
                           <div className="flex items-center space-x-1">
                             <Clock className="h-4 w-4" />
-                            <span>{post.read_time_minutes} min read</span>
+                            <span>{post.read_time_minutes || 5} min read</span>
                           </div>
                         </div>
                       </div>
@@ -193,7 +193,7 @@ export default function BlogPage() {
                       {post.title}
                     </h3>
                     <p className="text-gray-600 mb-4 line-clamp-3">
-                      {post.excerpt}
+                      {post.excerpt || 'No excerpt available'}
                     </p>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-2">
@@ -203,13 +203,13 @@ export default function BlogPage() {
                         <div>
                           <p className="text-sm font-medium">Admin</p>
                           <p className="text-xs text-gray-500">
-                            {new Date(post.published_at || post.created_at).toLocaleDateString()}
+                            {new Date(post.published_at || post.created_at || new Date()).toLocaleDateString()}
                           </p>
                         </div>
                       </div>
                       <div className="text-sm text-gray-500 flex items-center">
                         <Clock className="h-4 w-4 mr-1" />
-                        {post.read_time_minutes} min
+                        {post.read_time_minutes || 5} min
                       </div>
                     </div>
                   </CardContent>

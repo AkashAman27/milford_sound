@@ -10,14 +10,16 @@ import Image from 'next/image'
 interface Testimonial {
   id: string
   customer_name: string
-  customer_location: string
-  customer_avatar: string
-  rating: number
-  review_text: string
-  experience_name: string
-  featured: boolean
-  sort_order: number
-  created_at: string
+  customer_location: string | null
+  customer_avatar: string | null
+  rating: number | null
+  review_text: string | null
+  experience_name: string | null
+  featured: boolean | null
+  sort_order: number | null
+  created_at: string | null
+  experience_id: string | null
+  updated_at: string | null
 }
 
 export default function TestimonialsManagement() {
@@ -125,13 +127,13 @@ export default function TestimonialsManagement() {
     setEditingId(testimonial.id)
     setFormData({
       customer_name: testimonial.customer_name,
-      customer_location: testimonial.customer_location,
-      customer_avatar: testimonial.customer_avatar,
-      rating: testimonial.rating,
-      review_text: testimonial.review_text,
-      experience_name: testimonial.experience_name,
-      featured: testimonial.featured,
-      sort_order: testimonial.sort_order
+      customer_location: testimonial.customer_location || '',
+      customer_avatar: testimonial.customer_avatar || '',
+      rating: testimonial.rating || 5,
+      review_text: testimonial.review_text || '',
+      experience_name: testimonial.experience_name || '',
+      featured: testimonial.featured || false,
+      sort_order: testimonial.sort_order || 0
     })
   }
 
@@ -333,7 +335,7 @@ export default function TestimonialsManagement() {
                                 <Star
                                   key={star}
                                   className={`h-4 w-4 ${
-                                    star <= testimonial.rating
+                                    star <= (testimonial.rating || 0)
                                       ? 'fill-yellow-400 text-yellow-400'
                                       : 'text-gray-300'
                                   }`}
@@ -342,8 +344,8 @@ export default function TestimonialsManagement() {
                             </div>
                           </div>
                           
-                          <p className="text-gray-700 mb-2">"{testimonial.review_text}"</p>
-                          <p className="text-sm text-primary font-medium">{testimonial.experience_name}</p>
+                          <p className="text-gray-700 mb-2">"{testimonial.review_text || 'No review text'}"</p>
+                          <p className="text-sm text-primary font-medium">{testimonial.experience_name || 'No experience'}</p>
                           
                           <div className="flex items-center space-x-2 mt-2">
                             {testimonial.featured && (
@@ -352,7 +354,7 @@ export default function TestimonialsManagement() {
                               </span>
                             )}
                             <span className="text-xs text-gray-500">
-                              Order: {testimonial.sort_order}
+                              Order: {testimonial.sort_order || 0}
                             </span>
                           </div>
                         </div>
@@ -362,7 +364,7 @@ export default function TestimonialsManagement() {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => toggleFeatured(testimonial.id, testimonial.featured)}
+                          onClick={() => toggleFeatured(testimonial.id, testimonial.featured || false)}
                         >
                           {testimonial.featured ? 'Unfeature' : 'Feature'}
                         </Button>

@@ -24,33 +24,33 @@ interface BlogPost {
   id: string
   title: string
   slug: string
-  excerpt: string
+  excerpt: string | null
   content: string
-  featured_image: string
-  published_at: string
-  read_time_minutes: number
-  seo_title?: string
-  seo_description?: string
-  seo_keywords?: string
-  canonical_url?: string
-  robots_index?: boolean
-  robots_follow?: boolean
-  robots_nosnippet?: boolean
-  og_title?: string
-  og_description?: string
-  og_image?: string
-  og_image_alt?: string
-  twitter_title?: string
-  twitter_description?: string
-  twitter_image?: string
-  twitter_image_alt?: string
-  structured_data_type?: string
-  focus_keyword?: string
-  updated_at?: string
+  featured_image: string | null
+  published_at: string | null
+  read_time_minutes: number | null
+  seo_title?: string | null
+  seo_description?: string | null
+  seo_keywords?: string | null
+  canonical_url?: string | null
+  robots_index?: boolean | null
+  robots_follow?: boolean | null
+  robots_nosnippet?: boolean | null
+  og_title?: string | null
+  og_description?: string | null
+  og_image?: string | null
+  og_image_alt?: string | null
+  twitter_title?: string | null
+  twitter_description?: string | null
+  twitter_image?: string | null
+  twitter_image_alt?: string | null
+  structured_data_type?: string | null
+  focus_keyword?: string | null
+  updated_at?: string | null
   code_snippets: CodeSnippet[]
   blog_categories?: {
     name: string
-  }
+  } | null
 }
 
 export default function BlogPostPage() {
@@ -85,7 +85,10 @@ export default function BlogPostPage() {
         return
       }
 
-      setPost(postData)
+      setPost({
+        ...postData,
+        code_snippets: (postData.code_snippets as unknown as CodeSnippet[]) || []
+      })
 
       // Fetch related posts (3 random published posts, excluding current one)
       const { data: relatedData } = await supabase
@@ -98,7 +101,12 @@ export default function BlogPostPage() {
         .neq('id', postData.id)
         .limit(3)
 
-      if (relatedData) setRelatedPosts(relatedData)
+      if (relatedData) {
+        setRelatedPosts(relatedData.map(post => ({
+          ...post,
+          code_snippets: (post.code_snippets as unknown as CodeSnippet[]) || []
+        })))
+      }
     } catch (error) {
       console.error('Error fetching blog post:', error)
       notFound()
@@ -136,12 +144,12 @@ export default function BlogPostPage() {
     id: post.id,
     title: post.title,
     content: post.content,
-    excerpt: post.excerpt,
+    excerpt: post.excerpt || '',
     slug: post.slug,
     author: author,
-    published_date: post.published_at,
-    updated_date: post.updated_at || post.published_at,
-    featured_image: post.featured_image,
+    published_date: post.published_at || '',
+    updated_date: post.updated_at || post.published_at || '',
+    featured_image: post.featured_image || '',
     category: 'Blog'
   }, siteUrl)
 
@@ -159,7 +167,7 @@ export default function BlogPostPage() {
         openGraph={{
           title: post.og_title || seoTitle,
           description: post.og_description || seoDescription,
-          image: post.og_image || post.featured_image,
+          image: post.og_image || post.featured_image || undefined,
           imageAlt: post.og_image_alt || `${post.title} - Blog Post Image`,
           type: 'article',
           url: currentUrl,
@@ -169,11 +177,11 @@ export default function BlogPostPage() {
           card: 'summary_large_image',
           title: post.twitter_title || post.og_title || seoTitle,
           description: post.twitter_description || post.og_description || seoDescription,
-          image: post.twitter_image || post.og_image || post.featured_image,
+          image: post.twitter_image || post.og_image || post.featured_image || undefined,
           imageAlt: post.twitter_image_alt || post.og_image_alt || `${post.title} - Blog Post Image`
         }}
         structuredData={structuredData}
-        lastModified={post.updated_at}
+        lastModified={post.updated_at || undefined}
       />
       
       <article className="min-h-screen bg-white">
@@ -216,11 +224,11 @@ export default function BlogPostPage() {
                   <div className="flex items-center space-x-4 text-sm text-gray-300">
                     <div className="flex items-center space-x-1">
                       <Calendar className="h-4 w-4" />
-                      <span>{new Date(post.published_at).toLocaleDateString()}</span>
+                      <span>{post.published_at ? new Date(post.published_at).toLocaleDateString() : 'No date'}</span>
                     </div>
                     <div className="flex items-center space-x-1">
                       <Clock className="h-4 w-4" />
-                      <span>{post.read_time_minutes} min read</span>
+                      <span>{post.read_time_minutes || 5} min read</span>
                     </div>
                   </div>
                 </div>

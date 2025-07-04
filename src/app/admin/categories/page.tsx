@@ -11,10 +11,15 @@ interface Category {
   id: string
   name: string
   slug: string
-  description: string
-  image_url: string
-  product_count: number
-  created_at: string
+  description: string | null
+  image_url: string | null
+  experience_count: number | null
+  created_at: string | null
+  color: string | null
+  featured: boolean | null
+  icon: string | null
+  sort_order: number | null
+  updated_at: string | null
 }
 
 export default function CategoriesManagement() {
@@ -26,7 +31,7 @@ export default function CategoriesManagement() {
     slug: '',
     description: '',
     image_url: '',
-    product_count: 0
+    experience_count: 0
   })
 
   useEffect(() => {
@@ -74,7 +79,7 @@ export default function CategoriesManagement() {
           slug: formData.slug,
           description: formData.description,
           image_url: formData.image_url,
-          product_count: formData.product_count
+          experience_count: formData.experience_count
         })
         .eq('id', editingId)
 
@@ -127,7 +132,7 @@ export default function CategoriesManagement() {
       slug: category.slug || '',
       description: category.description || '',
       image_url: category.image_url || '',
-      product_count: category.product_count || 0
+      experience_count: category.experience_count || 0
     })
   }
 
@@ -137,7 +142,7 @@ export default function CategoriesManagement() {
       slug: '',
       description: '',
       image_url: '',
-      product_count: 0
+      experience_count: 0
     })
   }
 
@@ -231,8 +236,8 @@ export default function CategoriesManagement() {
                   <input
                     type="number"
                     min="0"
-                    value={formData.product_count || 0}
-                    onChange={(e) => setFormData(prev => ({ ...prev, product_count: parseInt(e.target.value) || 0 }))}
+                    value={formData.experience_count || 0}
+                    onChange={(e) => setFormData(prev => ({ ...prev, experience_count: parseInt(e.target.value) || 0 }))}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                   <p className="text-xs text-gray-500 mt-1">
@@ -291,8 +296,8 @@ export default function CategoriesManagement() {
                           )}
                           
                           <div className="flex items-center space-x-4 text-sm text-gray-500">
-                            <span>{category.product_count}+ products</span>
-                            <span>Created: {new Date(category.created_at).toLocaleDateString()}</span>
+                            <span>{category.experience_count || 0}+ tours</span>
+                            <span>Created: {category.created_at ? new Date(category.created_at).toLocaleDateString() : 'No date'}</span>
                           </div>
                         </div>
                       </div>

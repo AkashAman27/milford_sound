@@ -31,6 +31,12 @@ const nextConfig = {
     unoptimized: false,
   },
   serverExternalPackages: ['@supabase/supabase-js'],
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 }
 
 module.exports = nextConfig

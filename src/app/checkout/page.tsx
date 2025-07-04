@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -35,7 +35,7 @@ interface BookingDetails {
   currency: string
 }
 
-export default function CheckoutPage() {
+function CheckoutContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
   
@@ -74,7 +74,7 @@ export default function CheckoutPage() {
     }
 
     if (!bookingData.experience_id || !bookingData.selected_date) {
-      router.push('/experiences')
+      router.push('/tours')
       return
     }
 
@@ -486,5 +486,17 @@ A confirmation email will be sent to ${customerDetails.email}`)
         </div>
       </div>
     </div>
+  )
+}
+
+export default function CheckoutPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-purple-600"></div>
+      </div>
+    }>
+      <CheckoutContent />
+    </Suspense>
   )
 }

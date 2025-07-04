@@ -49,7 +49,7 @@ export default function AdminDashboard() {
           .select('rating')
         
         const avgRating = avgData?.length 
-          ? avgData.reduce((sum, review) => sum + review.rating, 0) / avgData.length
+          ? avgData.reduce((sum, review) => sum + (review.rating || 0), 0) / avgData.length
           : 0
 
         setStats({

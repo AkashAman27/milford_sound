@@ -157,10 +157,9 @@ export default function TourPage() {
     rating: product.rating,
     review_count: product.review_count,
     duration: product.duration,
-    main_image_url: product.main_image_url,
     category: product.categories?.name || 'Experience',
-    city: product.cities?.name || 'Unknown',
-    updated_date: product.updated_at
+    location: product.cities?.name || 'Unknown',
+    image_url: product.main_image_url || ''
   }, siteUrl)
 
   // Get highlights from product data or fallback to default

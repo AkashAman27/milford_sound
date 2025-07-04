@@ -52,7 +52,6 @@ interface BlogPost {
   twitter_image_alt?: string
   structured_data_type?: string
   focus_keyword?: string
-  previous_slug?: string
   code_snippets: CodeSnippet[]
 }
 
@@ -120,8 +119,7 @@ export default function EditBlogPost() {
         read_time_minutes: data.read_time_minutes || 5,
         seo_title: data.seo_title || '',
         seo_description: data.seo_description || '',
-        code_snippets: data.code_snippets || [],
-        previous_slug: data.previous_slug || ''
+        code_snippets: (data.code_snippets as unknown as CodeSnippet[]) || []
       })
       
       // Set SEO data
@@ -279,7 +277,7 @@ export default function EditBlogPost() {
                 <FormField label="URL Slug" description="This affects the post's URL - be careful when changing">
                   <SlugManager
                     currentSlug={formData.slug}
-                    previousSlug={formData.previous_slug}
+                    previousSlug=""
                     contentType="blog_posts"
                     contentId={postId}
                     onSlugChange={(slug) => setFormData(prev => ({ ...prev, slug }))}

@@ -13,14 +13,14 @@ interface Experience {
   title: string
   slug: string
   description: string
-  price: number
-  rating: number
-  review_count: number
-  featured: boolean
-  status: string
-  created_at: string
-  cities: { name: string }
-  categories: { name: string }
+  price: number | null
+  rating: number | null
+  review_count: number | null
+  featured: boolean | null
+  status: string | null
+  created_at: string | null
+  cities: { name: string } | null
+  categories: { name: string } | null
 }
 
 export default function TourManagement() {
@@ -143,18 +143,18 @@ export default function TourManagement() {
                         <div className="flex items-center space-x-4 text-sm text-gray-500 mb-4">
                           <span className="flex items-center">
                             <Star className="h-4 w-4 mr-1 text-yellow-400 fill-current" />
-                            {experience.rating} ({experience.review_count} reviews)
+                            {experience.rating || 0} ({experience.review_count || 0} reviews)
                           </span>
                           
                           <span className="font-semibold text-primary">
-                            ${experience.price}
+                            ${experience.price || 0}
                           </span>
                           
-                          <span>{experience.cities?.name}</span>
-                          <span>{experience.categories?.name}</span>
+                          <span>{experience.cities?.name || 'No city'}</span>
+                          <span>{experience.categories?.name || 'No category'}</span>
                           
                           <span>
-                            {new Date(experience.created_at).toLocaleDateString()}
+                            {experience.created_at ? new Date(experience.created_at).toLocaleDateString() : 'No date'}
                           </span>
                         </div>
 
@@ -181,7 +181,7 @@ export default function TourManagement() {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => toggleActive(experience.id, experience.status)}
+                      onClick={() => toggleActive(experience.id, experience.status || 'inactive')}
                     >
                       {experience.status === 'active' ? 'Deactivate' : 'Activate'}
                     </Button>
@@ -189,7 +189,7 @@ export default function TourManagement() {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => toggleFeatured(experience.id, experience.featured)}
+                      onClick={() => toggleFeatured(experience.id, experience.featured || false)}
                     >
                       {experience.featured ? 'Unfeature' : 'Feature'}
                     </Button>

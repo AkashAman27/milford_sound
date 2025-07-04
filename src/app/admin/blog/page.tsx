@@ -11,13 +11,13 @@ interface BlogPost {
   id: string
   title: string
   slug: string
-  excerpt: string
-  featured: boolean
-  published: boolean
-  view_count: number
-  read_time_minutes: number
-  published_at: string
-  created_at: string
+  excerpt: string | null
+  featured: boolean | null
+  published: boolean | null
+  view_count: number | null
+  read_time_minutes: number | null
+  published_at: string | null
+  created_at: string | null
 }
 
 export default function BlogManagement() {
@@ -111,7 +111,7 @@ export default function BlogManagement() {
                 <div className="flex justify-between items-start">
                   <div className="flex-1">
                     <CardTitle className="text-xl mb-2">{post.title}</CardTitle>
-                    <p className="text-gray-600 mb-4">{post.excerpt}</p>
+                    <p className="text-gray-600 mb-4">{post.excerpt || 'No excerpt available'}</p>
                     
                     <div className="flex items-center space-x-4 text-sm text-gray-500">
                       <span className={`px-2 py-1 rounded-full text-xs ${
@@ -130,13 +130,13 @@ export default function BlogManagement() {
                       
                       <span className="flex items-center">
                         <Eye className="h-4 w-4 mr-1" />
-                        {post.view_count} views
+                        {post.view_count || 0} views
                       </span>
                       
-                      <span>{post.read_time_minutes} min read</span>
+                      <span>{post.read_time_minutes || 5} min read</span>
                       
                       <span>
-                        {new Date(post.created_at).toLocaleDateString()}
+                        {post.created_at ? new Date(post.created_at).toLocaleDateString() : 'No date'}
                       </span>
                     </div>
                   </div>
@@ -145,7 +145,7 @@ export default function BlogManagement() {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => togglePublished(post.id, post.published)}
+                      onClick={() => togglePublished(post.id, post.published || false)}
                     >
                       {post.published ? 'Unpublish' : 'Publish'}
                     </Button>

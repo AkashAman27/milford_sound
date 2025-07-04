@@ -112,7 +112,7 @@ export default function NewExperience() {
       // Complete experience data including all SEO fields
       const experienceData = {
         ...formData,
-        languages: JSON.stringify(formData.languages),
+        languages: formData.languages,
         // SEO fields
         seo_title: seoData.seo_title || null,
         seo_description: seoData.seo_description || null,
@@ -137,7 +137,7 @@ export default function NewExperience() {
 
       const { data, error } = await supabase
         .from('experiences')
-        .insert([experienceData])
+        .insert(experienceData)
         .select()
         .single()
 
