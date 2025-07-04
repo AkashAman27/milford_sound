@@ -101,12 +101,7 @@ export function CategoryDropdown() {
               <DropdownMenuSubTrigger className="text-gray-900 hover:bg-gray-50">
                 <div className="flex items-center justify-between w-full">
                   <span className="text-gray-900">{category.name}</span>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-xs text-gray-500">
-                      {category.experience_count}
-                    </span>
-                    <ChevronRight className="h-3 w-3 text-gray-400" />
-                  </div>
+                  <ChevronRight className="h-3 w-3 text-gray-400" />
                 </div>
               </DropdownMenuSubTrigger>
               <DropdownMenuSubContent className="bg-white border border-gray-200 shadow-lg">
@@ -122,12 +117,7 @@ export function CategoryDropdown() {
                     {category.subcategories.map((subcategory) => (
                       <DropdownMenuItem key={subcategory.id} asChild>
                         <Link href={`/subcategory/${subcategory.slug}`} className="w-full text-gray-900 hover:bg-gray-50">
-                          <div className="flex items-center justify-between w-full">
-                            <span className="text-gray-900">{subcategory.name}</span>
-                            <span className="text-xs text-gray-500">
-                              {subcategory.experience_count}
-                            </span>
-                          </div>
+                          <span className="text-gray-900">{subcategory.name}</span>
                         </Link>
                       </DropdownMenuItem>
                     ))}
