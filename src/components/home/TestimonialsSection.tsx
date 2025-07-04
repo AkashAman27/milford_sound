@@ -16,15 +16,8 @@ interface Testimonial {
   experience_name: string
 }
 
-interface HomepageStat {
-  id: string
-  label: string
-  value: number
-}
-
 export function TestimonialsSection() {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([])
-  const [stats, setStats] = useState<HomepageStat[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -39,14 +32,7 @@ export function TestimonialsSection() {
         .order('sort_order')
         .limit(6)
 
-      // Fetch homepage stats
-      const { data: statsData } = await supabase
-        .from('homepage_stats')
-        .select('*')
-        .limit(4)
-
       if (testimonialsData) setTestimonials(testimonialsData)
-      if (statsData) setStats(statsData)
       setLoading(false)
     }
 
@@ -87,7 +73,7 @@ export function TestimonialsSection() {
         </div>
 
         {/* Testimonials Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {testimonials.map((testimonial, index) => (
             <Card 
               key={testimonial.id} 
@@ -134,21 +120,6 @@ export function TestimonialsSection() {
                 </div>
               </CardContent>
             </Card>
-          ))}
-        </div>
-
-        {/* Trust Indicators */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center justify-center">
-          {stats.map((stat) => (
-            <div key={stat.id} className="text-center">
-              <div className="text-3xl font-bold text-primary mb-2">
-                {stat.label === 'Average Rating' ? `${stat.value}/5` : 
-                 stat.value >= 1000000 ? `${(stat.value / 1000000).toFixed(0)}M+` :
-                 stat.value >= 1000 ? `${(stat.value / 1000).toFixed(0)}K+` :
-                 stat.value.toString()}
-              </div>
-              <div className="text-sm text-gray-600">{stat.label}</div>
-            </div>
           ))}
         </div>
       </div>

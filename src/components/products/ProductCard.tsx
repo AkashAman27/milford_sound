@@ -40,7 +40,7 @@ export function ProductCard({
     <Card className="group cursor-pointer overflow-hidden hover:shadow-lg transition-all duration-300">
       <CardContent className="p-0">
         <div className="relative">
-          <Link href={`/experience/${slug}`}>
+          <Link href={`/tour/${slug}`}>
             <div className="relative h-48 overflow-hidden">
               <Image
                 src={image}
@@ -78,7 +78,7 @@ export function ProductCard({
           </div>
 
           {/* Title */}
-          <Link href={`/experience/${slug}`}>
+          <Link href={`/tour/${slug}`}>
             <h3 className="font-semibold text-gray-900 mb-2 group-hover:text-primary transition-colors line-clamp-2">
               {title}
             </h3>
@@ -115,8 +115,8 @@ export function ProductCard({
               </span>
               <span className="text-sm text-gray-600 ml-1">per person</span>
             </div>
-            <Link href={`/experience/${slug}`}>
-              <Button size="sm" className="bg-primary hover:bg-primary/90">
+            <Link href={`/tour/${slug}`}>
+              <Button size="sm" className="bg-primary hover:bg-primary/90 text-white font-medium">
                 Book Now
               </Button>
             </Link>

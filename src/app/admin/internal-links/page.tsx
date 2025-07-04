@@ -104,14 +104,14 @@ export default function InternalLinksManagement() {
                         </div>
 
                         <div className="text-xs text-gray-500">
-                          URL: /experience/{experience.slug}
+                          URL: /tour/{experience.slug}
                         </div>
                       </div>
                     </div>
                   </div>
                   
                   <div className="flex items-center space-x-2">
-                    <Link href={`/experience/${experience.slug}`} target="_blank">
+                    <Link href={`/tour/${experience.slug}`} target="_blank">
                       <Button variant="outline" size="sm">
                         <Eye className="h-4 w-4 mr-1" />
                         View

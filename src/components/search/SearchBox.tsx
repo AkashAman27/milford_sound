@@ -21,7 +21,7 @@ import {
 
 interface SearchResult {
   id: string
-  type: 'destination' | 'experience' | 'category'
+  type: 'experience' | 'category'
   title: string
   subtitle?: string
   slug: string
@@ -39,13 +39,6 @@ interface SearchBoxProps {
 
 // Mock search data - replace with actual API calls
 const mockSearchData: SearchResult[] = [
-  // Destinations
-  { id: '1', type: 'destination', title: 'New York', subtitle: 'United States', slug: 'new-york' },
-  { id: '2', type: 'destination', title: 'Paris', subtitle: 'France', slug: 'paris' },
-  { id: '3', type: 'destination', title: 'London', subtitle: 'United Kingdom', slug: 'london' },
-  { id: '4', type: 'destination', title: 'Tokyo', subtitle: 'Japan', slug: 'tokyo' },
-  { id: '5', type: 'destination', title: 'Barcelona', subtitle: 'Spain', slug: 'barcelona' },
-  { id: '6', type: 'destination', title: 'Rome', subtitle: 'Italy', slug: 'rome' },
   
   // Categories
   { id: '7', type: 'category', title: 'Tours & Attractions', slug: 'tours-attractions' },
@@ -61,7 +54,7 @@ const mockSearchData: SearchResult[] = [
 ]
 
 export function SearchBox({ 
-  placeholder = "Search destinations, tours & experiences", 
+  placeholder = "Search tours & experiences", 
   showIcon = true, 
   size = 'md',
   className = '' 
@@ -109,14 +102,11 @@ export function SearchBox({
     setValue('')
     
     switch (result.type) {
-      case 'destination':
-        router.push(`/destinations/${result.slug}`)
-        break
       case 'category':
         router.push(`/category/${result.slug}`)
         break
       case 'experience':
-        router.push(`/experience/${result.slug}`)
+        router.push(`/tour/${result.slug}`)
         break
     }
   }
@@ -130,8 +120,6 @@ export function SearchBox({
 
   const getResultIcon = (type: string) => {
     switch (type) {
-      case 'destination':
-        return <MapPin className="h-4 w-4 text-blue-500" />
       case 'category':
         return <Calendar className="h-4 w-4 text-green-500" />
       case 'experience':
@@ -203,12 +191,11 @@ export function SearchBox({
 
             {!loading && searchResults.length > 0 && (
               <>
-                {['destination', 'experience', 'category'].map(type => {
+                {['experience', 'category'].map(type => {
                   const typeResults = searchResults.filter(r => r.type === type)
                   if (typeResults.length === 0) return null
                   
-                  const typeLabel = type === 'destination' ? 'Destinations' : 
-                                  type === 'experience' ? 'Experiences' : 'Categories'
+                  const typeLabel = type === 'experience' ? 'Tours' : 'Categories'
                   
                   return (
                     <CommandGroup key={type} heading={typeLabel}>

@@ -23,7 +23,7 @@ interface Experience {
   categories: { name: string }
 }
 
-export default function ExperienceManagement() {
+export default function TourManagement() {
   const [experiences, setExperiences] = useState<Experience[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -49,7 +49,7 @@ export default function ExperienceManagement() {
   }
 
   async function deleteExperience(id: string) {
-    if (!confirm('Are you sure you want to delete this experience?')) return
+    if (!confirm('Are you sure you want to delete this tour?')) return
 
     const supabase = createClient()
     
@@ -59,7 +59,7 @@ export default function ExperienceManagement() {
       .eq('id', id)
 
     if (error) {
-      alert('Error deleting experience')
+      alert('Error deleting tour')
       console.error(error)
     } else {
       fetchExperiences()
@@ -77,7 +77,7 @@ export default function ExperienceManagement() {
       .eq('id', id)
 
     if (error) {
-      alert('Error updating experience')
+      alert('Error updating tour')
       console.error(error)
     } else {
       fetchExperiences()
@@ -93,7 +93,7 @@ export default function ExperienceManagement() {
       .eq('id', id)
 
     if (error) {
-      alert('Error updating experience')
+      alert('Error updating tour')
       console.error(error)
     } else {
       fetchExperiences()
@@ -101,20 +101,20 @@ export default function ExperienceManagement() {
   }
 
   if (loading) {
-    return <div className="text-center py-8">Loading experiences...</div>
+    return <div className="text-center py-8">Loading tours...</div>
   }
 
   return (
     <div>
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Experience Management</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Tour Management</h1>
           <p className="text-gray-600 mt-2">Manage tours, experiences, and attractions</p>
         </div>
         <Link href="/admin/experiences/new">
           <Button className="flex items-center">
             <Plus className="h-4 w-4 mr-2" />
-            New Experience
+            New Tour
           </Button>
         </Link>
       </div>
@@ -123,9 +123,9 @@ export default function ExperienceManagement() {
         {experiences.length === 0 ? (
           <Card>
             <CardContent className="text-center py-12">
-              <p className="text-gray-500 mb-4">No experiences found</p>
+              <p className="text-gray-500 mb-4">No tours found</p>
               <Link href="/admin/experiences/new">
-                <Button>Create Your First Experience</Button>
+                <Button>Create Your First Tour</Button>
               </Link>
             </CardContent>
           </Card>

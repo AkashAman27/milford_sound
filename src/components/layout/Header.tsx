@@ -2,12 +2,12 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
-import { Search, Menu, User, ShoppingCart, Globe, LogOut } from 'lucide-react'
+import { Search, Menu, User, LogOut } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { AuthModal } from '@/components/auth/AuthModal'
-import { CartDrawer } from '@/components/cart/CartDrawer'
 import { SearchBox } from '@/components/search/SearchBox'
+import { CategoryDropdown } from '@/components/navigation/CategoryDropdown'
 import { useAuth } from '@/components/providers/AuthProvider'
 import { createClient } from '@/lib/supabase'
 import {
@@ -51,28 +51,20 @@ export function Header() {
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-6">
-            <Link href="/destinations" className="text-sm font-medium hover:text-primary">
-              Destinations
-            </Link>
-            <Link href="/experiences" className="text-sm font-medium hover:text-primary">
-              Experiences
+            <CategoryDropdown />
+            <Link href="/tours" className="text-sm font-medium hover:text-primary">
+              Tours
             </Link>
             <Link href="/blog" className="text-sm font-medium hover:text-primary">
-              Blog
+              Travel Guide
             </Link>
-            <Link href="/help" className="text-sm font-medium hover:text-primary">
-              Help
+            <Link href="/about" className="text-sm font-medium hover:text-primary">
+              About
             </Link>
           </nav>
 
           {/* Right Side Actions */}
           <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="sm" className="hidden sm:flex">
-              <Globe className="h-4 w-4 mr-1" />
-              USD
-            </Button>
-            
-            <CartDrawer />
 
             {loading ? (
               <div className="w-8 h-8 rounded-full bg-gray-200 animate-pulse" />
@@ -144,17 +136,17 @@ export function Header() {
         {isMobileMenuOpen && (
           <div className="border-t pb-4 lg:hidden">
             <nav className="flex flex-col space-y-2 pt-4">
-              <Link href="/destinations" className="py-2 text-sm font-medium hover:text-primary">
-                Destinations
+              <Link href="/tours" className="py-2 text-sm font-medium hover:text-primary">
+                Milford Sound Tours
               </Link>
-              <Link href="/experiences" className="py-2 text-sm font-medium hover:text-primary">
-                Experiences
+              <Link href="/tours" className="py-2 text-sm font-medium hover:text-primary">
+                Tours
               </Link>
               <Link href="/blog" className="py-2 text-sm font-medium hover:text-primary">
-                Blog
+                Travel Guide
               </Link>
-              <Link href="/help" className="py-2 text-sm font-medium hover:text-primary">
-                Help
+              <Link href="/about" className="py-2 text-sm font-medium hover:text-primary">
+                About
               </Link>
             </nav>
           </div>

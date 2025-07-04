@@ -1,328 +1,520 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase'
-import { Save } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { Label } from '@/components/ui/label'
+import { Switch } from '@/components/ui/switch'
+import { Save, Eye, RefreshCw } from 'lucide-react'
+import { Alert, AlertDescription } from '@/components/ui/alert'
 
-interface HomepageHero {
+interface HomepageSettings {
   id: string
+  section_name: string
   title: string
   subtitle: string
-  background_image: string
-  cta_text: string
-  cta_url: string
-}
-
-interface HomepageStat {
-  id: string
-  label: string
-  value: number
-}
-
-interface WhyChooseUs {
-  id: string
-  title: string
   description: string
-  order: number
+  button_text: string
+  button_link: string
+  background_image?: string
+  enabled: boolean
+  sort_order: number
+  settings_json?: any
 }
 
-export default function HomepageManagement() {
-  const [hero, setHero] = useState<HomepageHero | null>(null)
-  const [stats, setStats] = useState<HomepageStat[]>([])
-  const [whyChooseUs, setWhyChooseUs] = useState<WhyChooseUs[]>([])
+export default function HomepageAdmin() {
+  const [settings, setSettings] = useState<HomepageSettings[]>([])
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+  const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null)
 
   useEffect(() => {
-    fetchHomepageData()
+    fetchSettings()
   }, [])
 
-  async function fetchHomepageData() {
-    const supabase = createClient()
-    
+  const fetchSettings = async () => {
+    setLoading(true)
     try {
-      const [heroData, statsData, whyChooseUsData] = await Promise.all([
-        supabase.from('homepage_hero').select('*').single(),
-        supabase.from('homepage_stats').select('*').order('id'),
-        supabase.from('homepage_why_choose_us').select('*').order('order')
-      ])
+      const supabase = createClient()
+      const { data, error } = await supabase
+        .from('homepage_settings')
+        .select('*')
+        .order('sort_order')
 
-      if (heroData.data) setHero(heroData.data)
-      if (statsData.data) setStats(statsData.data)
-      if (whyChooseUsData.data) setWhyChooseUs(whyChooseUsData.data)
+      if (error) {
+        console.error('Error fetching settings:', error)
+        setMessage({ type: 'error', text: 'Failed to load homepage settings' })
+      } else {
+        setSettings(data || [])
+      }
     } catch (error) {
-      console.error('Error fetching homepage data:', error)
+      console.error('Error:', error)
+      setMessage({ type: 'error', text: 'Failed to load homepage settings' })
     } finally {
       setLoading(false)
     }
   }
 
-  async function saveHero() {
-    if (!hero) return
-    
-    setSaving(true)
-    const supabase = createClient()
-    
-    const { error } = await supabase
-      .from('homepage_hero')
-      .update({
-        title: hero.title,
-        subtitle: hero.subtitle,
-        background_image: hero.background_image,
-        cta_text: hero.cta_text,
-        cta_url: hero.cta_url
-      })
-      .eq('id', hero.id)
-
-    if (error) {
-      alert('Error saving hero section')
-      console.error(error)
-    } else {
-      alert('Hero section saved successfully!')
-    }
-    
-    setSaving(false)
+  const updateSetting = (sectionName: string, field: keyof HomepageSettings, value: any) => {
+    setSettings(prev => 
+      prev.map(setting => 
+        setting.section_name === sectionName 
+          ? { ...setting, [field]: value }
+          : setting
+      )
+    )
   }
 
-  async function saveStats() {
+  const saveSetting = async (setting: HomepageSettings) => {
     setSaving(true)
-    const supabase = createClient()
-    
     try {
-      for (const stat of stats) {
-        await supabase
-          .from('homepage_stats')
-          .update({
-            label: stat.label,
-            value: stat.value
-          })
-          .eq('id', stat.id)
+      const supabase = createClient()
+      const { error } = await supabase
+        .from('homepage_settings')
+        .update({
+          title: setting.title,
+          subtitle: setting.subtitle,
+          description: setting.description,
+          button_text: setting.button_text,
+          button_link: setting.button_link,
+          background_image: setting.background_image,
+          enabled: setting.enabled,
+          settings_json: setting.settings_json,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', setting.id)
+
+      if (error) {
+        console.error('Error saving setting:', error)
+        setMessage({ type: 'error', text: 'Failed to save settings' })
+      } else {
+        setMessage({ type: 'success', text: 'Settings saved successfully!' })
+        setTimeout(() => setMessage(null), 3000)
       }
-      alert('Stats saved successfully!')
     } catch (error) {
-      alert('Error saving stats')
-      console.error(error)
+      console.error('Error:', error)
+      setMessage({ type: 'error', text: 'Failed to save settings' })
+    } finally {
+      setSaving(false)
     }
-    
-    setSaving(false)
   }
 
-  async function saveWhyChooseUs() {
+  const saveAllSettings = async () => {
     setSaving(true)
-    const supabase = createClient()
-    
     try {
-      for (const item of whyChooseUs) {
-        await supabase
-          .from('homepage_why_choose_us')
+      const supabase = createClient()
+      
+      for (const setting of settings) {
+        const { error } = await supabase
+          .from('homepage_settings')
           .update({
-            title: item.title,
-            description: item.description,
-            order: item.order
+            title: setting.title,
+            subtitle: setting.subtitle,
+            description: setting.description,
+            button_text: setting.button_text,
+            button_link: setting.button_link,
+            background_image: setting.background_image,
+            enabled: setting.enabled,
+            settings_json: setting.settings_json,
+            updated_at: new Date().toISOString()
           })
-          .eq('id', item.id)
+          .eq('id', setting.id)
+
+        if (error) {
+          console.error('Error saving setting:', error)
+          setMessage({ type: 'error', text: 'Failed to save some settings' })
+          return
+        }
       }
-      alert('Why Choose Us section saved successfully!')
+
+      setMessage({ type: 'success', text: 'All settings saved successfully!' })
+      setTimeout(() => setMessage(null), 3000)
     } catch (error) {
-      alert('Error saving Why Choose Us section')
-      console.error(error)
+      console.error('Error:', error)
+      setMessage({ type: 'error', text: 'Failed to save settings' })
+    } finally {
+      setSaving(false)
     }
-    
-    setSaving(false)
   }
 
   if (loading) {
-    return <div className="text-center py-8">Loading homepage data...</div>
+    return (
+      <div className="text-center py-8">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary mx-auto"></div>
+        <p className="mt-4 text-gray-600">Loading homepage settings...</p>
+      </div>
+    )
   }
 
+  const heroSetting = settings.find(s => s.section_name === 'hero_section')
+  const featuredExperiencesSetting = settings.find(s => s.section_name === 'featured_experiences')
+  const faqSetting = settings.find(s => s.section_name === 'faq_section')
+  const internalLinksSetting = settings.find(s => s.section_name === 'internal_links_section')
+
   return (
-    <div>
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Homepage Management</h1>
-        <p className="text-gray-600 mt-2">Manage your homepage content and layout</p>
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Homepage Management</h1>
+          <p className="text-gray-600 mt-2">Customize your homepage content and settings</p>
+        </div>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={fetchSettings} disabled={loading}>
+            <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+            Refresh
+          </Button>
+          <Button onClick={saveAllSettings} disabled={saving}>
+            <Save className="h-4 w-4 mr-2" />
+            {saving ? 'Saving...' : 'Save All'}
+          </Button>
+        </div>
       </div>
 
-      <div className="space-y-8">
-        {/* Hero Section */}
-        {hero && (
-          <Card>
-            <CardHeader>
-              <CardTitle>Hero Section</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Main Title
-                </label>
-                <input
-                  type="text"
-                  value={hero.title}
-                  onChange={(e) => setHero({ ...hero, title: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                />
-              </div>
+      {message && (
+        <Alert className={message.type === 'error' ? 'border-red-500 bg-red-50' : 'border-green-500 bg-green-50'}>
+          <AlertDescription className={message.type === 'error' ? 'text-red-700' : 'text-green-700'}>
+            {message.text}
+          </AlertDescription>
+        </Alert>
+      )}
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Subtitle
-                </label>
-                <textarea
-                  value={hero.subtitle}
-                  onChange={(e) => setHero({ ...hero, subtitle: e.target.value })}
-                  rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Background Image URL
-                </label>
-                <input
-                  type="url"
-                  value={hero.background_image}
-                  onChange={(e) => setHero({ ...hero, background_image: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    CTA Button Text
-                  </label>
-                  <input
-                    type="text"
-                    value={hero.cta_text}
-                    onChange={(e) => setHero({ ...hero, cta_text: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    CTA Button URL
-                  </label>
-                  <input
-                    type="text"
-                    value={hero.cta_url}
-                    onChange={(e) => setHero({ ...hero, cta_url: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                  />
-                </div>
-              </div>
-
-              <Button onClick={saveHero} disabled={saving}>
-                <Save className="h-4 w-4 mr-2" />
-                Save Hero Section
-              </Button>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Stats Section */}
+      {/* Hero Section Settings */}
+      {heroSetting && (
         <Card>
           <CardHeader>
-            <CardTitle>Homepage Stats</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              {stats.map((stat, index) => (
-                <div key={stat.id} className="space-y-2">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      {stat.label} - Label
-                    </label>
-                    <input
-                      type="text"
-                      value={stat.label}
-                      onChange={(e) => {
-                        const newStats = [...stats]
-                        newStats[index].label = e.target.value
-                        setStats(newStats)
-                      }}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Value
-                    </label>
-                    <input
-                      type="number"
-                      value={stat.value}
-                      onChange={(e) => {
-                        const newStats = [...stats]
-                        newStats[index].value = parseInt(e.target.value) || 0
-                        setStats(newStats)
-                      }}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <Button onClick={saveStats} disabled={saving}>
-              <Save className="h-4 w-4 mr-2" />
-              Save Stats
-            </Button>
-          </CardContent>
-        </Card>
-
-        {/* Why Choose Us Section */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Why Choose Us</CardTitle>
+            <CardTitle className="flex items-center justify-between">
+              Hero Section
+              <div className="flex items-center space-x-2">
+                <Label htmlFor="hero-enabled" className="text-sm">Enabled</Label>
+                <Switch
+                  id="hero-enabled"
+                  checked={heroSetting.enabled}
+                  onCheckedChange={(checked) => updateSetting('hero_section', 'enabled', checked)}
+                />
+              </div>
+            </CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
-            {whyChooseUs.map((item, index) => (
-              <div key={item.id} className="border-b border-gray-200 pb-4 last:border-b-0">
-                <div className="grid grid-cols-1 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Title
-                    </label>
-                    <input
-                      type="text"
-                      value={item.title}
-                      onChange={(e) => {
-                        const newItems = [...whyChooseUs]
-                        newItems[index].title = e.target.value
-                        setWhyChooseUs(newItems)
-                      }}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                    />
-                  </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="hero-title">Main Title</Label>
+                  <Input
+                    id="hero-title"
+                    value={heroSetting.title}
+                    onChange={(e) => updateSetting('hero_section', 'title', e.target.value)}
+                    placeholder="Enter main title..."
+                  />
+                  <p className="text-xs text-gray-500 mt-1">The primary headline on your homepage</p>
+                </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Description
-                    </label>
-                    <textarea
-                      value={item.description}
-                      onChange={(e) => {
-                        const newItems = [...whyChooseUs]
-                        newItems[index].description = e.target.value
-                        setWhyChooseUs(newItems)
-                      }}
-                      rows={2}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                    />
-                  </div>
+                <div>
+                  <Label htmlFor="hero-subtitle">Subtitle</Label>
+                  <Input
+                    id="hero-subtitle"
+                    value={heroSetting.subtitle}
+                    onChange={(e) => updateSetting('hero_section', 'subtitle', e.target.value)}
+                    placeholder="Enter subtitle..."
+                  />
+                  <p className="text-xs text-gray-500 mt-1">The colored subtitle (appears in gradient)</p>
+                </div>
+
+                <div>
+                  <Label htmlFor="hero-description">Description</Label>
+                  <Textarea
+                    id="hero-description"
+                    value={heroSetting.description}
+                    onChange={(e) => updateSetting('hero_section', 'description', e.target.value)}
+                    placeholder="Enter description..."
+                    rows={3}
+                  />
+                  <p className="text-xs text-gray-500 mt-1">Brief description below the title</p>
                 </div>
               </div>
-            ))}
 
-            <Button onClick={saveWhyChooseUs} disabled={saving}>
-              <Save className="h-4 w-4 mr-2" />
-              Save Why Choose Us
-            </Button>
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="hero-button-text">Button Text</Label>
+                  <Input
+                    id="hero-button-text"
+                    value={heroSetting.button_text}
+                    onChange={(e) => updateSetting('hero_section', 'button_text', e.target.value)}
+                    placeholder="Enter button text..."
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="hero-button-link">Button Link</Label>
+                  <Input
+                    id="hero-button-link"
+                    value={heroSetting.button_link}
+                    onChange={(e) => updateSetting('hero_section', 'button_link', e.target.value)}
+                    placeholder="/tours"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">Where the button should link to</p>
+                </div>
+
+                <div>
+                  <Label htmlFor="hero-background">Background Image (Optional)</Label>
+                  <Input
+                    id="hero-background"
+                    value={heroSetting.background_image || ''}
+                    onChange={(e) => updateSetting('hero_section', 'background_image', e.target.value)}
+                    placeholder="https://example.com/image.jpg"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">URL to background image (optional)</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-between items-center pt-4 border-t">
+              <Button variant="outline" asChild>
+                <a href="/" target="_blank" rel="noopener noreferrer">
+                  <Eye className="h-4 w-4 mr-2" />
+                  Preview Homepage
+                </a>
+              </Button>
+              
+              <Button onClick={() => saveSetting(heroSetting)} disabled={saving}>
+                <Save className="h-4 w-4 mr-2" />
+                {saving ? 'Saving...' : 'Save Hero Section'}
+              </Button>
+            </div>
           </CardContent>
         </Card>
-      </div>
+      )}
+
+      {/* Featured Experiences Section */}
+      {featuredExperiencesSetting && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between">
+              Featured Experiences Section
+              <div className="flex items-center space-x-2">
+                <Label htmlFor="featured-enabled" className="text-sm">Enabled</Label>
+                <Switch
+                  id="featured-enabled"
+                  checked={featuredExperiencesSetting.enabled}
+                  onCheckedChange={(checked) => updateSetting('featured_experiences', 'enabled', checked)}
+                />
+              </div>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="featured-title">Section Title</Label>
+                  <Input
+                    id="featured-title"
+                    value={featuredExperiencesSetting.title}
+                    onChange={(e) => updateSetting('featured_experiences', 'title', e.target.value)}
+                    placeholder="Top Experiences"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="featured-description">Section Description</Label>
+                  <Textarea
+                    id="featured-description"
+                    value={featuredExperiencesSetting.description}
+                    onChange={(e) => updateSetting('featured_experiences', 'description', e.target.value)}
+                    placeholder="Discover the most popular tours and activities..."
+                    rows={3}
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="featured-count">Number of Experiences to Show</Label>
+                  <Input
+                    id="featured-count"
+                    type="number"
+                    min="1"
+                    max="12"
+                    value={featuredExperiencesSetting.settings_json?.featured_count || 6}
+                    onChange={(e) => {
+                      const count = parseInt(e.target.value) || 6
+                      updateSetting('featured_experiences', 'settings_json', {
+                        ...featuredExperiencesSetting.settings_json,
+                        featured_count: count
+                      })
+                    }}
+                    placeholder="6"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">Choose between 1-12 experiences to display</p>
+                </div>
+
+                <div className="p-4 bg-blue-50 rounded-lg">
+                  <h4 className="font-medium text-blue-900 mb-2">How to Control Which Experiences Show:</h4>
+                  <ul className="text-sm text-blue-800 space-y-1">
+                    <li>• Go to <strong>Admin → Experiences</strong></li>
+                    <li>• Edit any experience</li>
+                    <li>• Check the <strong>"Featured"</strong> checkbox</li>
+                    <li>• Only featured experiences appear in this section</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-between items-center pt-4 border-t">
+              <Button variant="outline" asChild>
+                <a href="/admin/experiences" target="_blank" rel="noopener noreferrer">
+                  <Eye className="h-4 w-4 mr-2" />
+                  Manage Featured Experiences
+                </a>
+              </Button>
+              
+              <Button onClick={() => saveSetting(featuredExperiencesSetting)} disabled={saving}>
+                <Save className="h-4 w-4 mr-2" />
+                {saving ? 'Saving...' : 'Save Featured Section'}
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* FAQ Section Settings */}
+      {faqSetting && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between">
+              FAQ Section
+              <div className="flex items-center space-x-2">
+                <Label htmlFor="faq-enabled" className="text-sm">Enabled</Label>
+                <Switch
+                  id="faq-enabled"
+                  checked={faqSetting.enabled}
+                  onCheckedChange={(checked) => updateSetting('faq_section', 'enabled', checked)}
+                />
+              </div>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="faq-title">Section Title</Label>
+                  <Input
+                    id="faq-title"
+                    value={faqSetting.title}
+                    onChange={(e) => updateSetting('faq_section', 'title', e.target.value)}
+                    placeholder="Frequently Asked Questions"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="faq-description">Section Description</Label>
+                  <Textarea
+                    id="faq-description"
+                    value={faqSetting.description}
+                    onChange={(e) => updateSetting('faq_section', 'description', e.target.value)}
+                    placeholder="Find answers to common questions..."
+                    rows={3}
+                  />
+                </div>
+              </div>
+
+              <div className="p-4 bg-blue-50 rounded-lg">
+                <h4 className="font-medium text-blue-900 mb-2">How to Manage FAQs:</h4>
+                <ul className="text-sm text-blue-800 space-y-1">
+                  <li>• Go to <strong>Admin → FAQs</strong></li>
+                  <li>• Add new questions and answers</li>
+                  <li>• Set sort order to control display order</li>
+                  <li>• Enable/disable individual FAQs</li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="flex justify-between items-center pt-4 border-t">
+              <Button variant="outline" asChild>
+                <a href="/admin/faqs" target="_blank" rel="noopener noreferrer">
+                  <Eye className="h-4 w-4 mr-2" />
+                  Manage FAQs
+                </a>
+              </Button>
+              
+              <Button onClick={() => saveSetting(faqSetting)} disabled={saving}>
+                <Save className="h-4 w-4 mr-2" />
+                {saving ? 'Saving...' : 'Save FAQ Section'}
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Internal Links Section Settings */}
+      {internalLinksSetting && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between">
+              Internal Links Section
+              <div className="flex items-center space-x-2">
+                <Label htmlFor="internal-links-enabled" className="text-sm">Enabled</Label>
+                <Switch
+                  id="internal-links-enabled"
+                  checked={internalLinksSetting.enabled}
+                  onCheckedChange={(checked) => updateSetting('internal_links_section', 'enabled', checked)}
+                />
+              </div>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="internal-links-title">Section Title</Label>
+                  <Input
+                    id="internal-links-title"
+                    value={internalLinksSetting.title}
+                    onChange={(e) => updateSetting('internal_links_section', 'title', e.target.value)}
+                    placeholder="Explore More"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="internal-links-description">Section Description</Label>
+                  <Textarea
+                    id="internal-links-description"
+                    value={internalLinksSetting.description}
+                    onChange={(e) => updateSetting('internal_links_section', 'description', e.target.value)}
+                    placeholder="Discover everything we have to offer"
+                    rows={3}
+                  />
+                </div>
+              </div>
+
+              <div className="p-4 bg-blue-50 rounded-lg">
+                <h4 className="font-medium text-blue-900 mb-2">How to Manage Internal Links:</h4>
+                <ul className="text-sm text-blue-800 space-y-1">
+                  <li>• Go to <strong>Admin → Homepage Links</strong></li>
+                  <li>• Create sections (e.g., Popular Destinations)</li>
+                  <li>• Add links to each section</li>
+                  <li>• Set display order and enable/disable</li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="flex justify-between items-center pt-4 border-t">
+              <Button variant="outline" asChild>
+                <a href="/admin/homepage-links" target="_blank" rel="noopener noreferrer">
+                  <Eye className="h-4 w-4 mr-2" />
+                  Manage Homepage Links
+                </a>
+              </Button>
+              
+              <Button onClick={() => saveSetting(internalLinksSetting)} disabled={saving}>
+                <Save className="h-4 w-4 mr-2" />
+                {saving ? 'Saving...' : 'Save Links Section'}
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   )
 }

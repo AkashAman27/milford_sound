@@ -9,7 +9,7 @@ import { Switch } from '@/components/ui/switch'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
-import { Info, ExternalLink } from 'lucide-react'
+import { Info, ExternalLink, X } from 'lucide-react'
 
 export interface SEOFormData {
   seo_title?: string
@@ -46,7 +46,6 @@ export function SEOFormFields({
   slug = '',
   contentType = 'page'
 }: SEOFormFieldsProps) {
-  const [showAdvanced, setShowAdvanced] = useState(false)
   
   const fullUrl = slug ? `${baseUrl}/${contentType === 'experience' ? 'experience' : contentType === 'blog' ? 'blog' : ''}/${slug}` : baseUrl
   
@@ -68,7 +67,7 @@ export function SEOFormFields({
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 w-full">
       {/* Basic SEO */}
       <Card>
         <CardHeader>
@@ -308,53 +307,6 @@ export function SEOFormFields({
         </CardContent>
       </Card>
 
-      {/* Advanced SEO */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center justify-between">
-            <span className="flex items-center gap-2">
-              Advanced SEO
-              <Badge variant="outline">Optional</Badge>
-            </span>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setShowAdvanced(!showAdvanced)}
-            >
-              {showAdvanced ? 'Hide' : 'Show'} Advanced
-            </Button>
-          </CardTitle>
-        </CardHeader>
-        {showAdvanced && (
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="seo_keywords">Meta Keywords (Legacy)</Label>
-              <Input
-                id="seo_keywords"
-                value={data.seo_keywords || ''}
-                onChange={(e) => onChange('seo_keywords', e.target.value)}
-                placeholder="keyword1, keyword2, keyword3"
-              />
-              <p className="text-xs text-gray-600">
-                Comma-separated keywords. Not used by modern search engines but may be useful for internal purposes.
-              </p>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="structured_data_type">Structured Data Type</Label>
-              <Input
-                id="structured_data_type"
-                value={data.structured_data_type || ''}
-                onChange={(e) => onChange('structured_data_type', e.target.value)}
-                placeholder="Product, Article, Organization, etc."
-              />
-              <p className="text-xs text-gray-600">
-                Schema.org type for structured data. Auto-generated based on content type if left empty.
-              </p>
-            </div>
-          </CardContent>
-        )}
-      </Card>
 
       {/* SEO Tips */}
       <Card>

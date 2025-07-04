@@ -12,6 +12,7 @@ import { Separator } from '@/components/ui/separator'
 import { createClient } from '@/lib/supabase'
 import { SEOHead } from '@/components/seo/SEOHead'
 import { generateBlogPostStructuredData } from '@/components/seo/structuredData'
+import { TravelGuideSections } from '@/components/blog/TravelGuideSections'
 
 interface CodeSnippet {
   language: string
@@ -324,6 +325,9 @@ export default function BlogPostPage() {
                   </div>
                 </div>
               )}
+
+              {/* Travel Guide Sections */}
+              <TravelGuideSections blogPostId={post.id} />
 
               {/* Author Bio */}
               <div className="mt-12 p-6 bg-gray-50 rounded-lg">

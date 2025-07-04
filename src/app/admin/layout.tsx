@@ -62,8 +62,8 @@ export default function AdminLayout({
 
   const navigation = [
     { name: 'Dashboard', href: '/admin', icon: BarChart3 },
-    { name: 'Blog Posts', href: '/admin/blog', icon: FileText },
-    { name: 'Experiences', href: '/admin/experiences', icon: Package },
+    { name: 'Travel Guide Sections', href: '/admin/blog/guide-sections', icon: FileText },
+    { name: 'Tours', href: '/admin/experiences', icon: Package },
     { name: 'Internal Links', href: '/admin/internal-links', icon: LinkIcon },
     { name: 'URL Redirects', href: '/admin/redirects', icon: LinkIcon },
     { name: 'Categories', href: '/admin/categories', icon: Settings },
@@ -122,7 +122,7 @@ export default function AdminLayout({
       </div>
 
       {/* Main content */}
-      <div className="ml-64">
+      <div className="ml-64 min-h-screen overflow-x-hidden">
         <div className="flex h-16 items-center justify-between border-b border-gray-200 bg-white px-8">
           <h2 className="text-2xl font-semibold text-gray-900">Content Management</h2>
           <Link 
@@ -133,8 +133,10 @@ export default function AdminLayout({
           </Link>
         </div>
         
-        <main className="p-8">
-          {children}
+        <main className="p-8 overflow-x-hidden">
+          <div className="max-w-full">
+            {children}
+          </div>
         </main>
       </div>
     </div>

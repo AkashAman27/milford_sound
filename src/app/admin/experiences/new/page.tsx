@@ -170,14 +170,14 @@ export default function NewExperience() {
             </Button>
           </Link>
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Create New Experience</h1>
+            <h1 className="text-3xl font-bold text-gray-900">Create New Tour</h1>
             <p className="text-gray-600 mt-1">Add a new tour, activity, or attraction</p>
           </div>
         </div>
         
         <div className="flex items-center space-x-2">
           {formData.slug && (
-            <Link href={`/experience/${formData.slug}`} target="_blank">
+            <Link href={`/tour/${formData.slug}`} target="_blank">
               <Button variant="outline" size="sm">
                 <Eye className="h-4 w-4 mr-2" />
                 Preview
@@ -186,7 +186,7 @@ export default function NewExperience() {
           )}
           <Button type="submit" disabled={loading} className="flex items-center">
             <Save className="h-4 w-4 mr-2" />
-            {loading ? 'Creating...' : 'Create Experience'}
+            {loading ? 'Creating...' : 'Create Tour'}
           </Button>
         </div>
       </div>
@@ -426,7 +426,7 @@ export default function NewExperience() {
                     {seoData.seo_title || formData.title}
                   </div>
                   <div className="text-green-700 text-sm">
-                    {baseUrl}/experience/{formData.slug}
+                    {baseUrl}/tour/{formData.slug}
                   </div>
                   <div className="text-gray-600 text-sm">
                     {seoData.seo_description || formData.short_description || formData.description.substring(0, 160)}

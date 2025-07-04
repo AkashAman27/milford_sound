@@ -115,7 +115,7 @@ Total: $${booking.total_price.toFixed(2)}
 A confirmation email will be sent to ${customerDetails.email}`)
       
       // You could redirect to a success page instead
-      router.push(`/experience/${booking.experience_slug}`)
+      router.push(`/tour/${booking.experience_slug}`)
       
     } catch (error) {
       alert('Booking failed. Please try again.')
@@ -180,11 +180,11 @@ A confirmation email will be sent to ${customerDetails.email}`)
         {/* Back Button */}
         <div className="mb-6">
           <Link 
-            href={`/experience/${booking.experience_slug}`}
+            href={`/tour/${booking.experience_slug}`}
             className="inline-flex items-center text-purple-600 hover:text-purple-700"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Experience
+            Back to Tour
           </Link>
         </div>
 

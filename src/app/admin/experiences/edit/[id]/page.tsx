@@ -22,6 +22,14 @@ interface City {
 interface Category {
   id: string
   name: string
+  subcategories?: Subcategory[]
+}
+
+interface Subcategory {
+  id: string
+  name: string
+  slug: string
+  category_id: string
 }
 
 interface Experience {
@@ -69,7 +77,7 @@ interface Experience {
   sort_order: number
 }
 
-export default function EditExperience() {
+export default function EditTour() {
   const router = useRouter()
   const params = useParams()
   const experienceId = params.id as string
@@ -304,24 +312,24 @@ export default function EditExperience() {
   }
 
   return (
-    <div>
+    <div className="w-full max-w-7xl mx-auto px-4 pb-8">
       <div className="flex items-center mb-8">
         <Link href="/admin/experiences">
           <Button variant="outline" size="sm" className="mr-4">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Experiences
+            Back to Tours
           </Button>
         </Link>
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Edit Experience</h1>
-          <p className="text-gray-600 mt-2">Update experience information and settings</p>
+          <h1 className="text-3xl font-bold text-gray-900">Edit Tour</h1>
+          <p className="text-gray-600 mt-2">Update tour information and settings</p>
         </div>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="flex flex-col lg:flex-row gap-6 overflow-hidden">
           {/* Main Content */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="flex-1 space-y-6 min-w-0 overflow-hidden">
             {/* Basic Information */}
             <Card>
               <CardHeader>
@@ -606,31 +614,13 @@ export default function EditExperience() {
           </div>
 
           {/* Sidebar */}
-          <div className="space-y-6">
-            {/* Classification */}
+          <div className="w-full lg:w-80 flex-shrink-0 space-y-6">
+            {/* Category */}
             <Card>
               <CardHeader>
-                <CardTitle>Classification</CardTitle>
+                <CardTitle>Category</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    City
-                  </label>
-                  <select
-                    value={formData.city_id}
-                    onChange={(e) => setFormData(prev => ({ ...prev, city_id: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                  >
-                    <option value="">Select city</option>
-                    {cities.map((city) => (
-                      <option key={city.id} value={city.id}>
-                        {city.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Category
@@ -681,7 +671,7 @@ export default function EditExperience() {
                     className="mr-2"
                   />
                   <label htmlFor="featured" className="text-sm font-medium text-gray-700">
-                    Featured Experience
+                    Featured Tour
                   </label>
                 </div>
 
@@ -719,7 +709,7 @@ export default function EditExperience() {
                 disabled={saving}
               >
                 <Save className="h-4 w-4 mr-2" />
-                {saving ? 'Saving...' : 'Update Experience'}
+                {saving ? 'Saving...' : 'Update Tour'}
               </Button>
             </div>
           </div>

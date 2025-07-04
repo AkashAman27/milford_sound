@@ -11,7 +11,7 @@ import { SearchBox } from '@/components/search/SearchBox'
 
 interface SearchResult {
   id: string
-  type: 'destination' | 'experience' | 'category'
+  type: 'experience' | 'category'
   title: string
   subtitle?: string
   slug: string
@@ -266,7 +266,6 @@ export function SearchResults() {
             <SelectContent>
               <SelectItem value="all">All Results</SelectItem>
               <SelectItem value="experience">Experiences</SelectItem>
-              <SelectItem value="destination">Destinations</SelectItem>
               <SelectItem value="category">Categories</SelectItem>
             </SelectContent>
           </Select>
@@ -353,18 +352,14 @@ export function SearchResults() {
               )
             }
             
-            // For destinations and categories, show simplified cards
+            // For categories, show simplified cards
             return (
               <div key={result.id} className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
                 <div className="p-6">
                   <div className="flex items-center mb-3">
-                    {result.type === 'destination' ? (
-                      <MapPin className="h-5 w-5 text-blue-500 mr-2" />
-                    ) : (
-                      <Clock className="h-5 w-5 text-green-500 mr-2" />
-                    )}
+                    <Clock className="h-5 w-5 text-green-500 mr-2" />
                     <Badge variant="outline" className="text-xs">
-                      {result.type === 'destination' ? 'Destination' : 'Category'}
+                      Category
                     </Badge>
                   </div>
                   <h3 className="text-lg font-semibold mb-2">{result.title}</h3>
@@ -375,9 +370,7 @@ export function SearchResults() {
                     size="sm" 
                     className="w-full"
                     onClick={() => {
-                      const url = result.type === 'destination' 
-                        ? `/destinations/${result.slug}` 
-                        : `/category/${result.slug}`
+                      const url = `/category/${result.slug}`
                       window.location.href = url
                     }}
                   >

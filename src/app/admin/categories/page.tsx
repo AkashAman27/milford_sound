@@ -123,11 +123,11 @@ export default function CategoriesManagement() {
   function editCategory(category: Category) {
     setEditingId(category.id)
     setFormData({
-      name: category.name,
-      slug: category.slug,
-      description: category.description,
-      image_url: category.image_url,
-      product_count: category.product_count
+      name: category.name || '',
+      slug: category.slug || '',
+      description: category.description || '',
+      image_url: category.image_url || '',
+      product_count: category.product_count || 0
     })
   }
 
@@ -231,7 +231,7 @@ export default function CategoriesManagement() {
                   <input
                     type="number"
                     min="0"
-                    value={formData.product_count}
+                    value={formData.product_count || 0}
                     onChange={(e) => setFormData(prev => ({ ...prev, product_count: parseInt(e.target.value) || 0 }))}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                   />

@@ -1,17 +1,21 @@
 import { HeroSection } from '@/components/home/HeroSection'
+import { StatsSection } from '@/components/home/StatsSection'
 import { FeaturedCategories } from '@/components/home/FeaturedCategories'
-import { PopularDestinations } from '@/components/home/PopularDestinations'
 import { FeaturedExperiences } from '@/components/home/FeaturedExperiences'
 import { TestimonialsSection } from '@/components/home/TestimonialsSection'
+import { FAQSection } from '@/components/home/FAQSection'
+import { HomepageInternalLinksSection } from '@/components/home/HomepageInternalLinksSection'
 
 export default function Home() {
   return (
     <>
       <HeroSection />
-      <TestimonialsSection />
+      <StatsSection />
       <FeaturedCategories />
-      <PopularDestinations />
       <FeaturedExperiences />
+      <TestimonialsSection />
+      <FAQSection />
+      <HomepageInternalLinksSection />
     </>
   )
 }
