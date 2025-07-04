@@ -1,7 +1,4 @@
-'use client'
-
-import { useState, useEffect } from 'react'
-import { notFound, useParams, useRouter } from 'next/navigation'
+import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { 
@@ -9,25 +6,16 @@ import {
   Clock, 
   Users, 
   MapPin, 
-  Calendar,
   Check,
-  X,
-  Share2,
-  Heart,
-  ChevronLeft,
-  ChevronRight,
-  Plus,
-  Minus
+  X
 } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Separator } from '@/components/ui/separator'
-import { createClient } from '@/lib/supabase'
-import { SEOHead } from '@/components/seo/SEOHead'
-import { generateExperienceStructuredData } from '@/components/seo/structuredData'
+import { createClient } from '@/lib/supabase/server'
+import { StructuredData } from '@/components/seo/StructuredData'
 import { InternalLinksSection } from '@/components/experience/InternalLinksSection'
+import { BookingCard } from '@/components/tour/BookingCard'
+import type { Metadata } from 'next'
 
 interface Product {
   id: string
@@ -76,70 +64,46 @@ interface Product {
   availability_url?: string
   cities?: { name: string }
   categories?: { name: string }
+  custom_json_ld?: string
+  structured_data_enabled?: boolean
 }
 
-
-export default function TourPage() {
-  const params = useParams()
-  const router = useRouter()
-  const slug = params.slug as string
+// Server-side function to fetch tour
+async function getTour(slug: string): Promise<Product | null> {
+  const supabase = await createClient()
   
-  const [product, setProduct] = useState<Product | null>(null)
-  const [loading, setLoading] = useState(true)
+  try {
+    const { data, error } = await supabase
+      .from('experiences')
+      .select(`
+        *,
+        cities:city_id(name),
+        categories:category_id(name)
+      `)
+      .eq('slug', slug)
+      .eq('status', 'active')
+      .single()
 
-  useEffect(() => {
-    if (slug) {
-      fetchProduct()
+    if (error || !data) {
+      return null
     }
-  }, [slug])
 
-  const fetchProduct = async () => {
-    try {
-      const supabase = createClient()
-      const { data, error } = await supabase
-        .from('experiences')
-        .select(`
-          *,
-          cities:city_id(name),
-          categories:category_id(name)
-        `)
-        .eq('slug', slug)
-        .eq('status', 'active')
-        .single()
-
-      if (error || !data) {
-        notFound()
-        return
-      }
-
-      setProduct(data)
-    } catch (error) {
-      console.error('Error fetching product:', error)
-      notFound()
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const handleCheckAvailability = () => {
-    if (product?.availability_url) {
-      window.open(product.availability_url, '_blank')
-    } else {
-      alert('Availability booking is currently unavailable')
-    }
-  }
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
-      </div>
-    )
-  }
-
-  if (!product) {
-    notFound()
+    return data
+  } catch (error) {
+    console.error('Error fetching tour:', error)
     return null
+  }
+}
+
+// Generate metadata for SEO
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  const product = await getTour(params.slug)
+  
+  if (!product) {
+    return {
+      title: 'Tour Not Found',
+      description: 'The requested tour could not be found.'
+    }
   }
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://milford-sound.com'
@@ -147,20 +111,57 @@ export default function TourPage() {
   const seoTitle = product.seo_title || `${product.title} - Milford Sound`
   const seoDescription = product.seo_description || product.short_description || product.description.substring(0, 160)
 
-  const structuredData = generateExperienceStructuredData({
-    id: product.id,
-    title: product.title,
-    description: product.description,
-    slug: product.slug,
-    price: product.price,
-    currency: product.currency,
-    rating: product.rating,
-    review_count: product.review_count,
-    duration: product.duration,
-    category: product.categories?.name || 'Experience',
-    location: product.cities?.name || 'Unknown',
-    image_url: product.main_image_url || ''
-  }, siteUrl)
+  return {
+    title: seoTitle,
+    description: seoDescription,
+    keywords: product.seo_keywords || undefined,
+    robots: {
+      index: product.robots_index !== false,
+      follow: product.robots_follow !== false,
+      nosnippet: product.robots_nosnippet || false
+    },
+    openGraph: {
+      title: product.og_title || seoTitle,
+      description: product.og_description || seoDescription,
+      images: product.og_image || product.main_image_url ? [{
+        url: product.og_image || product.main_image_url,
+        alt: product.og_image_alt || `${product.title} image`
+      }] : undefined,
+      type: 'website',
+      url: currentUrl,
+      siteName: 'Milford Sound'
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: product.twitter_title || product.og_title || seoTitle,
+      description: product.twitter_description || product.og_description || seoDescription,
+      images: product.twitter_image || product.og_image || product.main_image_url ? [{
+        url: product.twitter_image || product.og_image || product.main_image_url,
+        alt: product.twitter_image_alt || product.og_image_alt || `${product.title} image`
+      }] : undefined
+    },
+    alternates: {
+      canonical: product.canonical_url || currentUrl
+    },
+    other: {
+      'product:price:amount': product.price.toString(),
+      'product:price:currency': product.currency,
+      'product:availability': 'in_stock',
+      'product:brand': 'Milford Sound'
+    }
+  }
+}
+
+export default async function TourPage({ params }: { params: { slug: string } }) {
+  const product = await getTour(params.slug)
+  
+  if (!product) {
+    notFound()
+  }
+
+  // Prepare structured data
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://milford-sound.com'
+  const currentUrl = `${siteUrl}/tour/${product.slug}`
 
   // Get highlights from product data or fallback to default
   const getHighlights = () => {
@@ -179,32 +180,26 @@ export default function TourPage() {
 
   return (
     <>
-      <SEOHead
-        title={seoTitle}
-        description={seoDescription}
-        canonical={product.canonical_url || currentUrl}
-        robots={{
-          index: product.robots_index ?? true,
-          follow: product.robots_follow ?? true,
-          nosnippet: product.robots_nosnippet ?? false
+      {/* Structured Data */}
+      <StructuredData
+        type={(product.structured_data_type as any) || 'TouristAttraction'}
+        data={{
+          title: product.title,
+          description: product.description,
+          url: currentUrl,
+          image_url: product.main_image_url,
+          price: product.price,
+          currency: product.currency,
+          rating: product.rating,
+          review_count: product.review_count,
+          duration: product.duration,
+          category: product.categories?.name,
+          location: product.cities?.name,
+          latitude: -44.6189,
+          longitude: 167.9224,
+          booking_url: product.availability_url
         }}
-        openGraph={{
-          title: product.og_title || seoTitle,
-          description: product.og_description || seoDescription,
-          image: product.og_image || product.main_image_url,
-          imageAlt: product.og_image_alt || `${product.title} image`,
-          type: 'product',
-          url: currentUrl
-        }}
-        twitter={{
-          card: 'summary_large_image',
-          title: product.twitter_title || product.og_title || seoTitle,
-          description: product.twitter_description || product.og_description || seoDescription,
-          image: product.twitter_image || product.og_image || product.main_image_url,
-          imageAlt: product.twitter_image_alt || product.og_image_alt || `${product.title} image`
-        }}
-        structuredData={structuredData}
-        lastModified={product.updated_at}
+        customJsonLd={product.custom_json_ld}
       />
 
       <div className="min-h-screen bg-gray-50">
@@ -217,10 +212,9 @@ export default function TourPage() {
                 <span className="text-xl font-bold">Milford Sound</span>
               </Link>
               <nav className="hidden md:flex items-center space-x-6">
-                <Link href="/destinations" className="text-gray-600 hover:text-gray-900">Destinations</Link>
                 <Link href="/tours" className="text-gray-600 hover:text-gray-900">Tours</Link>
-                <Link href="/blog" className="text-gray-600 hover:text-gray-900">Blog</Link>
-                <Link href="/help" className="text-gray-600 hover:text-gray-900">Help</Link>
+                <Link href="/blog" className="text-gray-600 hover:text-gray-900">Travel Guide</Link>
+                <Link href="/about" className="text-gray-600 hover:text-gray-900">About</Link>
               </nav>
             </div>
           </div>
@@ -246,6 +240,7 @@ export default function TourPage() {
                   alt={product.title}
                   fill
                   className="object-cover"
+                  priority
                 />
                 {product.featured && (
                   <Badge className="absolute top-4 left-4 bg-purple-600">Featured</Badge>
@@ -262,7 +257,9 @@ export default function TourPage() {
                     {product.categories?.name || 'Tours & Attractions'}
                   </Badge>
                   <Badge variant="outline">{product.cities?.name}</Badge>
-                  <Badge variant="outline" className="bg-blue-50 text-blue-700">Featured</Badge>
+                  {product.featured && (
+                    <Badge variant="outline" className="bg-blue-50 text-blue-700">Featured</Badge>
+                  )}
                 </div>
 
                 <h1 className="text-3xl font-bold text-gray-900 mb-4">{product.title}</h1>
@@ -382,37 +379,10 @@ export default function TourPage() {
 
             {/* Booking Sidebar */}
             <div className="lg:col-span-1">
-              <Card className="bg-white shadow-lg">
-                <CardHeader>
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-gray-900">
-                      ${product.price.toFixed(2)}
-                    </div>
-                    <div className="text-sm text-gray-600">per person</div>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <Button 
-                    onClick={handleCheckAvailability}
-                    className="w-full bg-purple-600 hover:bg-purple-700"
-                  >
-                    Check Availability
-                  </Button>
-
-                  <div className="text-center text-sm text-gray-600">
-                    Free cancellation available
-                  </div>
-
-                  <div className="bg-gray-50 p-3 rounded-lg text-sm text-gray-600">
-                    <p className="font-medium mb-1">What's included:</p>
-                    <ul className="space-y-1">
-                      <li>• Entry tickets</li>
-                      <li>• Professional guide</li>
-                      <li>• Audio guide (multiple languages)</li>
-                    </ul>
-                  </div>
-                </CardContent>
-              </Card>
+              <BookingCard 
+                price={product.price}
+                availabilityUrl={product.availability_url}
+              />
             </div>
           </div>
         </div>

@@ -99,10 +99,7 @@ export function CategoryDropdown() {
           categories.map((category) => (
             <DropdownMenuSub key={category.id}>
               <DropdownMenuSubTrigger className="text-gray-900 hover:bg-gray-50">
-                <div className="flex items-center justify-between w-full">
-                  <span className="text-gray-900">{category.name}</span>
-                  <ChevronRight className="h-3 w-3 text-gray-400" />
-                </div>
+                <span className="text-gray-900">{category.name}</span>
               </DropdownMenuSubTrigger>
               <DropdownMenuSubContent className="bg-white border border-gray-200 shadow-lg">
                 <DropdownMenuItem asChild>

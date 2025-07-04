@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import { Header } from '@/components/layout/Header'
-import { Footer } from '@/components/layout/Footer'
+import { ConditionalHeader } from '@/components/layout/ConditionalHeader'
+import { ConditionalFooter } from '@/components/layout/ConditionalFooter'
 import { AuthProvider } from '@/components/providers/AuthProvider'
 import { CartProvider } from '@/components/providers/CartProvider'
 
@@ -24,11 +24,11 @@ export default function RootLayout({
         <AuthProvider>
           <CartProvider>
             <div className="min-h-screen flex flex-col">
-              <Header />
+              <ConditionalHeader />
               <main className="flex-1">
                 {children}
               </main>
-              <Footer />
+              <ConditionalFooter />
             </div>
           </CartProvider>
         </AuthProvider>

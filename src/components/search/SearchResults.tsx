@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Badge } from '@/components/ui/badge'
 import { ProductCard } from '@/components/products/ProductCard'
 import { SearchBox } from '@/components/search/SearchBox'
+import { createClient } from '@/lib/supabase'
 
 interface SearchResult {
   id: string
@@ -26,93 +27,6 @@ interface SearchResult {
   shortDescription?: string
 }
 
-// Mock search results - replace with actual API calls
-const mockSearchResults: SearchResult[] = [
-  {
-    id: '1',
-    type: 'experience',
-    title: 'Statue of Liberty & Ellis Island Tour',
-    slug: 'statue-of-liberty-ellis-island-tour',
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop',
-    price: 45,
-    rating: 4.5,
-    city: 'New York',
-    duration: '4 hours',
-    maxGroupSize: 25,
-    featured: true,
-    shortDescription: 'Visit the Statue of Liberty and Ellis Island with skip-the-line access',
-  },
-  {
-    id: '2',
-    type: 'experience',
-    title: 'Louvre Museum Priority Access',
-    slug: 'louvre-museum-priority-access',
-    image: 'https://images.unsplash.com/photo-1566139992169-9a8b0c9e0b58?w=600&h=400&fit=crop',
-    price: 25,
-    rating: 4.3,
-    city: 'Paris',
-    duration: '3 hours',
-    maxGroupSize: 20,
-    featured: true,
-    shortDescription: 'Skip-the-line access to the Louvre Museum',
-  },
-  {
-    id: '3',
-    type: 'experience',
-    title: 'Tower of London & Crown Jewels',
-    slug: 'tower-of-london-crown-jewels',
-    image: 'https://images.unsplash.com/photo-1587133603991-8e845d4b2fb0?w=600&h=400&fit=crop',
-    price: 32,
-    rating: 4.7,
-    city: 'London',
-    duration: '2.5 hours',
-    maxGroupSize: 15,
-    featured: true,
-    shortDescription: 'Explore the Tower of London and see the Crown Jewels',
-  },
-  {
-    id: '4',
-    type: 'experience',
-    title: 'Tokyo Food Tour in Shibuya',
-    slug: 'tokyo-food-tour-shibuya',
-    image: 'https://images.unsplash.com/photo-1576866209830-589e1bfbaa8d?w=600&h=400&fit=crop',
-    price: 75,
-    rating: 4.8,
-    city: 'Tokyo',
-    duration: '3.5 hours',
-    maxGroupSize: 8,
-    featured: true,
-    shortDescription: 'Authentic Japanese food tour in Shibuya district',
-  },
-  {
-    id: '5',
-    type: 'experience',
-    title: 'Sagrada Família Skip-the-Line',
-    slug: 'sagrada-familia-skip-the-line',
-    image: 'https://images.unsplash.com/photo-1583422409516-2895a77efded?w=600&h=400&fit=crop',
-    price: 28,
-    rating: 4.6,
-    city: 'Barcelona',
-    duration: '1.5 hours',
-    maxGroupSize: 30,
-    featured: false,
-    shortDescription: 'Skip-the-line access to Sagrada Família with audio guide',
-  },
-  {
-    id: '6',
-    type: 'experience',
-    title: 'Colosseum Underground Tour',
-    slug: 'colosseum-underground-tour',
-    image: 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=600&h=400&fit=crop',
-    price: 65,
-    rating: 4.9,
-    city: 'Rome',
-    duration: '3 hours',
-    maxGroupSize: 12,
-    featured: true,
-    shortDescription: 'Underground access to Colosseum with Roman Forum',
-  },
-]
 
 export function SearchResults() {
   const searchParams = useSearchParams()
@@ -126,20 +40,70 @@ export function SearchResults() {
 
   useEffect(() => {
     const searchItems = async () => {
+      if (!query.trim()) {
+        setSearchResults([])
+        setLoading(false)
+        return
+      }
+
       setLoading(true)
       
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 500))
-      
-      // Filter mock data based on query
-      const filtered = mockSearchResults.filter(item =>
-        item.title.toLowerCase().includes(query.toLowerCase()) ||
-        item.city?.toLowerCase().includes(query.toLowerCase()) ||
-        item.shortDescription?.toLowerCase().includes(query.toLowerCase())
-      )
-      
-      setSearchResults(filtered)
-      setLoading(false)
+      try {
+        const supabase = createClient()
+        const results: SearchResult[] = []
+
+        // Search experiences/tours with more detailed fields
+        const { data: experiences, error: experiencesError } = await supabase
+          .from('experiences')
+          .select(`
+            id, 
+            title, 
+            slug, 
+            short_description, 
+            description,
+            price, 
+            currency, 
+            rating, 
+            main_image_url, 
+            duration,
+            max_group_size,
+            featured,
+            cities(name),
+            categories(name)
+          `)
+          .eq('status', 'active')
+          .or(`title.ilike.%${query}%, short_description.ilike.%${query}%, description.ilike.%${query}%`)
+          .limit(20)
+
+        if (experiencesError) {
+          console.error('Error searching experiences:', experiencesError)
+        } else if (experiences) {
+          experiences.forEach(exp => {
+            results.push({
+              id: exp.id,
+              type: 'experience',
+              title: exp.title,
+              subtitle: exp.cities?.name || 'Milford Sound',
+              slug: exp.slug,
+              image: exp.main_image_url,
+              rating: exp.rating || undefined,
+              price: exp.price || undefined,
+              city: exp.cities?.name || 'Milford Sound',
+              duration: exp.duration || undefined,
+              maxGroupSize: exp.max_group_size || undefined,
+              featured: exp.featured || false,
+              shortDescription: exp.short_description || exp.description?.substring(0, 100) + '...'
+            })
+          })
+        }
+
+        setSearchResults(results)
+      } catch (error) {
+        console.error('Search error:', error)
+        setSearchResults([])
+      } finally {
+        setLoading(false)
+      }
     }
 
     searchItems()
@@ -224,10 +188,6 @@ export function SearchResults() {
           {query ? `Search results for "${query}"` : 'Search Results'}
         </h1>
         
-        {/* Search Box */}
-        <div className="max-w-2xl mb-6">
-          <SearchBox placeholder="Refine your search..." />
-        </div>
         
         <div className="flex items-center justify-between mb-6">
           <p className="text-gray-600">

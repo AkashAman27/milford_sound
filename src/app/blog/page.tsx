@@ -1,13 +1,11 @@
-'use client'
-
-import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Calendar, Clock, User, ChevronRight } from 'lucide-react'
+import { Calendar, Clock, ChevronRight } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { createClient } from '@/lib/supabase'
+import { createClient } from '@/lib/supabase/server'
+import type { Metadata } from 'next'
 
 interface BlogPost {
   id: string
@@ -32,57 +30,78 @@ interface BlogCategory {
   slug: string
 }
 
-export default function BlogPage() {
-  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([])
-  const [categories, setCategories] = useState<BlogCategory[]>([])
-  const [loading, setLoading] = useState(true)
+// Server-side function to fetch blog posts
+async function getBlogPosts(): Promise<BlogPost[]> {
+  const supabase = await createClient()
+  
+  try {
+    const { data } = await supabase
+      .from('blog_posts')
+      .select(`
+        *,
+        blog_categories(name)
+      `)
+      .eq('published', true)
+      .order('published_at', { ascending: false })
 
-  useEffect(() => {
-    fetchBlogData()
-  }, [])
-
-  async function fetchBlogData() {
-    const supabase = createClient()
-    
-    try {
-      // Fetch blog posts with categories
-      const { data: postsData } = await supabase
-        .from('blog_posts')
-        .select(`
-          *,
-          blog_categories(name)
-        `)
-        .eq('published', true)
-        .order('published_at', { ascending: false })
-
-      // Fetch categories
-      const { data: categoriesData } = await supabase
-        .from('blog_categories')
-        .select('*')
-        .order('name')
-
-      if (postsData) setBlogPosts(postsData)
-      if (categoriesData) setCategories(categoriesData)
-    } catch (error) {
-      console.error('Error fetching blog data:', error)
-    } finally {
-      setLoading(false)
-    }
+    return data || []
+  } catch (error) {
+    console.error('Error fetching blog posts:', error)
+    return []
   }
+}
+
+// Server-side function to fetch blog categories
+async function getBlogCategories(): Promise<BlogCategory[]> {
+  const supabase = await createClient()
+  
+  try {
+    const { data } = await supabase
+      .from('blog_categories')
+      .select('*')
+      .order('name')
+
+    return data || []
+  } catch (error) {
+    console.error('Error fetching blog categories:', error)
+    return []
+  }
+}
+
+// Generate metadata for SEO
+export const metadata: Metadata = {
+  title: 'Travel Stories & Guides - Milford Sound Blog',
+  description: 'Discover insider tips, hidden gems, and inspiring stories from travelers around the world. Get the best travel guides and destination insights.',
+  keywords: 'travel blog, travel guides, destination tips, travel stories, Milford Sound, New Zealand travel',
+  openGraph: {
+    title: 'Travel Stories & Guides - Milford Sound Blog',
+    description: 'Discover insider tips, hidden gems, and inspiring stories from travelers around the world.',
+    type: 'website',
+    siteName: 'Milford Sound',
+    images: [{
+      url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=630&fit=crop',
+      alt: 'Travel Stories & Guides'
+    }]
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Travel Stories & Guides - Milford Sound Blog',
+    description: 'Discover insider tips, hidden gems, and inspiring stories from travelers around the world.',
+    images: [{
+      url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=630&fit=crop',
+      alt: 'Travel Stories & Guides'
+    }]
+  }
+}
+
+export default async function BlogPage() {
+  const [blogPosts, categories] = await Promise.all([
+    getBlogPosts(),
+    getBlogCategories()
+  ])
 
   const featuredPosts = blogPosts.filter(post => post.featured)
   const regularPosts = blogPosts.filter(post => !post.featured)
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading blog posts...</p>
-        </div>
-      </div>
-    )
-  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -156,8 +175,11 @@ export default function BlogPage() {
                 variant="outline"
                 size="sm"
                 className="hover:bg-primary hover:text-white"
+                asChild
               >
-                {category.name}
+                <Link href={`/blog/category/${category.slug}`}>
+                  {category.name}
+                </Link>
               </Button>
             ))}
           </div>
@@ -167,10 +189,6 @@ export default function BlogPage() {
         <section>
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-3xl font-bold">Latest Stories</h2>
-            <Button variant="outline">
-              View All
-              <ChevronRight className="h-4 w-4 ml-1" />
-            </Button>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

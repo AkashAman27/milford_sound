@@ -146,7 +146,7 @@ export default function AboutPage() {
             </div>
             
             <a
-              href="/contact"
+              href="mailto:milfordsound@gmail.com"
               className="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary-700 transition-colors"
             >
               Contact Us
