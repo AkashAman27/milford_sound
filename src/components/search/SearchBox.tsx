@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import { Search, MapPin, Calendar, Clock, Star } from 'lucide-react'
 import { Input } from '@/components/ui/input'
@@ -39,63 +39,61 @@ export function SearchBox({
   const [loading, setLoading] = useState(false)
   const router = useRouter()
 
-  // Fetch popular suggestions on component mount
-  useEffect(() => {
-    const fetchPopularSuggestions = async () => {
-      try {
-        const supabase = createClient()
-        const suggestions: SearchResult[] = []
+  // Fetch popular suggestions only when dropdown opens
+  const fetchPopularSuggestions = useCallback(async () => {
+    if (popularSuggestions.length > 0) return // Don't fetch if already loaded
+    
+    try {
+      const supabase = createClient()
+      const suggestions: SearchResult[] = []
 
-        // Get featured/popular experiences
-        const { data: experiences } = await supabase
-          .from('experiences')
-          .select('id, title, slug, short_description, price, rating, main_image_url, cities(name), categories(name)')
-          .eq('status', 'active')
-          .eq('featured', true)
-          .limit(4)
+      // Get featured/popular experiences
+      const { data: experiences } = await supabase
+        .from('experiences')
+        .select('id, title, slug, short_description, price, rating, main_image_url, cities(name), categories(name)')
+        .eq('status', 'active')
+        .eq('featured', true)
+        .limit(4)
 
-        if (experiences) {
-          experiences.forEach(exp => {
-            suggestions.push({
-              id: exp.id,
-              type: 'experience',
-              title: exp.title,
-              subtitle: exp.cities?.name || exp.categories?.name || 'Milford Sound',
-              slug: exp.slug,
-              image: exp.main_image_url,
-              rating: exp.rating || undefined,
-              price: exp.price || undefined
-            })
+      if (experiences) {
+        experiences.forEach(exp => {
+          suggestions.push({
+            id: exp.id,
+            type: 'experience',
+            title: exp.title,
+            subtitle: exp.cities?.name || exp.categories?.name || 'Milford Sound',
+            slug: exp.slug,
+            image: exp.main_image_url,
+            rating: exp.rating || undefined,
+            price: exp.price || undefined
           })
-        }
-
-        // Get popular categories
-        const { data: categories } = await supabase
-          .from('categories')
-          .select('id, name, slug, experience_count')
-          .order('experience_count', { ascending: false })
-          .limit(3)
-
-        if (categories) {
-          categories.forEach(cat => {
-            suggestions.push({
-              id: cat.id,
-              type: 'category',
-              title: cat.name,
-              subtitle: `${cat.experience_count || 0} tours`,
-              slug: cat.slug
-            })
-          })
-        }
-
-        setPopularSuggestions(suggestions)
-      } catch (error) {
-        console.error('Error fetching popular suggestions:', error)
+        })
       }
-    }
 
-    fetchPopularSuggestions()
-  }, [])
+      // Get popular categories
+      const { data: categories } = await supabase
+        .from('categories')
+        .select('id, name, slug, experience_count')
+        .order('experience_count', { ascending: false })
+        .limit(3)
+
+      if (categories) {
+        categories.forEach(cat => {
+          suggestions.push({
+            id: cat.id,
+            type: 'category',
+            title: cat.name,
+            subtitle: `${cat.experience_count || 0} tours`,
+            slug: cat.slug
+          })
+        })
+      }
+
+      setPopularSuggestions(suggestions)
+    } catch (error) {
+      console.error('Error fetching popular suggestions:', error)
+    }
+  }, [popularSuggestions.length])
 
   // Handle clicks outside dropdown
   useEffect(() => {
@@ -116,7 +114,7 @@ export function SearchBox({
 
   const searchItems = useCallback(
     async (query: string) => {
-      if (!query.trim()) {
+      if (!query.trim() || query.length < 2) {
         setSearchResults([])
         return
       }
@@ -127,13 +125,13 @@ export function SearchBox({
         const supabase = createClient()
         const results: SearchResult[] = []
 
-        // Search experiences/tours
+        // Search experiences/tours with minimal fields for performance
         const { data: experiences, error: experiencesError } = await supabase
           .from('experiences')
-          .select('id, title, slug, short_description, price, currency, rating, main_image_url, cities(name), categories(name)')
+          .select('id, title, slug, price, rating, cities(name), categories(name)')
           .eq('status', 'active')
           .ilike('title', `%${query}%`)
-          .limit(6)
+          .limit(5) // Reduced limit for performance
 
         if (experiencesError) {
           console.error('Error searching experiences:', experiencesError)
@@ -145,19 +143,18 @@ export function SearchBox({
               title: exp.title,
               subtitle: exp.cities?.name || exp.categories?.name || 'Milford Sound',
               slug: exp.slug,
-              image: exp.main_image_url,
               rating: exp.rating || undefined,
               price: exp.price || undefined
             })
           })
         }
 
-        // Search categories
+        // Search categories with smaller limit
         const { data: categories, error: categoriesError } = await supabase
           .from('categories')
           .select('id, name, slug, experience_count')
           .ilike('name', `%${query}%`)
-          .limit(4)
+          .limit(3) // Reduced limit for performance
 
         if (categoriesError) {
           console.error('Error searching categories:', categoriesError)
@@ -180,7 +177,7 @@ export function SearchBox({
           return 0
         })
 
-        setSearchResults(results.slice(0, 8))
+        setSearchResults(results.slice(0, 6)) // Reduced total results
       } catch (error) {
         console.error('Search error:', error)
         setSearchResults([])
@@ -193,12 +190,12 @@ export function SearchBox({
 
   useEffect(() => {
     const debounceTimer = setTimeout(() => {
-      if (value) {
-        searchItems(value)
+      if (value.trim() && value.length >= 2) {
+        searchItems(value.trim())
       } else {
         setSearchResults([])
       }
-    }, 300) // 300ms debounce
+    }, 400) // Increased debounce to 400ms
 
     return () => clearTimeout(debounceTimer)
   }, [value, searchItems])
@@ -227,7 +224,7 @@ export function SearchBox({
     }
   }
 
-  const getResultIcon = (type: string) => {
+  const getResultIcon = useCallback((type: string) => {
     switch (type) {
       case 'category':
         return <Calendar className="h-4 w-4 text-green-500" />
@@ -236,7 +233,7 @@ export function SearchBox({
       default:
         return <Search className="h-4 w-4 text-gray-500" />
     }
-  }
+  }, [])
 
   const inputSizeClasses = {
     sm: 'h-8 text-sm',
@@ -254,8 +251,14 @@ export function SearchBox({
         placeholder={placeholder}
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        onFocus={() => setOpen(true)}
-        onClick={() => setOpen(true)}
+        onFocus={() => {
+          setOpen(true)
+          fetchPopularSuggestions()
+        }}
+        onClick={() => {
+          setOpen(true)
+          fetchPopularSuggestions()
+        }}
         onKeyDown={(e) => {
           if (e.key === 'Enter') {
             handleSearch()

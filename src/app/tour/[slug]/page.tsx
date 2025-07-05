@@ -203,22 +203,6 @@ export default async function TourPage({ params }: { params: { slug: string } })
       />
 
       <div className="min-h-screen bg-gray-50">
-        {/* Header */}
-        <header className="bg-white shadow-sm border-b">
-          <div className="container mx-auto px-4 py-4">
-            <div className="flex items-center justify-between">
-              <Link href="/" className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-purple-600 rounded"></div>
-                <span className="text-xl font-bold">Milford Sound</span>
-              </Link>
-              <nav className="hidden md:flex items-center space-x-6">
-                <Link href="/tours" className="text-gray-600 hover:text-gray-900">Tours</Link>
-                <Link href="/blog" className="text-gray-600 hover:text-gray-900">Travel Guide</Link>
-                <Link href="/about" className="text-gray-600 hover:text-gray-900">About</Link>
-              </nav>
-            </div>
-          </div>
-        </header>
 
         <div className="container mx-auto px-4 py-8">
           {/* Breadcrumb */}

@@ -29,6 +29,7 @@ const nextConfig = {
     ],
     loader: 'default',
     unoptimized: false,
+    formats: ['image/webp', 'image/avif'],
   },
   serverExternalPackages: ['@supabase/supabase-js'],
   typescript: {
@@ -36,6 +37,12 @@ const nextConfig = {
   },
   eslint: {
     ignoreDuringBuilds: true,
+  },
+  experimental: {
+    optimizePackageImports: ['lucide-react', '@radix-ui/react-dropdown-menu'],
+  },
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
   },
 }
 

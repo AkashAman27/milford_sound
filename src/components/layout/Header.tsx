@@ -23,9 +23,9 @@ export function Header() {
   const [authModalOpen, setAuthModalOpen] = useState(false)
   const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signin')
   const { user, loading } = useAuth()
-  const supabase = createClient()
 
   const handleSignOut = async () => {
+    const supabase = createClient()
     await supabase.auth.signOut()
   }
 
@@ -35,7 +35,7 @@ export function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-white">
+    <header className="sticky top-0 z-50 w-full border-b bg-white" data-testid="main-header">
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
@@ -136,9 +136,6 @@ export function Header() {
         {isMobileMenuOpen && (
           <div className="border-t pb-4 lg:hidden">
             <nav className="flex flex-col space-y-2 pt-4">
-              <Link href="/tours" className="py-2 text-sm font-medium hover:text-primary">
-                Milford Sound Tours
-              </Link>
               <Link href="/tours" className="py-2 text-sm font-medium hover:text-primary">
                 Tours
               </Link>
