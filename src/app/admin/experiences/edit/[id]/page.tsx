@@ -120,7 +120,8 @@ export default function EditTour() {
     seo_description: '',
     sort_order: 0,
     highlights: '',
-    availability_url: ''
+    availability_url: '',
+    show_faqs: false
   })
 
   useEffect(() => {
@@ -166,7 +167,8 @@ export default function EditTour() {
         seo_description: experienceData.seo_description || '',
         sort_order: experienceData.sort_order || 0,
         highlights: Array.isArray(experienceData.highlights) ? experienceData.highlights.join('\n') : '',
-        availability_url: experienceData.availability_url || ''
+        availability_url: experienceData.availability_url || '',
+        show_faqs: experienceData.show_faqs || false
       })
       
       // Set SEO data
@@ -685,6 +687,19 @@ export default function EditTour() {
                   />
                   <label htmlFor="bestseller" className="text-sm font-medium text-gray-700">
                     Bestseller
+                  </label>
+                </div>
+
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="show_faqs"
+                    checked={formData.show_faqs}
+                    onChange={(e) => setFormData(prev => ({ ...prev, show_faqs: e.target.checked }))}
+                    className="mr-2"
+                  />
+                  <label htmlFor="show_faqs" className="text-sm font-medium text-gray-700">
+                    Show FAQ Section
                   </label>
                 </div>
 

@@ -5,7 +5,6 @@ import { useState } from 'react'
 import { Search, Menu, User, LogOut } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { AuthModal } from '@/components/auth/AuthModal'
 import { SearchBox } from '@/components/search/SearchBox'
 import { CategoryDropdown } from '@/components/navigation/CategoryDropdown'
 import { useAuth } from '@/components/providers/AuthProvider'
@@ -20,18 +19,11 @@ import {
 
 export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const [authModalOpen, setAuthModalOpen] = useState(false)
-  const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signin')
   const { user, loading } = useAuth()
 
   const handleSignOut = async () => {
     const supabase = createClient()
     await supabase.auth.signOut()
-  }
-
-  const openAuthModal = (mode: 'signin' | 'signup') => {
-    setAuthMode(mode)
-    setAuthModalOpen(true)
   }
 
   return (
@@ -65,10 +57,8 @@ export function Header() {
 
           {/* Right Side Actions */}
           <div className="flex items-center space-x-4">
-
-            {loading ? (
-              <div className="w-8 h-8 rounded-full bg-gray-200 animate-pulse" />
-            ) : user ? (
+            {/* Hidden user authentication - only shown when user is already logged in from admin access */}
+            {loading ? null : user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="sm" className="relative">
@@ -81,13 +71,7 @@ export function Header() {
                   </div>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
-                    <Link href="/profile">My Profile</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/bookings">My Bookings</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/wishlist">Wishlist</Link>
+                    <Link href="/admin">Admin Dashboard</Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleSignOut}>
@@ -96,24 +80,7 @@ export function Header() {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-            ) : (
-              <div className="flex items-center space-x-2">
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  onClick={() => openAuthModal('signin')}
-                >
-                  Sign In
-                </Button>
-                <Button 
-                  size="sm" 
-                  onClick={() => openAuthModal('signup')}
-                  className="bg-primary hover:bg-primary/90"
-                >
-                  Sign Up
-                </Button>
-              </div>
-            )}
+            ) : null}
 
             {/* Mobile Menu Button */}
             <Button
@@ -150,11 +117,6 @@ export function Header() {
         )}
       </div>
 
-      <AuthModal 
-        open={authModalOpen} 
-        onOpenChange={setAuthModalOpen} 
-        mode={authMode} 
-      />
     </header>
   )
 }

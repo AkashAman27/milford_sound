@@ -14,6 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { createClient } from '@/lib/supabase/server'
 import { StructuredData } from '@/components/seo/StructuredData'
 import { InternalLinksSection } from '@/components/experience/InternalLinksSection'
+import { FAQSection } from '@/components/tour/FAQSection'
 import { BookingCard } from '@/components/tour/BookingCard'
 import type { Metadata } from 'next'
 
@@ -66,6 +67,7 @@ interface Product {
   categories?: { name: string }
   custom_json_ld?: string
   structured_data_enabled?: boolean
+  show_faqs?: boolean
 }
 
 // Server-side function to fetch tour
@@ -96,8 +98,9 @@ async function getTour(slug: string): Promise<Product | null> {
 }
 
 // Generate metadata for SEO
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const product = await getTour(params.slug)
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params
+  const product = await getTour(slug)
   
   if (!product) {
     return {
@@ -152,8 +155,9 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   }
 }
 
-export default async function TourPage({ params }: { params: { slug: string } }) {
-  const product = await getTour(params.slug)
+export default async function TourPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const product = await getTour(slug)
   
   if (!product) {
     notFound()
@@ -356,6 +360,12 @@ export default async function TourPage({ params }: { params: { slug: string } })
 
               {/* Internal Links Section */}
               <InternalLinksSection 
+                experienceId={product.id} 
+                className="mt-8"
+              />
+
+              {/* FAQ Section */}
+              <FAQSection 
                 experienceId={product.id} 
                 className="mt-8"
               />
