@@ -226,3 +226,22 @@ Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
  GET /tours 200 in 657ms
  GET / 200 in 49ms
  ⨯ upstream image response failed for https://images.unsplash.com/photo-1494790108755-2616b612b3bb?w=150&h=150&fit=crop&crop=face 404
+ GET / 200 in 215ms
+ ○ Compiling /blog ...
+ ✓ Compiled /blog in 665ms (1305 modules)
+ GET /blog 200 in 1067ms
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1502602898536-47ad22581b52?w=800 404
+ ✓ Compiled /about in 275ms (1314 modules)
+ GET /about 200 in 328ms
+ ✓ Compiled /_not-found in 336ms (1318 modules)
+ GET /careers 404 in 372ms
+ GET /careers 404 in 106ms
+ ✓ Compiled in 2.3s (1274 modules)
+ ✓ Compiled in 434ms (1274 modules)
+ ✓ Compiled in 324ms (1274 modules)
+ ✓ Compiled /_not-found in 376ms (1264 modules)
+ GET /careers 404 in 585ms
+ ✓ Compiled / in 439ms (683 modules)
+ GET / 200 in 633ms
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1494790108755-2616b612b3bb?w=150&h=150&fit=crop&crop=face 404
+ ✓ Compiled in 438ms (605 modules)

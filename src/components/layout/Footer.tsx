@@ -7,7 +7,7 @@ export function Footer() {
   return (
     <footer className="bg-gray-900 text-white">
       <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {/* Company Info */}
           <div>
             <div className="flex items-center space-x-2 mb-4">
@@ -38,9 +38,7 @@ export function Footer() {
             <h3 className="font-semibold mb-4">Company</h3>
             <ul className="space-y-2 text-sm">
               <li><Link href="/about" className="text-gray-400 hover:text-white">About Us</Link></li>
-              <li><Link href="/careers" className="text-gray-400 hover:text-white">Careers</Link></li>
-              <li><Link href="/press" className="text-gray-400 hover:text-white">Press</Link></li>
-              <li><Link href="/blog" className="text-gray-400 hover:text-white">Blog</Link></li>
+              <li><Link href="/blog" className="text-gray-400 hover:text-white">Travel Guide</Link></li>
               <li><Link href="/contact" className="text-gray-400 hover:text-white">Contact Us</Link></li>
             </ul>
           </div>
@@ -57,23 +55,6 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Newsletter */}
-          <div>
-            <h3 className="font-semibold mb-4">Stay Updated</h3>
-            <p className="text-gray-400 text-sm mb-4">
-              Get the latest deals and travel inspiration straight to your inbox.
-            </p>
-            <div className="space-y-2">
-              <Input
-                type="email"
-                placeholder="Enter your email"
-                className="bg-gray-800 border-gray-700 text-white placeholder-gray-400"
-              />
-              <Button className="w-full bg-primary hover:bg-primary/90">
-                Subscribe
-              </Button>
-            </div>
-          </div>
         </div>
 
         {/* Bottom Bar */}
