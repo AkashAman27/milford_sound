@@ -26,7 +26,7 @@ export interface BlogPost {
   category?: string
 }
 
-export function generateExperienceStructuredData(experience: Experience, siteUrl: string = 'https://milford-sound.com') {
+export function generateExperienceStructuredData(experience: Experience, siteUrl: string = 'https://tps-site.com') {
   return {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -53,7 +53,7 @@ export function generateExperienceStructuredData(experience: Experience, siteUrl
     } : undefined,
     "provider": {
       "@type": "Organization",
-      "name": "Milford Sound",
+      "name": "TPS Site",
       "url": siteUrl
     },
     "location": {
@@ -64,7 +64,7 @@ export function generateExperienceStructuredData(experience: Experience, siteUrl
   }
 }
 
-export function generateBlogPostStructuredData(post: BlogPost, siteUrl: string = 'https://milford-sound.com') {
+export function generateBlogPostStructuredData(post: BlogPost, siteUrl: string = 'https://tps-site.com') {
   return {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
@@ -80,7 +80,7 @@ export function generateBlogPostStructuredData(post: BlogPost, siteUrl: string =
     },
     "publisher": {
       "@type": "Organization",
-      "name": "Milford Sound",
+      "name": "TPS Site",
       "url": siteUrl,
       "logo": {
         "@type": "ImageObject",
@@ -95,32 +95,32 @@ export function generateBlogPostStructuredData(post: BlogPost, siteUrl: string =
   }
 }
 
-export function generateOrganizationStructuredData(siteUrl: string = 'https://milford-sound.com') {
+export function generateOrganizationStructuredData(siteUrl: string = 'https://tps-site.com') {
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "name": "Milford Sound",
+    "name": "TPS Site",
     "url": siteUrl,
     "logo": `${siteUrl}/logo.png`,
-    "description": "Discover unforgettable tours, activities and experiences around the world with Milford Sound",
+    "description": "Discover unforgettable tours, activities and experiences around the world with TPS Site",
     "contactPoint": {
       "@type": "ContactPoint",
       "contactType": "customer service",
       "url": `${siteUrl}/help`
     },
     "sameAs": [
-      "https://facebook.com/milfordsound",
-      "https://twitter.com/milfordsound",
-      "https://instagram.com/milfordsound"
+      "https://facebook.com/tpssite",
+      "https://twitter.com/tpssite",
+      "https://instagram.com/tpssite"
     ]
   }
 }
 
-export function generateWebsiteStructuredData(siteUrl: string = 'https://milford-sound.com') {
+export function generateWebsiteStructuredData(siteUrl: string = 'https://tps-site.com') {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "name": "Milford Sound",
+    "name": "TPS Site",
     "url": siteUrl,
     "description": "Book the best tours, activities and experiences around the world",
     "potentialAction": {

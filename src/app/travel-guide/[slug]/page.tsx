@@ -120,9 +120,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     }
   }
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://milford-sound.com'
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tps-site.com'
   const currentUrl = `${siteUrl}/blog/${post.slug}`
-  const seoTitle = post.seo_title || `${post.title} - Milford Sound Blog`
+  const seoTitle = post.seo_title || `${post.title} - TPS Site Blog`
   const seoDescription = post.seo_description || post.excerpt || post.content.substring(0, 160)
 
   return {
@@ -143,7 +143,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       }] : undefined,
       type: 'article',
       url: currentUrl,
-      siteName: 'Milford Sound',
+      siteName: 'TPS Site',
       publishedTime: post.published_at || undefined,
       modifiedTime: post.updated_at || undefined
     },
@@ -160,7 +160,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       canonical: post.canonical_url || currentUrl
     },
     other: {
-      'article:author': 'Milford Sound Team',
+      'article:author': 'TPS Site Team',
       'article:section': post.blog_categories?.name || 'Blog',
       'article:published_time': post.published_at || '',
       'article:modified_time': post.updated_at || post.published_at || ''
@@ -186,9 +186,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         data={{
           title: post.title,
           description: post.excerpt || post.content.substring(0, 160),
-          url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://milford-sound.com'}/blog/${post.slug}`,
+          url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://tps-site.com'}/blog/${post.slug}`,
           image_url: post.featured_image,
-          author: 'Milford Sound Team',
+          author: 'TPS Site Team',
           published_date: post.published_at,
           updated_date: post.updated_at || post.published_at,
           category: post.blog_categories?.name,

@@ -14,6 +14,6 @@ export default function robots(): MetadataRoute.Robots {
         '/dev-output.log',
       ],
     },
-    sitemap: 'https://milford-sound.com/sitemap.xml',
+    sitemap: 'https://tps-site.com/sitemap.xml',
   }
 }

@@ -109,9 +109,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     }
   }
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://milford-sound.com'
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tps-site.com'
   const currentUrl = `${siteUrl}/tour/${product.slug}`
-  const seoTitle = product.seo_title || `${product.title} - Milford Sound`
+  const seoTitle = product.seo_title || `${product.title} - TPS Site`
   const seoDescription = product.seo_description || product.short_description || product.description.substring(0, 160)
 
   return {
@@ -132,7 +132,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       }] : undefined,
       type: 'website',
       url: currentUrl,
-      siteName: 'Milford Sound'
+      siteName: 'TPS Site'
     },
     twitter: {
       card: 'summary_large_image',
@@ -150,7 +150,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       'product:price:amount': product.price.toString(),
       'product:price:currency': product.currency,
       'product:availability': 'in_stock',
-      'product:brand': 'Milford Sound'
+      'product:brand': 'TPS Site'
     }
   }
 }
@@ -164,7 +164,7 @@ export default async function TourPage({ params }: { params: Promise<{ slug: str
   }
 
   // Prepare structured data
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://milford-sound.com'
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tps-site.com'
   const currentUrl = `${siteUrl}/tour/${product.slug}`
 
   // Get highlights from product data or fallback to default

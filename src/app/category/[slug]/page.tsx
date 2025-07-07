@@ -91,19 +91,19 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   }
 
   return {
-    title: `${category.name} Tours - Milford Sound`,
-    description: category.description || `Discover the best ${category.name.toLowerCase()} tours and experiences in Milford Sound, New Zealand.`,
-    keywords: `${category.name.toLowerCase()}, tours, experiences, Milford Sound, New Zealand`,
+    title: `${category.name} Tours - TPS Site`,
+    description: category.description || `Discover the best ${category.name.toLowerCase()} tours and experiences in TPS Site, New Zealand.`,
+    keywords: `${category.name.toLowerCase()}, tours, experiences, TPS Site, New Zealand`,
     openGraph: {
-      title: `${category.name} Tours - Milford Sound`,
-      description: category.description || `Discover the best ${category.name.toLowerCase()} tours and experiences in Milford Sound.`,
+      title: `${category.name} Tours - TPS Site`,
+      description: category.description || `Discover the best ${category.name.toLowerCase()} tours and experiences in TPS Site.`,
       type: 'website',
-      siteName: 'Milford Sound'
+      siteName: 'TPS Site'
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${category.name} Tours - Milford Sound`,
-      description: category.description || `Discover the best ${category.name.toLowerCase()} tours and experiences in Milford Sound.`
+      title: `${category.name} Tours - TPS Site`,
+      description: category.description || `Discover the best ${category.name.toLowerCase()} tours and experiences in TPS Site.`
     }
   }
 }
@@ -127,7 +127,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
             {category.name} Tours
           </h1>
           <p className="text-xl lg:text-2xl max-w-3xl mx-auto mb-8">
-            {category.description || `Discover amazing ${category.name.toLowerCase()} experiences in Milford Sound`}
+            {category.description || `Discover amazing ${category.name.toLowerCase()} experiences in TPS Site`}
           </p>
           <div className="text-lg">
             {experiences.length} tour{experiences.length !== 1 ? 's' : ''} available
@@ -195,7 +195,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
                       <div className="p-4">
                         <div className="flex items-center mb-2">
                           <MapPin className="h-4 w-4 text-gray-500 mr-1" />
-                          <span className="text-sm text-gray-600">{experience.cities?.name || 'Milford Sound'}</span>
+                          <span className="text-sm text-gray-600">{experience.cities?.name || 'TPS Site'}</span>
                         </div>
                         
                         <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">

@@ -166,7 +166,7 @@ A confirmation email will be sent to ${customerDetails.email}`)
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center space-x-2">
               <div className="w-8 h-8 bg-purple-600 rounded"></div>
-              <span className="text-xl font-bold">Milford Sound</span>
+              <span className="text-xl font-bold">TPS Site</span>
             </Link>
             <div className="flex items-center space-x-4">
               <Shield className="h-5 w-5 text-green-600" />

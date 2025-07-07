@@ -70,14 +70,14 @@ async function getBlogCategories(): Promise<BlogCategory[]> {
 
 // Generate metadata for SEO
 export const metadata: Metadata = {
-  title: 'Travel Stories & Guides - Milford Sound Blog',
+  title: 'Travel Stories & Guides - TPS Site Blog',
   description: 'Discover insider tips, hidden gems, and inspiring stories from travelers around the world. Get the best travel guides and destination insights.',
-  keywords: 'travel blog, travel guides, destination tips, travel stories, Milford Sound, New Zealand travel',
+  keywords: 'travel blog, travel guides, destination tips, travel stories, TPS Site, New Zealand travel',
   openGraph: {
-    title: 'Travel Stories & Guides - Milford Sound Blog',
+    title: 'Travel Stories & Guides - TPS Site Blog',
     description: 'Discover insider tips, hidden gems, and inspiring stories from travelers around the world.',
     type: 'website',
-    siteName: 'Milford Sound',
+    siteName: 'TPS Site',
     images: [{
       url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=630&fit=crop',
       alt: 'Travel Stories & Guides'
@@ -85,7 +85,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Travel Stories & Guides - Milford Sound Blog',
+    title: 'Travel Stories & Guides - TPS Site Blog',
     description: 'Discover insider tips, hidden gems, and inspiring stories from travelers around the world.',
     images: [{
       url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=630&fit=crop',

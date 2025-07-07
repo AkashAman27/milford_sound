@@ -50,7 +50,7 @@ export function StatsSection() {
         {/* Section header */}
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            Why Choose Milford Sound Tours?
+            Why Choose TPS Site Tours?
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Join thousands of adventurers who've discovered the magic of New Zealand's most spectacular destination

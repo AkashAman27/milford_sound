@@ -206,7 +206,7 @@ export default function InternalLinksManagement() {
                 id="new-title"
                 value={newLink.title}
                 onChange={(e) => setNewLink(prev => ({ ...prev, title: e.target.value }))}
-                placeholder="e.g., Milford Sound Cruise"
+                placeholder="e.g., TPS Site Cruise"
               />
             </div>
 
@@ -271,7 +271,7 @@ export default function InternalLinksManagement() {
                 id="edit-title"
                 value={editingLink.title}
                 onChange={(e) => setEditingLink(prev => prev ? ({ ...prev, title: e.target.value }) : null)}
-                placeholder="e.g., Milford Sound Cruise"
+                placeholder="e.g., TPS Site Cruise"
               />
             </div>
 

@@ -81,7 +81,7 @@ export function CategoryDropdown() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="flex items-center text-sm font-medium hover:text-primary transition-colors">
-        Milford Sound Tours
+        TPS Site Tours
         <ChevronDown className="h-4 w-4 ml-1" />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="w-64 bg-white border border-gray-200 shadow-lg">

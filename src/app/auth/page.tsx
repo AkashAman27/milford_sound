@@ -48,7 +48,7 @@ export default function AuthPage() {
         <div className="text-center">
           <Link href="/" className="inline-flex items-center space-x-2 mb-8">
             <div className="h-8 w-8 rounded bg-primary" />
-            <span className="text-xl font-bold text-primary">Milford Sound</span>
+            <span className="text-xl font-bold text-primary">TPS Site</span>
           </Link>
         </div>
 
@@ -68,7 +68,7 @@ export default function AuthPage() {
                   <Input
                     id="email"
                     type="email"
-                    placeholder="admin@milfordsound.com"
+                    placeholder="admin@tpssite.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="pl-10"

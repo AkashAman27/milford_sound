@@ -49,8 +49,8 @@ export function SEOHead({
   lastModified,
   additionalMeta = []
 }: SEOProps) {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://milford-sound.com'
-  const siteName = 'Milford Sound'
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tps-site.com'
+  const siteName = 'TPS Site'
   
   useEffect(() => {
     // Update document title

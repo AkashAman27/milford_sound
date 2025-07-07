@@ -44,26 +44,26 @@ async function getTours(): Promise<Experience[]> {
 
 // Generate metadata for SEO
 export const metadata: Metadata = {
-  title: 'Unforgettable Tours - Milford Sound',
-  description: 'Discover amazing tours and experiences in New Zealand. From boat cruises to scenic flights, find the perfect adventure in Milford Sound.',
-  keywords: 'tours, experiences, New Zealand, Milford Sound, boat cruises, scenic flights, hiking, water sports',
+  title: 'Unforgettable Tours - TPS Site',
+  description: 'Discover amazing tours and experiences in New Zealand. From boat cruises to scenic flights, find the perfect adventure in TPS Site.',
+  keywords: 'tours, experiences, New Zealand, TPS Site, boat cruises, scenic flights, hiking, water sports',
   openGraph: {
-    title: 'Unforgettable Tours - Milford Sound',
+    title: 'Unforgettable Tours - TPS Site',
     description: 'Discover amazing tours and experiences in New Zealand. From boat cruises to scenic flights, find the perfect adventure.',
     type: 'website',
-    siteName: 'Milford Sound',
+    siteName: 'TPS Site',
     images: [{
       url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=630&fit=crop',
-      alt: 'Milford Sound Tours'
+      alt: 'TPS Site Tours'
     }]
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Unforgettable Tours - Milford Sound',
+    title: 'Unforgettable Tours - TPS Site',
     description: 'Discover amazing tours and experiences in New Zealand. From boat cruises to scenic flights, find the perfect adventure.',
     images: [{
       url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=630&fit=crop',
-      alt: 'Milford Sound Tours'
+      alt: 'TPS Site Tours'
     }]
   }
 }

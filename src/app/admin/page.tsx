@@ -121,7 +121,7 @@ export default function AdminDashboard() {
     <div>
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-        <p className="text-gray-600 mt-2">Welcome to your Milford Sound CMS dashboard</p>
+        <p className="text-gray-600 mt-2">Welcome to your TPS Site CMS dashboard</p>
       </div>
 
       {/* Stats Grid */}

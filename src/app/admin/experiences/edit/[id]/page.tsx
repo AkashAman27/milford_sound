@@ -624,7 +624,7 @@ export default function EditTour() {
             <SEOFormFields
               data={seoData}
               onChange={handleSEOChange}
-              baseUrl={process.env.NEXT_PUBLIC_SITE_URL || 'https://milford-sound.com'}
+              baseUrl={process.env.NEXT_PUBLIC_SITE_URL || 'https://tps-site.com'}
               slug={formData.slug}
               contentType="experience"
             />

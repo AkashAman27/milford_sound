@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
           id: exp.id,
           type: 'experience',
           title: exp.title,
-          subtitle: exp.cities?.name || exp.categories?.name || 'Milford Sound',
+          subtitle: exp.cities?.name || exp.categories?.name || 'TPS Site',
           slug: exp.slug,
           image: exp.main_image_url,
           rating: exp.rating || undefined,

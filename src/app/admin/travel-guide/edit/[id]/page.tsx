@@ -285,7 +285,7 @@ export default function EditTravelGuidePost() {
                     contentType="blog_posts"
                     contentId={postId}
                     onSlugChange={(slug) => setFormData(prev => ({ ...prev, slug }))}
-                    baseUrl={process.env.NEXT_PUBLIC_SITE_URL || 'https://milford-sound.com'}
+                    baseUrl={process.env.NEXT_PUBLIC_SITE_URL || 'https://tps-site.com'}
                   />
                 </FormField>
 
@@ -337,7 +337,7 @@ export default function EditTravelGuidePost() {
             <SEOFormFields
               data={seoData}
               onChange={handleSEOChange}
-              baseUrl={process.env.NEXT_PUBLIC_SITE_URL || 'https://milford-sound.com'}
+              baseUrl={process.env.NEXT_PUBLIC_SITE_URL || 'https://tps-site.com'}
               slug={formData.slug}
               contentType="travel-guide"
             />

@@ -120,7 +120,7 @@ export function StructuredDataEditor({
           },
           address: {
             '@type': 'PostalAddress',
-            addressLocality: 'Milford Sound',
+            addressLocality: 'TPS Site',
             addressRegion: 'Southland',
             addressCountry: 'NZ'
           }

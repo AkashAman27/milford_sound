@@ -104,7 +104,7 @@ export function ToursGrid({ experiences }: ToursGridProps) {
                       <div className="p-4">
                         <div className="flex items-center mb-2">
                           <MapPin className="h-4 w-4 text-gray-500 mr-1" />
-                          <span className="text-sm text-gray-600">{experience.cities?.name || 'Milford Sound'}</span>
+                          <span className="text-sm text-gray-600">{experience.cities?.name || 'TPS Site'}</span>
                         </div>
                         
                         <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">

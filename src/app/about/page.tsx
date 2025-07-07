@@ -2,8 +2,8 @@ import { Metadata } from 'next'
 import { MapPin, Users, Award, Clock, Mail, Phone } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'About Us | Milford Sound',
-  description: 'Learn more about Milford Sound Tours and our commitment to providing unforgettable experiences in New Zealand.'
+  title: 'About Us | TPS Site',
+  description: 'Learn more about TPS Site Tours and our commitment to providing unforgettable experiences in New Zealand.'
 }
 
 export default function AboutPage() {
@@ -13,7 +13,7 @@ export default function AboutPage() {
       <section className="bg-gradient-to-r from-primary to-primary-600 text-white py-16">
         <div className="container mx-auto px-4">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">
-            About Milford Sound
+            About TPS Site
           </h1>
           <p className="text-xl text-gray-100 max-w-3xl">
             We're passionate about sharing the natural beauty and wonder of New Zealand through unforgettable experiences and tours.
@@ -28,14 +28,14 @@ export default function AboutPage() {
             <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Our Story</h2>
             <div className="prose prose-lg max-w-none">
               <p className="text-gray-700 mb-6">
-                Founded with a deep love for New Zealand's pristine wilderness, Milford Sound Tours has been creating 
+                Founded with a deep love for New Zealand's pristine wilderness, TPS Site Tours has been creating 
                 extraordinary experiences for travelers from around the world. Our journey began with a simple mission: 
                 to showcase the breathtaking beauty of Fiordland and the wider South Island in a way that respects and 
                 preserves the natural environment.
               </p>
               <p className="text-gray-700 mb-6">
                 From humble beginnings, we've grown to become one of New Zealand's most trusted tour operators, 
-                offering everything from scenic boat cruises through the iconic Milford Sound to thrilling helicopter 
+                offering everything from scenic boat cruises through the iconic TPS Site to thrilling helicopter 
                 flights over snow-capped peaks. Every experience we offer is designed to create lasting memories while 
                 supporting local communities and conservation efforts.
               </p>
@@ -136,7 +136,7 @@ export default function AboutPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
               <div className="flex items-center justify-center space-x-3">
                 <Mail className="h-6 w-6 text-primary" />
-                <span className="text-gray-900">info@milfordsound.com</span>
+                <span className="text-gray-900">info@tpssite.com</span>
               </div>
               
               <div className="flex items-center justify-center space-x-3">
@@ -146,7 +146,7 @@ export default function AboutPage() {
             </div>
             
             <a
-              href="mailto:milfordsound@gmail.com"
+              href="mailto:tpssite@gmail.com"
               className="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary-700 transition-colors"
             >
               Contact Us

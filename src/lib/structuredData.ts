@@ -91,7 +91,7 @@ function generateTouristAttraction(data: any): BaseStructuredData {
     },
     address: {
       '@type': 'PostalAddress',
-      addressLocality: data.location || 'Milford Sound',
+      addressLocality: data.location || 'TPS Site',
       addressRegion: 'Southland',
       addressCountry: 'NZ'
     }
@@ -125,7 +125,7 @@ function generateTouristAttraction(data: any): BaseStructuredData {
     base.touristType = 'https://schema.org/Traveler'
     base.provider = {
       '@type': 'LocalBusiness',
-      name: data.operator || data.provider || 'Milford Sound Tours',
+      name: data.operator || data.provider || 'TPS Site Tours',
       url: data.operator_url || data.provider_url
     }
   }
@@ -139,7 +139,7 @@ function generateLocalBusiness(data: any): BaseStructuredData {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
     '@id': data.url + '#organization',
-    name: data.name || 'Milford Sound Tours',
+    name: data.name || 'TPS Site Tours',
     description: data.description,
     url: data.url,
     logo: data.logo,
@@ -149,7 +149,7 @@ function generateLocalBusiness(data: any): BaseStructuredData {
     address: {
       '@type': 'PostalAddress',
       streetAddress: data.street_address,
-      addressLocality: data.city || 'Milford Sound',
+      addressLocality: data.city || 'TPS Site',
       addressRegion: data.region || 'Southland',
       postalCode: data.postal_code,
       addressCountry: data.country || 'NZ'
@@ -179,7 +179,7 @@ function generateProduct(data: any): BaseStructuredData {
     image: data.image_url || data.main_image_url,
     brand: {
       '@type': 'Brand',
-      name: data.brand || 'Milford Sound Tours'
+      name: data.brand || 'TPS Site Tours'
     },
     category: data.category,
     sku: data.id || data.sku
@@ -194,7 +194,7 @@ function generateProduct(data: any): BaseStructuredData {
       availability: 'https://schema.org/InStock',
       seller: {
         '@type': 'Organization',
-        name: data.seller || 'Milford Sound Tours'
+        name: data.seller || 'TPS Site Tours'
       }
     }
   }
@@ -225,17 +225,17 @@ function generateEvent(data: any): BaseStructuredData {
     endDate: data.end_date,
     location: {
       '@type': 'Place',
-      name: data.location_name || 'Milford Sound',
+      name: data.location_name || 'TPS Site',
       address: {
         '@type': 'PostalAddress',
-        addressLocality: data.city || 'Milford Sound',
+        addressLocality: data.city || 'TPS Site',
         addressRegion: data.region || 'Southland',
         addressCountry: data.country || 'NZ'
       }
     },
     organizer: {
       '@type': 'Organization',
-      name: data.organizer || 'Milford Sound Tours',
+      name: data.organizer || 'TPS Site Tours',
       url: data.organizer_url
     },
     offers: data.price ? {
@@ -257,11 +257,11 @@ function generateArticle(data: any): BaseStructuredData {
     image: data.featured_image || data.image,
     author: {
       '@type': 'Person',
-      name: data.author || 'Milford Sound Team'
+      name: data.author || 'TPS Site Team'
     },
     publisher: {
       '@type': 'Organization',
-      name: data.publisher || 'Milford Sound',
+      name: data.publisher || 'TPS Site',
       logo: {
         '@type': 'ImageObject',
         url: data.publisher_logo
@@ -289,11 +289,11 @@ function generateBlogPosting(data: any): BaseStructuredData {
     image: data.featured_image || data.image,
     author: {
       '@type': 'Person',
-      name: data.author || 'Milford Sound Team'
+      name: data.author || 'TPS Site Team'
     },
     publisher: {
       '@type': 'Organization',
-      name: data.publisher || 'Milford Sound',
+      name: data.publisher || 'TPS Site',
       logo: {
         '@type': 'ImageObject',
         url: data.publisher_logo
@@ -317,7 +317,7 @@ function generateOrganization(data: any): BaseStructuredData {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     '@id': data.url + '#organization',
-    name: data.name || 'Milford Sound Tours',
+    name: data.name || 'TPS Site Tours',
     url: data.url,
     logo: data.logo,
     description: data.description,
@@ -325,7 +325,7 @@ function generateOrganization(data: any): BaseStructuredData {
     email: data.email,
     address: {
       '@type': 'PostalAddress',
-      addressLocality: data.city || 'Milford Sound',
+      addressLocality: data.city || 'TPS Site',
       addressRegion: data.region || 'Southland',
       addressCountry: data.country || 'NZ'
     },
@@ -339,7 +339,7 @@ function generateWebSite(data: any): BaseStructuredData {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     '@id': data.url + '#website',
-    name: data.name || 'Milford Sound Tours',
+    name: data.name || 'TPS Site Tours',
     url: data.url,
     description: data.description,
     publisher: {
@@ -423,7 +423,7 @@ function generateOffer(data: any): BaseStructuredData {
     validThrough: data.valid_through,
     seller: {
       '@type': 'Organization',
-      name: data.seller || 'Milford Sound Tours'
+      name: data.seller || 'TPS Site Tours'
     }
   }
 }
@@ -437,11 +437,11 @@ function generateService(data: any): BaseStructuredData {
     description: data.description,
     provider: {
       '@type': 'Organization',
-      name: data.provider || 'Milford Sound Tours'
+      name: data.provider || 'TPS Site Tours'
     },
     areaServed: {
       '@type': 'Place',
-      name: data.area_served || 'Milford Sound, New Zealand'
+      name: data.area_served || 'TPS Site, New Zealand'
     },
     hasOfferCatalog: {
       '@type': 'OfferCatalog',

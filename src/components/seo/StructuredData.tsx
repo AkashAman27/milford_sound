@@ -50,9 +50,9 @@ export function GlobalStructuredData({ siteData }: { siteData: Record<string, an
   const websiteSchema = generateStructuredData({
     type: 'WebSite',
     data: {
-      name: siteData.name || 'Milford Sound Tours',
-      url: siteData.url || 'https://milford-sound.com',
-      description: siteData.description || 'Premier tour operator offering unforgettable experiences in Milford Sound, New Zealand',
+      name: siteData.name || 'TPS Site Tours',
+      url: siteData.url || 'https://tps-site.com',
+      description: siteData.description || 'Premier tour operator offering unforgettable experiences in TPS Site, New Zealand',
       ...siteData
     }
   })
@@ -60,10 +60,10 @@ export function GlobalStructuredData({ siteData }: { siteData: Record<string, an
   const organizationSchema = generateStructuredData({
     type: 'Organization',
     data: {
-      name: siteData.organizationName || 'Milford Sound Tours',
-      url: siteData.url || 'https://milford-sound.com',
+      name: siteData.organizationName || 'TPS Site Tours',
+      url: siteData.url || 'https://tps-site.com',
       logo: siteData.logo,
-      description: siteData.organizationDescription || 'Leading tour operator in Milford Sound',
+      description: siteData.organizationDescription || 'Leading tour operator in TPS Site',
       telephone: siteData.telephone,
       email: siteData.email,
       social_links: siteData.socialLinks || [],
@@ -74,13 +74,13 @@ export function GlobalStructuredData({ siteData }: { siteData: Record<string, an
   const localBusinessSchema = generateStructuredData({
     type: 'LocalBusiness',
     data: {
-      name: siteData.businessName || 'Milford Sound Tours',
-      url: siteData.url || 'https://milford-sound.com',
-      description: siteData.businessDescription || 'Tour operator specializing in Milford Sound experiences',
+      name: siteData.businessName || 'TPS Site Tours',
+      url: siteData.url || 'https://tps-site.com',
+      description: siteData.businessDescription || 'Tour operator specializing in TPS Site experiences',
       telephone: siteData.telephone,
       email: siteData.email,
       street_address: siteData.streetAddress,
-      city: siteData.city || 'Milford Sound',
+      city: siteData.city || 'TPS Site',
       region: siteData.region || 'Southland',
       postal_code: siteData.postalCode,
       country: siteData.country || 'NZ',

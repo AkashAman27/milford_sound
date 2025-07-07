@@ -10,21 +10,21 @@ import { ErrorBoundary } from '@/components/ui/ErrorBoundary'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Milford Sound - Tours, Activities & Experiences',
+  title: 'TPS Site - Tours, Activities & Experiences',
   description: 'Book the best tours, activities and experiences around the world. Discover unforgettable adventures in New Zealand\'s most stunning destinations.',
-  keywords: 'tours, activities, experiences, travel, New Zealand, Milford Sound, adventures, booking',
-  authors: [{ name: 'Milford Sound' }],
+  keywords: 'tours, activities, experiences, travel, New Zealand, TPS Site, adventures, booking',
+  authors: [{ name: 'TPS Site' }],
   robots: 'index, follow',
   openGraph: {
-    title: 'Milford Sound - Tours, Activities & Experiences',
+    title: 'TPS Site - Tours, Activities & Experiences',
     description: 'Book the best tours, activities and experiences around the world',
     type: 'website',
-    siteName: 'Milford Sound',
+    siteName: 'TPS Site',
     locale: 'en_US',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Milford Sound - Tours, Activities & Experiences',
+    title: 'TPS Site - Tours, Activities & Experiences',
     description: 'Book the best tours, activities and experiences around the world',
   },
   alternates: {
@@ -45,13 +45,13 @@ export default function RootLayout({
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'TravelAgency',
-    name: 'Milford Sound',
+    name: 'TPS Site',
     description: 'Book the best tours, activities and experiences around the world',
-    url: 'https://milford-sound.com',
+    url: 'https://tps-site.com',
     sameAs: [
-      'https://www.facebook.com/milfordsound',
-      'https://www.instagram.com/milfordsound',
-      'https://twitter.com/milfordsound'
+      'https://www.facebook.com/tpssite',
+      'https://www.instagram.com/tpssite',
+      'https://twitter.com/tpssite'
     ],
     contactPoint: {
       '@type': 'ContactPoint',

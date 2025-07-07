@@ -17,10 +17,10 @@ interface HeroContent {
 
 export function HeroSection() {
   const [heroContent, setHeroContent] = useState<HeroContent>({
-    title: 'Discover the Majesty of Milford Sound',
-    subtitle: 'New Zealand\'s Crown Jewel',
-    description: 'Experience breathtaking fiords, cascading waterfalls, and pristine wilderness in the heart of Fiordland National Park',
-    button_text: 'Explore Our Tours',
+    title: 'Unforgettable experiences.',
+    subtitle: 'Unbeatable deals.',
+    description: 'Book tours, attractions, and experiences across the globe',
+    button_text: 'Discover More',
     button_link: '/tours',
     enabled: true
   })
@@ -41,10 +41,10 @@ export function HeroSection() {
 
       if (data) {
         setHeroContent({
-          title: data.title || 'Discover the Majesty of Milford Sound',
-          subtitle: data.subtitle || 'New Zealand\'s Crown Jewel',
-          description: data.description || 'Experience breathtaking fiords, cascading waterfalls, and pristine wilderness in the heart of Fiordland National Park',
-          button_text: data.button_text || 'Explore Our Tours',
+          title: data.title || 'Unforgettable experiences.',
+          subtitle: data.subtitle || 'Unbeatable deals.',
+          description: data.description || 'Book tours, attractions, and experiences across the globe',
+          button_text: data.button_text || 'Discover More',
           button_link: data.button_link || '/tours',
           background_image: data.background_image,
           enabled: data.enabled

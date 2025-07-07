@@ -3,7 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const supabase = await createClient()
-  const baseUrl = 'https://milford-sound.com'
+  const baseUrl = 'https://tps-site.com'
 
   const staticPages = [
     {
