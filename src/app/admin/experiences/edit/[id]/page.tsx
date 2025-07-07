@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
 import { SEOFormFields, SEOFormData } from '@/components/seo/SEOFormFields'
+import { sanitizeUuidFields, COMMON_UUID_FIELDS } from '@/lib/utils/form-helpers'
 import { Save, ArrowLeft, Eye } from 'lucide-react'
 import Link from 'next/link'
 
@@ -261,7 +262,7 @@ export default function EditTour() {
 
 
     // Complete update data including all SEO fields
-    const updateData = {
+    const baseUpdateData = {
       ...formData,
       languages: languagesArray,
       highlights: highlightsArray,
@@ -286,6 +287,20 @@ export default function EditTour() {
       focus_keyword: seoData.focus_keyword || null,
       updated_at: new Date().toISOString()
     }
+
+    // Debug logging
+    console.log('Base update data before sanitization:', baseUpdateData)
+    console.log('UUID fields to sanitize:', COMMON_UUID_FIELDS.experiences)
+    
+    // Sanitize UUID fields to prevent PostgreSQL errors
+    const updateData = sanitizeUuidFields(baseUpdateData, COMMON_UUID_FIELDS.experiences)
+    
+    console.log('Update data after sanitization:', updateData)
+    console.log('UUID field values:', {
+      category_id: updateData.category_id,
+      city_id: updateData.city_id,
+      subcategory_id: updateData.subcategory_id
+    })
     
     const { error } = await supabase
       .from('experiences')
@@ -295,7 +310,7 @@ export default function EditTour() {
     if (error) {
       alert(`Error updating experience: ${error.message}`)
       console.error('Update failed:', error)
-      console.log('Update data:', updateData) // Debug log
+      console.log('Full error details:', error)
     } else {
       console.log('Experience updated successfully with SEO data')
       router.push('/admin/experiences')

@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Plus, Edit, Trash2, Save, X, ChevronUp, ChevronDown } from 'lucide-react'
+import { sanitizeUuidFields } from '@/lib/utils/form-helpers'
 
 interface FAQ {
   id: string
@@ -88,17 +89,22 @@ export default function FAQsManagement() {
     const supabase = createClient()
     
     try {
+      const faqData = {
+        question: newFAQ.question.trim(),
+        answer: newFAQ.answer.trim(),
+        experience_id: newFAQ.experience_id,
+        category: newFAQ.category,
+        show_on_tour_page: newFAQ.show_on_tour_page,
+        sort_order: newFAQ.sort_order,
+        enabled: newFAQ.enabled
+      }
+
+      // Sanitize UUID fields to prevent PostgreSQL errors
+      const sanitizedData = sanitizeUuidFields(faqData, ['experience_id'])
+
       const { error } = await supabase
         .from('faqs')
-        .insert([{
-          question: newFAQ.question.trim(),
-          answer: newFAQ.answer.trim(),
-          experience_id: newFAQ.experience_id || null,
-          category: newFAQ.category,
-          show_on_tour_page: newFAQ.show_on_tour_page,
-          sort_order: newFAQ.sort_order,
-          enabled: newFAQ.enabled
-        }])
+        .insert([sanitizedData])
 
       if (error) throw error
 
@@ -122,9 +128,12 @@ export default function FAQsManagement() {
     const supabase = createClient()
     
     try {
+      // Sanitize UUID fields to prevent PostgreSQL errors
+      const sanitizedUpdates = sanitizeUuidFields(updates, ['experience_id'])
+
       const { error } = await supabase
         .from('faqs')
-        .update(updates)
+        .update(sanitizedUpdates)
         .eq('id', id)
 
       if (error) throw error

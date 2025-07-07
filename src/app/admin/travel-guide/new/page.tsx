@@ -10,6 +10,7 @@ import Link from 'next/link'
 import { FormField, TextInput, TextArea, Select, Checkbox } from '@/components/admin/forms/FormField'
 import { CodeEditor } from '@/components/admin/forms/CodeEditor'
 import { SEOFormFields, SEOFormData } from '@/components/seo/SEOFormFields'
+import { sanitizeUuidFields, COMMON_UUID_FIELDS } from '@/lib/utils/form-helpers'
 
 interface TravelGuideCategory {
   id: string
@@ -86,7 +87,7 @@ export default function NewTravelGuidePost() {
     const supabase = createClient()
     
     // Complete blog data including all SEO fields
-    const blogData = {
+    const baseBlogData = {
       ...formData,
       published_at: formData.published ? new Date().toISOString() : null,
       // SEO fields
@@ -110,6 +111,9 @@ export default function NewTravelGuidePost() {
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
     }
+
+    // Sanitize UUID fields to prevent PostgreSQL errors
+    const blogData = sanitizeUuidFields(baseBlogData, COMMON_UUID_FIELDS.blog_posts)
     
     const { data, error } = await supabase
       .from('blog_posts')

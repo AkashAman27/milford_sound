@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
 import { SEOFormFields, SEOFormData } from '@/components/seo/SEOFormFields'
+import { sanitizeUuidFields, COMMON_UUID_FIELDS } from '@/lib/utils/form-helpers'
 import { Save, ArrowLeft, Eye } from 'lucide-react'
 import Link from 'next/link'
 
@@ -110,7 +111,7 @@ export default function NewExperience() {
       const supabase = createClient()
       
       // Complete experience data including all SEO fields
-      const experienceData = {
+      const baseExperienceData = {
         ...formData,
         languages: formData.languages,
         // SEO fields
@@ -134,6 +135,9 @@ export default function NewExperience() {
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
       }
+
+      // Sanitize UUID fields to prevent PostgreSQL errors
+      const experienceData = sanitizeUuidFields(baseExperienceData, COMMON_UUID_FIELDS.experiences)
 
       const { data, error } = await supabase
         .from('experiences')

@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Plus, Edit, Trash2, Save, X, ExternalLink } from 'lucide-react'
+import { sanitizeUuidFields } from '@/lib/utils/form-helpers'
 import Link from 'next/link'
 
 interface InternalLinksSection {
@@ -100,15 +101,20 @@ export default function InternalLinksPage() {
     const supabase = createClient()
     
     try {
+      const sectionData = {
+        experience_id: newSection.experience_id,
+        section_title: newSection.section_title.trim(),
+        section_type: newSection.section_type,
+        sort_order: newSection.sort_order,
+        enabled: newSection.enabled
+      }
+
+      // Sanitize UUID fields to prevent PostgreSQL errors
+      const sanitizedData = sanitizeUuidFields(sectionData, ['experience_id'])
+
       const { error } = await supabase
         .from('internal_links_sections')
-        .insert([{
-          experience_id: newSection.experience_id || null,
-          section_title: newSection.section_title.trim(),
-          section_type: newSection.section_type,
-          sort_order: newSection.sort_order,
-          enabled: newSection.enabled
-        }])
+        .insert([sanitizedData])
 
       if (error) throw error
 
@@ -130,9 +136,12 @@ export default function InternalLinksPage() {
     const supabase = createClient()
     
     try {
+      // Sanitize UUID fields to prevent PostgreSQL errors
+      const sanitizedUpdates = sanitizeUuidFields(updates, ['experience_id'])
+
       const { error } = await supabase
         .from('internal_links_sections')
-        .update(updates)
+        .update(sanitizedUpdates)
         .eq('id', id)
 
       if (error) throw error

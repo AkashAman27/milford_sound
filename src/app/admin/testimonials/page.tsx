@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase'
 import { Plus, Edit, Trash2, Star } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { sanitizeUuidFields, COMMON_UUID_FIELDS } from '@/lib/utils/form-helpers'
 import Image from 'next/image'
 
 interface Testimonial {
@@ -58,15 +59,17 @@ export default function TestimonialsManagement() {
     e.preventDefault()
     const supabase = createClient()
 
+    // Sanitize UUID fields to prevent PostgreSQL errors
+    const sanitizedData = sanitizeUuidFields(formData, COMMON_UUID_FIELDS.testimonials)
+
     if (editingId) {
       // Update existing testimonial
       const { error } = await supabase
         .from('testimonials')
-        .update(formData)
+        .update(sanitizedData)
         .eq('id', editingId)
 
       if (error) {
-        alert('Error updating testimonial')
         console.error(error)
       } else {
         setEditingId(null)
@@ -77,10 +80,9 @@ export default function TestimonialsManagement() {
       // Create new testimonial
       const { error } = await supabase
         .from('testimonials')
-        .insert([formData])
+        .insert([sanitizedData])
 
       if (error) {
-        alert('Error creating testimonial')
         console.error(error)
       } else {
         resetForm()
