@@ -45,7 +45,7 @@ export default function CategoriesManagement() {
       .from('categories')
       .select('*')
       .order('name')
-
+    
     if (data) setCategories(data)
     if (error) console.error('Error fetching categories:', error)
     setLoading(false)
@@ -82,9 +82,8 @@ export default function CategoriesManagement() {
           experience_count: formData.experience_count
         })
         .eq('id', editingId)
-
+      
       if (error) {
-        alert('Error updating category')
         console.error(error)
       } else {
         setEditingId(null)
@@ -96,9 +95,8 @@ export default function CategoriesManagement() {
       const { error } = await supabase
         .from('categories')
         .insert([formData])
-
+      
       if (error) {
-        alert('Error creating category')
         console.error(error)
       } else {
         resetForm()
