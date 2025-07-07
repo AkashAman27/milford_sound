@@ -38,7 +38,7 @@ export function Footer() {
             <h3 className="font-semibold mb-4">Company</h3>
             <ul className="space-y-2 text-sm">
               <li><Link href="/about" className="text-gray-400 hover:text-white">About Us</Link></li>
-              <li><Link href="/blog" className="text-gray-400 hover:text-white">Travel Guide</Link></li>
+              <li><Link href="/travel-guide" className="text-gray-400 hover:text-white">Travel Guide</Link></li>
               <li><Link href="/contact" className="text-gray-400 hover:text-white">Contact Us</Link></li>
             </ul>
           </div>
@@ -59,7 +59,7 @@ export function Footer() {
 
         {/* Bottom Bar */}
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
-          <p>&copy; 2024 Milford Sound. All rights reserved.</p>
+          <p>&copy; 2025 Milford Sound. All rights reserved.</p>
         </div>
       </div>
     </footer>

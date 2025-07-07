@@ -125,7 +125,7 @@ export default async function BlogPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {featuredPosts.map((post) => (
                 <Card key={post.id} className="group cursor-pointer overflow-hidden hover:shadow-lg transition-all duration-300">
-                  <Link href={`/blog/${post.slug}`}>
+                  <Link href={`/travel-guide/${post.slug}`}>
                     <div className="relative overflow-hidden h-64">
                       <Image
                         src={post.featured_image || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop'}
@@ -177,7 +177,7 @@ export default async function BlogPage() {
                 className="hover:bg-primary hover:text-white"
                 asChild
               >
-                <Link href={`/blog/category/${category.slug}`}>
+                <Link href={`/travel-guide/category/${category.slug}`}>
                   {category.name}
                 </Link>
               </Button>
@@ -194,7 +194,7 @@ export default async function BlogPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {regularPosts.map((post) => (
               <Card key={post.id} className="group cursor-pointer overflow-hidden hover:shadow-lg transition-all duration-300">
-                <Link href={`/blog/${post.slug}`}>
+                <Link href={`/travel-guide/${post.slug}`}>
                   <div className="relative h-48 overflow-hidden">
                     <Image
                       src={post.featured_image || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop'}

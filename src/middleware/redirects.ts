@@ -13,7 +13,7 @@ export async function handleRedirects(request: NextRequest) {
   }
 
   // Extract slug and content type from pathname
-  const blogMatch = pathname.match(/^\/blog\/([^\/]+)$/)
+  const blogMatch = pathname.match(/^\/travel-guide\/([^\/]+)$/)
   const experienceMatch = pathname.match(/^\/experience\/([^\/]+)$/)
   const categoryMatch = pathname.match(/^\/category\/([^\/]+)$/)
 
@@ -37,7 +37,7 @@ export async function handleRedirects(request: NextRequest) {
 
     if (redirect) {
       // Create redirect URL
-      const baseUrl = blogMatch ? '/blog' : experienceMatch ? '/experience' : '/category'
+      const baseUrl = blogMatch ? '/travel-guide' : experienceMatch ? '/experience' : '/category'
       const redirectUrl = `${baseUrl}/${redirect.new_slug}`
       
       // Return appropriate redirect

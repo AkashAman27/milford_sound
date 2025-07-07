@@ -90,7 +90,7 @@ export default function AdminDashboard() {
       color: 'text-purple-600'
     },
     {
-      title: 'Blog Posts',
+      title: 'Travel Guide Posts',
       value: stats.totalBlogPosts,
       icon: FileText,
       color: 'text-orange-600'
@@ -153,13 +153,13 @@ export default function AdminDashboard() {
           <CardContent>
             <div className="space-y-3">
               <a 
-                href="/admin/blog" 
+                href="/admin/travel-guide" 
                 className="flex items-center p-3 rounded-lg border hover:bg-gray-50 transition-colors"
               >
                 <FileText className="h-5 w-5 mr-3 text-blue-600" />
                 <div>
-                  <p className="font-medium">Create New Blog Post</p>
-                  <p className="text-sm text-gray-600">Add a new article to your blog</p>
+                  <p className="font-medium">Create New Travel Guide</p>
+                  <p className="text-sm text-gray-600">Add a new travel guide article</p>
                 </div>
               </a>
               

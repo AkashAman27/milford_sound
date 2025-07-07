@@ -241,7 +241,7 @@ export default function InternalLinksPage() {
                 <option value="related_tours">Related Tours</option>
                 <option value="recommended">Recommended</option>
                 <option value="popular">Popular Tours</option>
-                <option value="blog_posts">Blog Posts</option>
+                <option value="blog_posts">Travel Guide Posts</option>
                 <option value="custom">Custom Links</option>
               </select>
             </div>
@@ -329,7 +329,7 @@ export default function InternalLinksPage() {
                 <option value="related_tours">Related Tours</option>
                 <option value="recommended">Recommended</option>
                 <option value="popular">Popular Tours</option>
-                <option value="blog_posts">Blog Posts</option>
+                <option value="blog_posts">Travel Guide Posts</option>
                 <option value="custom">Custom Links</option>
               </select>
             </div>

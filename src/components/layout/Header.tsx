@@ -47,7 +47,7 @@ export function Header() {
             <Link href="/tours" className="text-sm font-medium hover:text-primary">
               Tours
             </Link>
-            <Link href="/blog" className="text-sm font-medium hover:text-primary">
+            <Link href="/travel-guide" className="text-sm font-medium hover:text-primary">
               Travel Guide
             </Link>
             <Link href="/about" className="text-sm font-medium hover:text-primary">
@@ -106,7 +106,7 @@ export function Header() {
               <Link href="/tours" className="py-2 text-sm font-medium hover:text-primary">
                 Tours
               </Link>
-              <Link href="/blog" className="py-2 text-sm font-medium hover:text-primary">
+              <Link href="/travel-guide" className="py-2 text-sm font-medium hover:text-primary">
                 Travel Guide
               </Link>
               <Link href="/about" className="py-2 text-sm font-medium hover:text-primary">

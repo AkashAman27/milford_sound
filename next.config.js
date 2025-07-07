@@ -46,6 +46,20 @@ const nextConfig = {
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
   },
+  async redirects() {
+    return [
+      {
+        source: '/blog',
+        destination: '/travel-guide',
+        permanent: true,
+      },
+      {
+        source: '/blog/:slug*',
+        destination: '/travel-guide/:slug*',
+        permanent: true,
+      },
+    ]
+  },
 }
 
 module.exports = nextConfig

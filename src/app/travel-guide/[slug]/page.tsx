@@ -212,10 +212,10 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           
           {/* Back Button */}
           <div className="absolute top-8 left-8 z-10">
-            <Link href="/blog">
+            <Link href="/travel-guide">
               <Button variant="secondary" size="sm">
                 <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Blog
+                Back to Travel Guide
               </Button>
             </Link>
           </div>
@@ -379,7 +379,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               <div className="max-w-6xl mx-auto">
                 <div className="flex items-center justify-between mb-8">
                   <h3 className="text-3xl font-bold">Related Stories</h3>
-                  <Link href="/blog">
+                  <Link href="/travel-guide">
                     <Button variant="outline">
                       View All
                       <ChevronRight className="h-4 w-4 ml-1" />
@@ -390,7 +390,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                   {relatedPosts.map((relatedPost) => (
                     <Card key={relatedPost.id} className="group cursor-pointer overflow-hidden hover:shadow-lg transition-all duration-300">
-                      <Link href={`/blog/${relatedPost.slug}`}>
+                      <Link href={`/travel-guide/${relatedPost.slug}`}>
                         <div className="relative h-48 overflow-hidden">
                           <Image
                             src={relatedPost.featured_image || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop'}

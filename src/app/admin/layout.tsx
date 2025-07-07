@@ -62,7 +62,7 @@ export default function AdminLayout({
 
   const navigation = [
     { name: 'Dashboard', href: '/admin', icon: BarChart3 },
-    { name: 'Travel Guide Sections', href: '/admin/blog/guide-sections', icon: FileText },
+    { name: 'Travel Guide', href: '/admin/travel-guide', icon: FileText },
     { name: 'Tours', href: '/admin/experiences', icon: Package },
     { name: 'FAQs', href: '/admin/faqs', icon: MessageSquare },
     { name: 'Internal Links', href: '/admin/internal-links', icon: LinkIcon },
