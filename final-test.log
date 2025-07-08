@@ -35,3 +35,39 @@
 <w> [webpack.cache.PackFileCacheStrategy] Serializing big strings (100kiB) impacts deserialization performance (consider using Buffer instead and decode when needed)
  GET /tour/doubtful-sound-night-cruise 200 in 419ms
  GET /tour/doubtful-sound-night-cruise 200 in 405ms
+ ✓ Compiled /admin in 471ms (1174 modules)
+ GET /admin 200 in 557ms
+ ✓ Compiled in 574ms (1354 modules)
+ GET /admin 200 in 65ms
+ GET /admin 200 in 15ms
+ ✓ Compiled in 348ms (1188 modules)
+ GET /admin 200 in 53ms
+ ✓ Compiled in 283ms (1190 modules)
+ GET /admin 200 in 36ms
+ ✓ Compiled in 233ms (554 modules)
+ GET /admin 200 in 23ms
+ ✓ Compiled /robots.txt in 440ms (1197 modules)
+Failed to fetch robots config from database, using defaults: relation "public.robots_config" does not exist
+ HEAD /robots.txt 200 in 1133ms
+Failed to fetch robots config from database, using defaults: relation "public.robots_config" does not exist
+ GET /robots.txt 200 in 612ms
+ ✓ Compiled /admin/robots in 451ms (1228 modules)
+ HEAD /admin/robots 200 in 593ms
+ GET /admin/robots 200 in 55ms
+ ✓ Compiled in 649ms (1222 modules)
+ GET /admin/robots 200 in 112ms
+ GET /admin/robots 200 in 145ms
+ ✓ Compiled in 631ms (1222 modules)
+ GET /admin/robots 200 in 69ms
+ ✓ Compiled in 521ms (1222 modules)
+ GET /admin/robots 200 in 41ms
+ ✓ Compiled in 422ms (1222 modules)
+ GET /admin/robots 200 in 35ms
+ ✓ Compiled in 877ms (1226 modules)
+ GET /admin/robots 200 in 200ms
+ ✓ Compiled in 502ms (1226 modules)
+ GET /admin/robots 200 in 34ms
+ GET /admin/robots 200 in 153ms
+ ✓ Compiled /robots.txt in 386ms (675 modules)
+ GET /robots.txt 200 in 629ms
+ GET /robots.txt 200 in 320ms

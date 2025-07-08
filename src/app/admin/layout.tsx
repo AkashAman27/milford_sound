@@ -14,7 +14,8 @@ import {
   Settings,
   BarChart3,
   LogOut,
-  Link as LinkIcon
+  Link as LinkIcon,
+  Bot
 } from 'lucide-react'
 
 export default function AdminLayout({
@@ -67,6 +68,7 @@ export default function AdminLayout({
     { name: 'FAQs', href: '/admin/faqs', icon: MessageSquare },
     { name: 'Internal Links', href: '/admin/internal-links', icon: LinkIcon },
     { name: 'URL Redirects', href: '/admin/redirects', icon: LinkIcon },
+    { name: 'Robots.txt', href: '/admin/robots', icon: Bot },
     { name: 'Categories', href: '/admin/categories', icon: Settings },
     { name: 'Testimonials', href: '/admin/testimonials', icon: MessageSquare },
     { name: 'Homepage', href: '/admin/homepage', icon: Home },
