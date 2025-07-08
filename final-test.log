@@ -1,0 +1,37 @@
+
+> milford-sound@0.1.0 dev
+> next dev
+
+   ▲ Next.js 15.3.4
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.1.100:3000
+   - Environments: .env.local
+   - Experiments (use with caution):
+     ✓ optimizeCss
+     ✓ scrollRestoration
+
+ ✓ Starting...
+ ✓ Ready in 1594ms
+ ○ Compiling /tour/[slug] ...
+ ✓ Compiled /tour/[slug] in 1546ms (1153 modules)
+ ✓ Compiled in 123ms (538 modules)
+ HEAD /tour/doubtful-sound-overnight-cruise 404 in 3010ms
+ ⚠ Found a change in next.config.js. Restarting the server to apply the changes...
+   ▲ Next.js 15.3.4
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.1.100:3000
+   - Environments: .env.local
+   - Experiments (use with caution):
+     ✓ optimizeCss
+     ✓ scrollRestoration
+
+ ✓ Starting...
+ ✓ Ready in 2.6s
+ ○ Compiling /tour/[slug] ...
+ ✓ Compiled /tour/[slug] in 1554ms (1153 modules)
+ ✓ Compiled in 128ms (538 modules)
+ GET /tour/doubtful-sound-night-cruise 200 in 2731ms
+ ✓ Compiled /middleware in 466ms (180 modules)
+<w> [webpack.cache.PackFileCacheStrategy] Serializing big strings (100kiB) impacts deserialization performance (consider using Buffer instead and decode when needed)
+ GET /tour/doubtful-sound-night-cruise 200 in 419ms
+ GET /tour/doubtful-sound-night-cruise 200 in 405ms

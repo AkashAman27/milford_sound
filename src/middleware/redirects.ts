@@ -15,14 +15,15 @@ export async function handleRedirects(request: NextRequest) {
   // Extract slug and content type from pathname
   const blogMatch = pathname.match(/^\/travel-guide\/([^\/]+)$/)
   const experienceMatch = pathname.match(/^\/experience\/([^\/]+)$/)
+  const tourMatch = pathname.match(/^\/tour\/([^\/]+)$/)
   const categoryMatch = pathname.match(/^\/category\/([^\/]+)$/)
 
-  if (!blogMatch && !experienceMatch && !categoryMatch) {
+  if (!blogMatch && !experienceMatch && !tourMatch && !categoryMatch) {
     return NextResponse.next()
   }
 
-  const slug = blogMatch?.[1] || experienceMatch?.[1] || categoryMatch?.[1]
-  const contentType = blogMatch ? 'blog_posts' : experienceMatch ? 'experiences' : 'categories'
+  const slug = blogMatch?.[1] || experienceMatch?.[1] || tourMatch?.[1] || categoryMatch?.[1]
+  const contentType = blogMatch ? 'blog_posts' : (experienceMatch || tourMatch) ? 'experiences' : 'categories'
 
   try {
     const supabase = createClient()
@@ -37,7 +38,7 @@ export async function handleRedirects(request: NextRequest) {
 
     if (redirect) {
       // Create redirect URL
-      const baseUrl = blogMatch ? '/travel-guide' : experienceMatch ? '/experience' : '/category'
+      const baseUrl = blogMatch ? '/travel-guide' : (experienceMatch || tourMatch) ? (tourMatch ? '/tour' : '/experience') : '/category'
       const redirectUrl = `${baseUrl}/${redirect.new_slug}`
       
       // Return appropriate redirect

@@ -1,0 +1,19 @@
+
+> milford-sound@0.1.0 dev
+> next dev
+
+   ▲ Next.js 15.3.4
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.1.100:3000
+   - Environments: .env.local
+   - Experiments (use with caution):
+     ✓ optimizeCss
+     ✓ scrollRestoration
+
+ ✓ Starting...
+ ✓ Ready in 1449ms
+ ○ Compiling /tour/[slug] ...
+ ✓ Compiled /tour/[slug] in 3.3s (1162 modules)
+ ✓ Compiled in 131ms (538 modules)
+ HEAD /tour/doubtful-sound-overnight-cruise 404 in 4527ms
+[?25h

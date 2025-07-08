@@ -47,7 +47,8 @@ const nextConfig = {
     removeConsole: process.env.NODE_ENV === 'production',
   },
   async redirects() {
-    return [
+    // Static redirects
+    const staticRedirects = [
       {
         source: '/blog',
         destination: '/travel-guide',
@@ -59,6 +60,45 @@ const nextConfig = {
         permanent: true,
       },
     ]
+
+    // Dynamic redirects from database
+    let dynamicRedirects = []
+    try {
+      const { createClient } = require('@supabase/supabase-js')
+      const supabase = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+      )
+
+      const { data: redirects } = await supabase
+        .from('slug_redirects')
+        .select('old_slug, new_slug, content_type, permanent')
+
+      if (redirects) {
+        dynamicRedirects = redirects.map(redirect => {
+          const getBasePath = (contentType) => {
+            switch (contentType) {
+              case 'blog_posts': return '/travel-guide'
+              case 'experiences': return '/tour'
+              case 'categories': return '/category'
+              default: return ''
+            }
+          }
+
+          const basePath = getBasePath(redirect.content_type)
+          
+          return {
+            source: `${basePath}/${redirect.old_slug}`,
+            destination: `${basePath}/${redirect.new_slug}`,
+            permanent: redirect.permanent || true,
+          }
+        })
+      }
+    } catch (error) {
+      console.warn('Failed to fetch dynamic redirects:', error.message)
+    }
+
+    return [...staticRedirects, ...dynamicRedirects]
   },
 }
 
