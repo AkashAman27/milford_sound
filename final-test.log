@@ -71,3 +71,12 @@ Failed to fetch robots config from database, using defaults: relation "public.ro
  ✓ Compiled /robots.txt in 386ms (675 modules)
  GET /robots.txt 200 in 629ms
  GET /robots.txt 200 in 320ms
+ ○ Compiling / ...
+ ✓ Compiled / in 1737ms (1256 modules)
+ ✓ Compiled /_not-found in 324ms (1260 modules)
+ GET / 200 in 102ms
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 999ms (1594 modules)
+Time 2.794291
+ GET /tour/doubtful-sound-night-cruise-test 404 in 1369ms
+[?25h

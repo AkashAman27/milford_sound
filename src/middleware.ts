@@ -1,7 +1,15 @@
 import { type NextRequest } from 'next/server'
 import { updateSession } from '@/lib/supabase/middleware'
+import { handleRedirects } from '@/middleware/redirects'
 
 export async function middleware(request: NextRequest) {
+  // Handle redirects first
+  const redirectResponse = await handleRedirects(request)
+  if (redirectResponse && redirectResponse.status >= 300 && redirectResponse.status < 400) {
+    return redirectResponse
+  }
+  
+  // Then handle auth
   return await updateSession(request)
 }
 

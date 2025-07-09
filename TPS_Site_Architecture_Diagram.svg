@@ -1,0 +1,509 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1400" height="1000" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="userGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#e1f5fe;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#b3e5fc;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="appGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f3e5f5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e1bee7;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="dbGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#e8f5e8;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#c8e6c9;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="mcpGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#fff3e0;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ffe0b2;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Drop shadow filter -->
+    <filter id="dropshadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+      <feOffset dx="2" dy="2" result="offset"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.3"/>
+      </feComponentTransfer>
+      <feMerge> 
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/> 
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1400" height="1000" fill="#f8f9fa"/>
+  
+  <!-- Title -->
+  <text x="700" y="30" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#2c3e50">
+    🏗️ TPS Site: Complete Project Architecture
+  </text>
+  
+  <!-- Subtitle -->
+  <text x="700" y="55" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#7f8c8d">
+    Next.js 15 + Supabase + Claude Code MCP + Admin CMS
+  </text>
+  
+  <!-- External Users Layer -->
+  <g>
+    <rect x="50" y="80" width="300" height="120" rx="10" fill="url(#userGradient)" stroke="#01579b" stroke-width="2" filter="url(#dropshadow)"/>
+    <text x="200" y="105" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#01579b">🌐 External Layer</text>
+    
+    <!-- Users -->
+    <circle cx="100" cy="140" r="25" fill="#4fc3f7" stroke="#0277bd" stroke-width="2"/>
+    <text x="100" y="147" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="white">👤</text>
+    <text x="100" y="175" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#01579b">Visitors</text>
+    
+    <circle cx="200" cy="140" r="25" fill="#4fc3f7" stroke="#0277bd" stroke-width="2"/>
+    <text x="200" y="147" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="white">🤖</text>
+    <text x="200" y="175" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#01579b">Bots</text>
+    
+    <circle cx="300" cy="140" r="25" fill="#4fc3f7" stroke="#0277bd" stroke-width="2"/>
+    <text x="300" y="147" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="white">👨‍💻</text>
+    <text x="300" y="175" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#01579b">Admins</text>
+  </g>
+  
+  <!-- Next.js Application Layer -->
+  <g>
+    <rect x="380" y="80" width="500" height="320" rx="10" fill="url(#appGradient)" stroke="#4a148c" stroke-width="2" filter="url(#dropshadow)"/>
+    <text x="630" y="105" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#4a148c">🖥️ Next.js 15 Application</text>
+    
+    <!-- Public Site -->
+    <rect x="400" y="120" width="220" height="120" rx="5" fill="#f8bbd9" stroke="#ad1457" stroke-width="1"/>
+    <text x="510" y="140" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#ad1457">📱 Public Site</text>
+    
+    <rect x="410" y="150" width="40" height="25" rx="3" fill="#ffffff" stroke="#ad1457"/>
+    <text x="430" y="165" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#ad1457">🏠 Home</text>
+    
+    <rect x="460" y="150" width="40" height="25" rx="3" fill="#ffffff" stroke="#ad1457"/>
+    <text x="480" y="165" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#ad1457">🎫 Tours</text>
+    
+    <rect x="510" y="150" width="40" height="25" rx="3" fill="#ffffff" stroke="#ad1457"/>
+    <text x="530" y="165" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#ad1457">📖 Blog</text>
+    
+    <rect x="560" y="150" width="40" height="25" rx="3" fill="#ffffff" stroke="#ad1457"/>
+    <text x="580" y="165" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#ad1457">💳 Book</text>
+    
+    <rect x="410" y="185" width="90" height="25" rx="3" fill="#ffffff" stroke="#ad1457"/>
+    <text x="455" y="200" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#ad1457">🔍 Search</text>
+    
+    <rect x="510" y="185" width="90" height="25" rx="3" fill="#ffffff" stroke="#ad1457"/>
+    <text x="555" y="200" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#ad1457">📄 robots.txt</text>
+    
+    <!-- Admin CMS Panel -->
+    <rect x="640" y="120" width="220" height="180" rx="5" fill="#ce93d8" stroke="#7b1fa2" stroke-width="1"/>
+    <text x="750" y="140" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#7b1fa2">⚙️ Admin CMS Panel</text>
+    
+    <!-- Admin modules in a grid -->
+    <rect x="650" y="150" width="60" height="25" rx="3" fill="#ffffff" stroke="#7b1fa2"/>
+    <text x="680" y="165" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#7b1fa2">📊 Dashboard</text>
+    
+    <rect x="720" y="150" width="60" height="25" rx="3" fill="#ffffff" stroke="#7b1fa2"/>
+    <text x="750" y="165" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#7b1fa2">🎫 Tours</text>
+    
+    <rect x="790" y="150" width="60" height="25" rx="3" fill="#ffffff" stroke="#7b1fa2"/>
+    <text x="820" y="165" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#7b1fa2">📝 Blog</text>
+    
+    <rect x="650" y="185" width="60" height="25" rx="3" fill="#ffffff" stroke="#7b1fa2"/>
+    <text x="680" y="200" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#7b1fa2">❓ FAQs</text>
+    
+    <rect x="720" y="185" width="60" height="25" rx="3" fill="#ffffff" stroke="#7b1fa2"/>
+    <text x="750" y="200" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#7b1fa2">🔄 Redirects</text>
+    
+    <rect x="790" y="185" width="60" height="25" rx="3" fill="#ffffff" stroke="#7b1fa2"/>
+    <text x="820" y="200" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#7b1fa2">🤖 Robots</text>
+    
+    <rect x="650" y="220" width="60" height="25" rx="3" fill="#ffffff" stroke="#7b1fa2"/>
+    <text x="680" y="235" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#7b1fa2">🔗 Links</text>
+    
+    <rect x="720" y="220" width="60" height="25" rx="3" fill="#ffffff" stroke="#7b1fa2"/>
+    <text x="750" y="235" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#7b1fa2">💬 Reviews</text>
+    
+    <rect x="790" y="220" width="60" height="25" rx="3" fill="#ffffff" stroke="#7b1fa2"/>
+    <text x="820" y="235" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#7b1fa2">⚙️ Settings</text>
+    
+    <!-- System Components -->
+    <rect x="400" y="260" width="460" height="60" rx="5" fill="#e1bee7" stroke="#8e24aa" stroke-width="1"/>
+    <text x="630" y="280" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#8e24aa">🔧 System Components</text>
+    
+    <rect x="420" y="290" width="90" height="20" rx="3" fill="#ffffff" stroke="#8e24aa"/>
+    <text x="465" y="302" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#8e24aa">⚡ Middleware</text>
+    
+    <rect x="520" y="290" width="90" height="20" rx="3" fill="#ffffff" stroke="#8e24aa"/>
+    <text x="565" y="302" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#8e24aa">🔄 Redirects</text>
+    
+    <rect x="620" y="290" width="90" height="20" rx="3" fill="#ffffff" stroke="#8e24aa"/>
+    <text x="665" y="302" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#8e24aa">🗺️ Sitemap</text>
+    
+    <rect x="720" y="290" width="90" height="20" rx="3" fill="#ffffff" stroke="#8e24aa"/>
+    <text x="765" y="302" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#8e24aa">🔐 Auth</text>
+  </g>
+  
+  <!-- Supabase Backend -->
+  <g>
+    <rect x="920" y="80" width="420" height="320" rx="10" fill="url(#dbGradient)" stroke="#1b5e20" stroke-width="2" filter="url(#dropshadow)"/>
+    <text x="1130" y="105" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#1b5e20">🗄️ Supabase Backend</text>
+    
+    <!-- Authentication -->
+    <rect x="940" y="120" width="80" height="40" rx="5" fill="#81c784" stroke="#388e3c" stroke-width="1"/>
+    <text x="980" y="135" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#1b5e20">🔐 Auth</text>
+    <text x="980" y="150" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#1b5e20">&amp; Security</text>
+    
+    <!-- Database Tables -->
+    <rect x="940" y="180" width="380" height="160" rx="5" fill="#a5d6a7" stroke="#4caf50" stroke-width="1"/>
+    <text x="1130" y="200" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#1b5e20">📊 Database Tables</text>
+    
+    <!-- Database table grid -->
+    <g>
+      <rect x="950" y="210" width="80" height="30" rx="3" fill="#ffffff" stroke="#4caf50"/>
+      <text x="990" y="225" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#1b5e20">🎫 experiences</text>
+      <text x="990" y="235" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#666">Tours data</text>
+      
+      <rect x="1040" y="210" width="80" height="30" rx="3" fill="#ffffff" stroke="#4caf50"/>
+      <text x="1080" y="225" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#1b5e20">📝 blog_posts</text>
+      <text x="1080" y="235" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#666">Travel guides</text>
+      
+      <rect x="1130" y="210" width="80" height="30" rx="3" fill="#ffffff" stroke="#4caf50"/>
+      <text x="1170" y="225" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#1b5e20">❓ faqs</text>
+      <text x="1170" y="235" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#666">Q&amp;A data</text>
+      
+      <rect x="1220" y="210" width="80" height="30" rx="3" fill="#ffffff" stroke="#4caf50"/>
+      <text x="1260" y="225" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#1b5e20">🔄 redirects</text>
+      <text x="1260" y="235" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#666">URL rules</text>
+      
+      <rect x="950" y="250" width="80" height="30" rx="3" fill="#ffffff" stroke="#4caf50"/>
+      <text x="990" y="265" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#1b5e20">🤖 robots_config</text>
+      <text x="990" y="275" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#666">SEO settings</text>
+      
+      <rect x="1040" y="250" width="80" height="30" rx="3" fill="#ffffff" stroke="#4caf50"/>
+      <text x="1080" y="265" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#1b5e20">🔗 internal_links</text>
+      <text x="1080" y="275" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#666">Cross-links</text>
+      
+      <rect x="1130" y="250" width="80" height="30" rx="3" fill="#ffffff" stroke="#4caf50"/>
+      <text x="1170" y="265" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#1b5e20">💬 testimonials</text>
+      <text x="1170" y="275" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#666">Reviews</text>
+      
+      <rect x="1220" y="250" width="80" height="30" rx="3" fill="#ffffff" stroke="#4caf50"/>
+      <text x="1260" y="265" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#1b5e20">👥 users</text>
+      <text x="1260" y="275" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#666">Auth data</text>
+    </g>
+    
+    <!-- Real-time &amp; Security -->
+    <rect x="1030" y="120" width="80" height="40" rx="5" fill="#81c784" stroke="#388e3c" stroke-width="1"/>
+    <text x="1070" y="135" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#1b5e20">⚡ Real-time</text>
+    <text x="1070" y="150" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#1b5e20">Updates</text>
+    
+    <rect x="1240" y="120" width="80" height="40" rx="5" fill="#81c784" stroke="#388e3c" stroke-width="1"/>
+    <text x="1280" y="135" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#1b5e20">🛡️ RLS</text>
+    <text x="1280" y="150" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#1b5e20">Security</text>
+    
+    <!-- API Layer -->
+    <rect x="940" y="290" width="380" height="40" rx="5" fill="#66bb6a" stroke="#2e7d32" stroke-width="1"/>
+    <text x="1130" y="310" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#1b5e20">🔌 REST API + GraphQL + Real-time Subscriptions</text>
+    
+    <!-- Supabase Capabilities Banner -->
+    <rect x="940" y="340" width="380" height="50" rx="5" fill="#e8f5e8" stroke="#4caf50" stroke-width="2"/>
+    <text x="1130" y="360" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#1b5e20">🏗️ Supabase Handles Everything</text>
+    <text x="1130" y="375" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#2e7d32">Auto-generated APIs • Real-time subscriptions • Authentication • Row Level Security</text>
+    <text x="1130" y="385" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#388e3c">Instant REST &amp; GraphQL APIs • Database triggers • Backup &amp; scaling</text>
+  </g>
+  
+  <!-- MCP Development Layer -->
+  <g>
+    <rect x="50" y="430" width="600" height="200" rx="10" fill="url(#mcpGradient)" stroke="#e65100" stroke-width="2" filter="url(#dropshadow)"/>
+    <text x="350" y="455" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#e65100">🛠️ Claude Code + MCP Development Automation</text>
+    
+    <!-- Claude Code Brain -->
+    <circle cx="150" cy="520" r="40" fill="#ff9800" stroke="#e65100" stroke-width="2"/>
+    <text x="150" y="527" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="white">🤖</text>
+    <text x="150" y="570" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#e65100">Claude Code</text>
+    <text x="150" y="585" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#e65100">Assistant</text>
+    
+    <!-- MCP Tools -->
+    <rect x="230" y="480" width="400" height="120" rx="5" fill="#ffcc02" stroke="#ff8f00" stroke-width="1"/>
+    <text x="430" y="500" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#e65100">🔌 MCP Tool Arsenal</text>
+    
+    <!-- MCP Tool boxes -->
+    <rect x="250" y="510" width="110" height="40" rx="3" fill="#ffffff" stroke="#ff8f00"/>
+    <text x="305" y="525" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#e65100">📊 Supabase MCP</text>
+    <text x="305" y="535" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#666">SQL, Tables, Data</text>
+    <text x="305" y="545" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#666">Real-time Ops</text>
+    
+    <rect x="370" y="510" width="110" height="40" rx="3" fill="#ffffff" stroke="#ff8f00"/>
+    <text x="425" y="525" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#e65100">📁 File System MCP</text>
+    <text x="425" y="535" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#666">Read/Write/Edit</text>
+    <text x="425" y="545" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#666">Code Generation</text>
+    
+    <rect x="490" y="510" width="110" height="40" rx="3" fill="#ffffff" stroke="#ff8f00"/>
+    <text x="545" y="525" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#e65100">🌐 Web &amp; Testing</text>
+    <text x="545" y="535" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#666">API Testing</text>
+    <text x="545" y="545" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#666">Documentation</text>
+    
+    <rect x="250" y="560" width="110" height="30" rx="3" fill="#ffffff" stroke="#ff8f00"/>
+    <text x="305" y="575" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#e65100">⚡ Bash &amp; Git</text>
+    <text x="305" y="585" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#666">System Operations</text>
+    
+    <rect x="370" y="560" width="230" height="30" rx="3" fill="#ffffff" stroke="#ff8f00"/>
+    <text x="485" y="575" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#e65100">⚙️ Automated Tasks</text>
+    <text x="485" y="585" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#666">DB Setup • Code Gen • Debugging • Feature Implementation</text>
+  </g>
+  
+  <!-- Data Flow Diagram -->
+  <g>
+    <rect x="680" y="430" width="660" height="200" rx="10" fill="#f5f5f5" stroke="#616161" stroke-width="2" filter="url(#dropshadow)"/>
+    <text x="1010" y="455" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#424242">🔄 Data Flow &amp; Feature Implementation</text>
+    
+    <!-- Content Creation Flow -->
+    <text x="700" y="480" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#424242">📝 Content Creation Flow:</text>
+    
+    <!-- Flow steps -->
+    <g>
+      <rect x="700" y="490" width="80" height="25" rx="3" fill="#ffeb3b" stroke="#f57f17"/>
+      <text x="740" y="505" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#424242">👨‍💻 Admin</text>
+      
+      <polygon points="790,502.5 800,497.5 800,507.5" fill="#666"/>
+      
+      <rect x="810" y="490" width="80" height="25" rx="3" fill="#4caf50" stroke="#2e7d32"/>
+      <text x="850" y="505" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="white">🖥️ CMS UI</text>
+      
+      <polygon points="900,502.5 910,497.5 910,507.5" fill="#666"/>
+      
+      <rect x="920" y="490" width="80" height="25" rx="3" fill="#2196f3" stroke="#1976d2"/>
+      <text x="960" y="505" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="white">📊 Database</text>
+      
+      <polygon points="1010,502.5 1020,497.5 1020,507.5" fill="#666"/>
+      
+      <rect x="1030" y="490" width="80" height="25" rx="3" fill="#9c27b0" stroke="#7b1fa2"/>
+      <text x="1070" y="505" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="white">🌐 Live Site</text>
+    </g>
+    
+    <!-- Redirect Flow -->
+    <text x="700" y="540" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#424242">🔄 Redirect Management:</text>
+    
+    <g>
+      <rect x="700" y="550" width="70" height="25" rx="3" fill="#ff9800" stroke="#f57c00"/>
+      <text x="735" y="565" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="white">Add Rule</text>
+      
+      <polygon points="780,562.5 790,557.5 790,567.5" fill="#666"/>
+      
+      <rect x="800" y="550" width="70" height="25" rx="3" fill="#2196f3" stroke="#1976d2"/>
+      <text x="835" y="565" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="white">Store DB</text>
+      
+      <polygon points="880,562.5 890,557.5 890,567.5" fill="#666"/>
+      
+      <rect x="900" y="550" width="80" height="25" rx="3" fill="#795548" stroke="#5d4037"/>
+      <text x="940" y="565" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="white">Build-time</text>
+      
+      <polygon points="990,562.5 1000,557.5 1000,567.5" fill="#666"/>
+      
+      <rect x="1010" y="550" width="80" height="25" rx="3" fill="#4caf50" stroke="#388e3c"/>
+      <text x="1050" y="565" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="white">301 Redirect</text>
+    </g>
+    
+    <!-- MCP Development Flow -->
+    <text x="700" y="590" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#424242">🛠️ MCP Development:</text>
+    
+    <g>
+      <rect x="700" y="600" width="60" height="20" rx="3" fill="#e91e63" stroke="#c2185b"/>
+      <text x="730" y="612" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">Request</text>
+      
+      <polygon points="770,610 775,607 775,613" fill="#666"/>
+      
+      <rect x="780" y="600" width="60" height="20" rx="3" fill="#ff5722" stroke="#d84315"/>
+      <text x="810" y="612" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">Analyze</text>
+      
+      <polygon points="850,610 855,607 855,613" fill="#666"/>
+      
+      <rect x="860" y="600" width="60" height="20" rx="3" fill="#ffc107" stroke="#ffa000"/>
+      <text x="890" y="612" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#424242">MCP Tools</text>
+      
+      <polygon points="930,610 935,607 935,613" fill="#666"/>
+      
+      <rect x="940" y="600" width="60" height="20" rx="3" fill="#8bc34a" stroke="#689f38"/>
+      <text x="970" y="612" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">Execute</text>
+      
+      <polygon points="1010,610 1015,607 1015,613" fill="#666"/>
+      
+      <rect x="1020" y="600" width="80" height="20" rx="3" fill="#673ab7" stroke="#512da8"/>
+      <text x="1060" y="612" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">Deploy Ready</text>
+    </g>
+  </g>
+  
+  <!-- Connection Lines -->
+  <!-- Users to App -->
+  <line x1="350" y1="140" x2="380" y2="200" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- App to Database -->
+  <line x1="880" y1="240" x2="920" y2="240" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- MCP to App -->
+  <line x1="350" y1="430" x2="630" y2="400" stroke="#ff6b35" stroke-width="3" marker-end="url(#arrowhead)" stroke-dasharray="5,5"/>
+  
+  <!-- MCP to Database -->
+  <line x1="550" y1="430" x2="1130" y2="400" stroke="#ff6b35" stroke-width="3" marker-end="url(#arrowhead)" stroke-dasharray="5,5"/>
+  
+  <!-- Additional Data Flow Arrows -->
+  
+  <!-- Admin to Database flows -->
+  <g>
+    <!-- Admin to Tours Table -->
+    <path d="M 750 120 Q 900 80 990 210" fill="none" stroke="#8e44ad" stroke-width="2" marker-end="url(#arrowhead)" stroke-dasharray="3,3"/>
+    <text x="850" y="75" font-family="Arial, sans-serif" font-size="8" fill="#8e44ad">Create Tours</text>
+    
+    <!-- Admin to Blog Table -->
+    <path d="M 750 140 Q 920 100 1080 210" fill="none" stroke="#8e44ad" stroke-width="2" marker-end="url(#arrowhead)" stroke-dasharray="3,3"/>
+    <text x="900" y="95" font-family="Arial, sans-serif" font-size="8" fill="#8e44ad">Publish Blogs</text>
+    
+    <!-- Admin to Redirects Table -->
+    <path d="M 750 160 Q 1000 120 1260 210" fill="none" stroke="#8e44ad" stroke-width="2" marker-end="url(#arrowhead)" stroke-dasharray="3,3"/>
+    <text x="1050" y="115" font-family="Arial, sans-serif" font-size="8" fill="#8e44ad">Manage Redirects</text>
+    
+    <!-- Admin to Robots Table -->
+    <path d="M 750 180 Q 850 200 990 250" fill="none" stroke="#8e44ad" stroke-width="2" marker-end="url(#arrowhead)" stroke-dasharray="3,3"/>
+    <text x="850" y="195" font-family="Arial, sans-serif" font-size="8" fill="#8e44ad">Configure SEO</text>
+  </g>
+  
+  <!-- Database to Public Site flows -->
+  <g>
+    <!-- Tours DB to Tours Page -->
+    <path d="M 950 225 Q 750 300 510 150" fill="none" stroke="#27ae60" stroke-width="2" marker-end="url(#arrowhead)"/>
+    <text x="700" y="295" font-family="Arial, sans-serif" font-size="8" fill="#27ae60">Dynamic Tours</text>
+    
+    <!-- Blog DB to Blog Page -->
+    <path d="M 1040 225 Q 800 320 530 150" fill="none" stroke="#27ae60" stroke-width="2" marker-end="url(#arrowhead)"/>
+    <text x="780" y="315" font-family="Arial, sans-serif" font-size="8" fill="#27ae60">Live Content</text>
+    
+    <!-- Redirects DB to Middleware -->
+    <path d="M 1220 225 Q 750 350 470 190" fill="none" stroke="#f39c12" stroke-width="2" marker-end="url(#arrowhead)"/>
+    <text x="850" y="345" font-family="Arial, sans-serif" font-size="8" fill="#f39c12">URL Redirects</text>
+    
+    <!-- Robots DB to robots.txt -->
+    <path d="M 950 265 Q 750 380 600 190" fill="none" stroke="#e74c3c" stroke-width="2" marker-end="url(#arrowhead)"/>
+    <text x="750" y="375" font-family="Arial, sans-serif" font-size="8" fill="#e74c3c">robots.txt</text>
+  </g>
+  
+  <!-- MCP to Supabase Enhanced Flow -->
+  <g>
+    <!-- MCP Database Operations -->
+    <rect x="940" y="400" width="380" height="40" rx="5" fill="#fff3e0" stroke="#e65100" stroke-width="2" stroke-dasharray="5,5"/>
+    <text x="1130" y="420" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#e65100">🔄 MCP → Supabase Operations</text>
+    
+    <!-- MCP Operation Details -->
+    <rect x="950" y="450" width="80" height="25" rx="3" fill="#ffcc80" stroke="#ff9800"/>
+    <text x="990" y="465" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#e65100">Create Tables</text>
+    
+    <rect x="1040" y="450" width="80" height="25" rx="3" fill="#ffcc80" stroke="#ff9800"/>
+    <text x="1080" y="465" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#e65100">Execute SQL</text>
+    
+    <rect x="1130" y="450" width="80" height="25" rx="3" fill="#ffcc80" stroke="#ff9800"/>
+    <text x="1170" y="465" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#e65100">Insert Data</text>
+    
+    <rect x="1220" y="450" width="80" height="25" rx="3" fill="#ffcc80" stroke="#ff9800"/>
+    <text x="1260" y="465" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#e65100">Real-time Test</text>
+    
+    <!-- Arrows from MCP to Operations -->
+    <path d="M 350 500 Q 600 480 990 475" fill="none" stroke="#e65100" stroke-width="2" marker-end="url(#arrowhead)"/>
+    <path d="M 350 520 Q 650 500 1080 475" fill="none" stroke="#e65100" stroke-width="2" marker-end="url(#arrowhead)"/>
+    <path d="M 350 540 Q 700 520 1170 475" fill="none" stroke="#e65100" stroke-width="2" marker-end="url(#arrowhead)"/>
+    <path d="M 350 560 Q 750 540 1260 475" fill="none" stroke="#e65100" stroke-width="2" marker-end="url(#arrowhead)"/>
+  </g>
+
+  <!-- Arrow marker definition -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#666"/>
+    </marker>
+  </defs>
+  
+  <!-- Key Features Box -->
+  <g>
+    <rect x="50" y="660" width="1290" height="300" rx="10" fill="#ffffff" stroke="#bdc3c7" stroke-width="2" filter="url(#dropshadow)"/>
+    <text x="695" y="685" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#2c3e50">🎯 Key Implementation Highlights</text>
+    
+    <!-- Three columns of features -->
+    <g>
+      <!-- Column 1: Technical Features -->
+      <text x="70" y="715" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#27ae60">⚡ Technical Innovations</text>
+      
+      <text x="70" y="735" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">✅ Next.js 15 App Router</text>
+      <text x="70" y="750" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">✅ Database-driven Redirects</text>
+      <text x="70" y="765" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">✅ Dynamic robots.txt Management</text>
+      <text x="70" y="780" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">✅ Real-time Content Updates</text>
+      <text x="70" y="795" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">✅ TypeScript + Tailwind CSS</text>
+      <text x="70" y="810" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">✅ Supabase Integration</text>
+      <text x="70" y="825" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">✅ SEO-optimized Architecture</text>
+      <text x="70" y="840" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">✅ Image Optimization</text>
+      <text x="70" y="855" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">✅ Build-time Static Generation</text>
+    </g>
+    
+    <g>
+      <!-- Column 2: CMS Features -->
+      <text x="340" y="715" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#8e44ad">📝 CMS Capabilities</text>
+      
+      <text x="340" y="735" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">✅ Tour Management System</text>
+      <text x="340" y="750" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">✅ Travel Guide Blog Editor</text>
+      <text x="340" y="765" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">✅ FAQ Management</text>
+      <text x="340" y="780" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">✅ URL Redirect Manager</text>
+      <text x="340" y="795" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">✅ robots.txt Visual Editor</text>
+      <text x="340" y="810" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">✅ Internal Link Management</text>
+      <text x="340" y="825" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">✅ Testimonial System</text>
+      <text x="340" y="840" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">✅ User Authentication</text>
+      <text x="340" y="855" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">✅ Live Preview Features</text>
+    </g>
+    
+    <g>
+      <!-- Column 3: MCP Benefits -->
+      <text x="610" y="715" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#e67e22">🛠️ MCP Development Benefits</text>
+      
+      <text x="610" y="735" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">✅ Automated Database Setup</text>
+      <text x="610" y="750" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">✅ Real-time Code Generation</text>
+      <text x="610" y="765" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">✅ Intelligent Debugging</text>
+      <text x="610" y="780" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">✅ Multi-tool Orchestration</text>
+      <text x="610" y="795" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">✅ Error Detection &amp; Fixing</text>
+      <text x="610" y="810" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">✅ Documentation Integration</text>
+      <text x="610" y="825" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">✅ Testing Automation</text>
+      <text x="610" y="840" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">✅ Best Practice Implementation</text>
+      <text x="610" y="855" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">✅ Rapid Feature Development</text>
+    </g>
+    
+    <g>
+      <!-- Column 4: Business Value -->
+      <text x="880" y="715" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#c0392b">📈 Business Impact</text>
+      
+      <text x="880" y="735" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">💰 90% Faster Development</text>
+      <text x="880" y="750" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">🎯 Non-technical Content Management</text>
+      <text x="880" y="765" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">📊 Better SEO Control</text>
+      <text x="880" y="780" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">⚡ Instant Content Publishing</text>
+      <text x="880" y="795" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">🔧 Reduced Maintenance</text>
+      <text x="880" y="810" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">🚀 Faster Time to Market</text>
+      <text x="880" y="825" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">📱 Mobile-First Design</text>
+      <text x="880" y="840" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">🔒 Enterprise Security</text>
+      <text x="880" y="855" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">📈 Scalable Architecture</text>
+    </g>
+    
+    <!-- Usage Statistics -->
+    <g>
+      <text x="1150" y="715" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#16a085">📊 Project Statistics</text>
+      
+      <rect x="1150" y="730" width="160" height="110" rx="5" fill="#ecf0f1" stroke="#bdc3c7"/>
+      
+      <text x="1230" y="750" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#2c3e50">Development Metrics</text>
+      
+      <text x="1160" y="770" font-family="Arial, sans-serif" font-size="10" fill="#2c3e50">📋 8 Admin Modules</text>
+      <text x="1160" y="785" font-family="Arial, sans-serif" font-size="10" fill="#2c3e50">🗄️ 8+ Database Tables</text>
+      <text x="1160" y="800" font-family="Arial, sans-serif" font-size="10" fill="#2c3e50">🔧 4 MCP Tool Categories</text>
+      <text x="1160" y="815" font-family="Arial, sans-serif" font-size="10" fill="#2c3e50">⚡ Real-time Updates</text>
+      <text x="1160" y="830" font-family="Arial, sans-serif" font-size="10" fill="#2c3e50">🎯 Production Ready</text>
+    </g>
+  </g>
+  
+  <!-- Footer -->
+  <text x="700" y="980" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#7f8c8d">
+    🚀 Modern Web Development: Next.js 15 + Supabase + Claude Code MCP = Rapid, Scalable, Maintainable Applications
+  </text>
+</svg>

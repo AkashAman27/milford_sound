@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { createClient } from '@supabase/supabase-js'
 
 export async function handleRedirects(request: NextRequest) {
   const pathname = request.nextUrl.pathname
@@ -11,6 +11,7 @@ export async function handleRedirects(request: NextRequest) {
       pathname.includes('.')) {
     return NextResponse.next()
   }
+
 
   // Extract slug and content type from pathname
   const blogMatch = pathname.match(/^\/travel-guide\/([^\/]+)$/)
@@ -26,7 +27,10 @@ export async function handleRedirects(request: NextRequest) {
   const contentType = blogMatch ? 'blog_posts' : (experienceMatch || tourMatch) ? 'experiences' : 'categories'
 
   try {
-    const supabase = createClient()
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    )
     
     // Check if this slug exists as a redirect
     const { data: redirect } = await supabase
